@@ -102,7 +102,7 @@ function SchedulePage() {
         ))}
       </div>
 
-      <ol className="relative space-y-2 pl-[3.6rem]">
+      <ol className="relative space-y-2 pb-8 pl-[3.6rem]">
         <span aria-hidden className="absolute left-[3.1rem] top-2 bottom-2 w-px bg-border" />
         {schedule.map((block) => {
           const isCurrent = current?.id === block.id;
@@ -158,7 +158,7 @@ function SchedulePage() {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger
           aria-label="Add time block"
-          className="fixed bottom-24 left-1/2 z-30 ml-[7.5rem] grid size-13 place-items-center rounded-full bg-primary text-primary-foreground shadow-[var(--glow-primary)] transition-transform active:scale-95"
+          className="fixed bottom-24 right-5 z-30 grid size-13 md:right-[calc(50%-11rem)] place-items-center rounded-full bg-primary text-primary-foreground shadow-[var(--glow-primary)] transition-transform active:scale-95"
         >
           <Plus className="size-5.5" strokeWidth={2} />
         </SheetTrigger>
