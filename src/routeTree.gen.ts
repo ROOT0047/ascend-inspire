@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as FocusRouteImport } from './routes/focus'
 import { Route as HabitsRouteImport } from './routes/habits'
 import { Route as HomeRouteImport } from './routes/home'
@@ -18,6 +19,11 @@ import { Route as ScheduleRouteImport } from './routes/schedule'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FocusRoute = FocusRouteImport.update({
@@ -43,6 +49,7 @@ const ScheduleRoute = ScheduleRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/focus': typeof FocusRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/focus': typeof FocusRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/focus': typeof FocusRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
@@ -65,14 +74,22 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/focus' | '/habits' | '/home' | '/schedule'
+  fullPaths: '/' | '/analytics' | '/focus' | '/habits' | '/home' | '/schedule'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/focus' | '/habits' | '/home' | '/schedule'
-  id: '__root__' | '/' | '/focus' | '/habits' | '/home' | '/schedule'
+  to: '/' | '/analytics' | '/focus' | '/habits' | '/home' | '/schedule'
+  id:
+    | '__root__'
+    | '/'
+    | '/analytics'
+    | '/focus'
+    | '/habits'
+    | '/home'
+    | '/schedule'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyticsRoute: typeof AnalyticsRoute
   FocusRoute: typeof FocusRoute
   HabitsRoute: typeof HabitsRoute
   HomeRoute: typeof HomeRoute
@@ -86,6 +103,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/focus': {
@@ -121,6 +145,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyticsRoute: AnalyticsRoute,
   FocusRoute: FocusRoute,
   HabitsRoute: HabitsRoute,
   HomeRoute: HomeRoute,
