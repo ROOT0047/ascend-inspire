@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "ASCEND — Discipline shapes destiny" },
       {
         property: "og:description",
-        content: "Master your habits. Master yourself.",
+        content: "Sign in to ASCEND, the discipline operating system for schedule, habits, focus, health and AI coaching.",
       },
     ],
   }),

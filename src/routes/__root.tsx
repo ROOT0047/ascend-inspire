@@ -79,21 +79,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ASCEND — Master your habits. Master yourself." },
+      { title: "ASCEND — Discipline shapes destiny" },
       {
         name: "description",
         content:
-          "ASCEND is a discipline operating system: schedule, habits, focus, health and an AI coach in one calm dark interface.",
+          "Sign in to ASCEND, the discipline operating system for schedule, habits, focus, health and AI coaching.",
       },
       { name: "author", content: "ASCEND" },
-      { property: "og:title", content: "ASCEND — Master your habits. Master yourself." },
+      { property: "og:title", content: "ASCEND — Discipline shapes destiny" },
       {
         property: "og:description",
-        content: "Plan your day, build habits, track focus and grow with an AI coach.",
+        content: "Sign in to ASCEND, the discipline operating system for schedule, habits, focus, health and AI coaching.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "ASCEND — Discipline shapes destiny" },
+      { name: "twitter:description", content: "Sign in to ASCEND, the discipline operating system for schedule, habits, focus, health and AI coaching." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1d082f8d-414c-49f8-a302-4b22b1e0fe5f" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1d082f8d-414c-49f8-a302-4b22b1e0fe5f" },
     ],
     links: [
       {
