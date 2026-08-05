@@ -18,8 +18,13 @@ import { Route as HabitsRouteImport } from './routes/habits'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as JournalRouteImport } from './routes/journal'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as RemindersRouteImport } from './routes/reminders'
 import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SyncRouteImport } from './routes/sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -66,14 +71,39 @@ const JournalRoute = JournalRouteImport.update({
   path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RemindersRoute = RemindersRouteImport.update({
+  id: '/reminders',
+  path: '/reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SyncRoute = SyncRouteImport.update({
+  id: '/sync',
+  path: '/sync',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -87,8 +117,13 @@ export interface FileRoutesByFullPath {
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/journal': typeof JournalRoute
+  '/learn': typeof LearnRoute
+  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
+  '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
+  '/settings': typeof SettingsRoute
+  '/sync': typeof SyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,8 +135,13 @@ export interface FileRoutesByTo {
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/journal': typeof JournalRoute
+  '/learn': typeof LearnRoute
+  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
+  '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
+  '/settings': typeof SettingsRoute
+  '/sync': typeof SyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,8 +154,13 @@ export interface FileRoutesById {
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/journal': typeof JournalRoute
+  '/learn': typeof LearnRoute
+  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
+  '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
+  '/settings': typeof SettingsRoute
+  '/sync': typeof SyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,8 +174,13 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/journal'
+    | '/learn'
+    | '/notifications'
     | '/profile'
+    | '/reminders'
     | '/schedule'
+    | '/settings'
+    | '/sync'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -142,8 +192,13 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/journal'
+    | '/learn'
+    | '/notifications'
     | '/profile'
+    | '/reminders'
     | '/schedule'
+    | '/settings'
+    | '/sync'
   id:
     | '__root__'
     | '/'
@@ -155,8 +210,13 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/journal'
+    | '/learn'
+    | '/notifications'
     | '/profile'
+    | '/reminders'
     | '/schedule'
+    | '/settings'
+    | '/sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -169,8 +229,13 @@ export interface RootRouteChildren {
   HealthRoute: typeof HealthRoute
   HomeRoute: typeof HomeRoute
   JournalRoute: typeof JournalRoute
+  LearnRoute: typeof LearnRoute
+  NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
+  RemindersRoute: typeof RemindersRoute
   ScheduleRoute: typeof ScheduleRoute
+  SettingsRoute: typeof SettingsRoute
+  SyncRoute: typeof SyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -238,6 +303,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -245,11 +324,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reminders': {
+      id: '/reminders'
+      path: '/reminders'
+      fullPath: '/reminders'
+      preLoaderRoute: typeof RemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schedule': {
       id: '/schedule'
       path: '/schedule'
       fullPath: '/schedule'
       preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sync': {
+      id: '/sync'
+      path: '/sync'
+      fullPath: '/sync'
+      preLoaderRoute: typeof SyncRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -265,8 +365,13 @@ const rootRouteChildren: RootRouteChildren = {
   HealthRoute: HealthRoute,
   HomeRoute: HomeRoute,
   JournalRoute: JournalRoute,
+  LearnRoute: LearnRoute,
+  NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
+  RemindersRoute: RemindersRoute,
   ScheduleRoute: ScheduleRoute,
+  SettingsRoute: SettingsRoute,
+  SyncRoute: SyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
