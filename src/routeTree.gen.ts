@@ -11,9 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as CoachRouteImport } from './routes/coach'
 import { Route as FocusRouteImport } from './routes/focus'
 import { Route as HabitsRouteImport } from './routes/habits'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as JournalRouteImport } from './routes/journal'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 
 const IndexRoute = IndexRouteImport.update({
@@ -24,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const AnalyticsRoute = AnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoachRoute = CoachRouteImport.update({
+  id: '/coach',
+  path: '/coach',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FocusRoute = FocusRouteImport.update({
@@ -41,6 +48,11 @@ const HomeRoute = HomeRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
@@ -50,49 +62,75 @@ const ScheduleRoute = ScheduleRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/coach': typeof CoachRoute
   '/focus': typeof FocusRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
+  '/journal': typeof JournalRoute
   '/schedule': typeof ScheduleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/coach': typeof CoachRoute
   '/focus': typeof FocusRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
+  '/journal': typeof JournalRoute
   '/schedule': typeof ScheduleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/coach': typeof CoachRoute
   '/focus': typeof FocusRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
+  '/journal': typeof JournalRoute
   '/schedule': typeof ScheduleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analytics' | '/focus' | '/habits' | '/home' | '/schedule'
+  fullPaths:
+    | '/'
+    | '/analytics'
+    | '/coach'
+    | '/focus'
+    | '/habits'
+    | '/home'
+    | '/journal'
+    | '/schedule'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analytics' | '/focus' | '/habits' | '/home' | '/schedule'
+  to:
+    | '/'
+    | '/analytics'
+    | '/coach'
+    | '/focus'
+    | '/habits'
+    | '/home'
+    | '/journal'
+    | '/schedule'
   id:
     | '__root__'
     | '/'
     | '/analytics'
+    | '/coach'
     | '/focus'
     | '/habits'
     | '/home'
+    | '/journal'
     | '/schedule'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyticsRoute: typeof AnalyticsRoute
+  CoachRoute: typeof CoachRoute
   FocusRoute: typeof FocusRoute
   HabitsRoute: typeof HabitsRoute
   HomeRoute: typeof HomeRoute
+  JournalRoute: typeof JournalRoute
   ScheduleRoute: typeof ScheduleRoute
 }
 
@@ -110,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/analytics'
       fullPath: '/analytics'
       preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coach': {
+      id: '/coach'
+      path: '/coach'
+      fullPath: '/coach'
+      preLoaderRoute: typeof CoachRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/focus': {
@@ -133,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schedule': {
       id: '/schedule'
       path: '/schedule'
@@ -146,9 +198,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyticsRoute: AnalyticsRoute,
+  CoachRoute: CoachRoute,
   FocusRoute: FocusRoute,
   HabitsRoute: HabitsRoute,
   HomeRoute: HomeRoute,
+  JournalRoute: JournalRoute,
   ScheduleRoute: ScheduleRoute,
 }
 export const routeTree = rootRouteImport
