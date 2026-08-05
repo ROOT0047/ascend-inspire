@@ -48,7 +48,8 @@ function CoachPage() {
       addCoachMessage({
         id: Math.random().toString(36).slice(2),
         role: "coach",
-        content: coachReplies[Math.floor(Math.random() * coachReplies.length)],
+        content:
+          coachReplies[Math.floor(Math.random() * coachReplies.length)] ?? coachReplies[0]!,
       });
       setThinking(false);
       inputRef.current?.focus();
