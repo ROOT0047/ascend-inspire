@@ -10,17 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as FocusRouteImport } from './routes/focus'
 import { Route as HabitsRouteImport } from './routes/habits'
+import { Route as HealthRouteImport } from './routes/health'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as JournalRouteImport } from './routes/journal'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AchievementsRoute = AchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalyticsRoute = AnalyticsRouteImport.update({
@@ -43,6 +51,11 @@ const HabitsRoute = HabitsRouteImport.update({
   path: '/habits',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
@@ -53,6 +66,11 @@ const JournalRoute = JournalRouteImport.update({
   path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScheduleRoute = ScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
@@ -61,76 +79,97 @@ const ScheduleRoute = ScheduleRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
   '/coach': typeof CoachRoute
   '/focus': typeof FocusRoute
   '/habits': typeof HabitsRoute
+  '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/journal': typeof JournalRoute
+  '/profile': typeof ProfileRoute
   '/schedule': typeof ScheduleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
   '/coach': typeof CoachRoute
   '/focus': typeof FocusRoute
   '/habits': typeof HabitsRoute
+  '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/journal': typeof JournalRoute
+  '/profile': typeof ProfileRoute
   '/schedule': typeof ScheduleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
   '/coach': typeof CoachRoute
   '/focus': typeof FocusRoute
   '/habits': typeof HabitsRoute
+  '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/journal': typeof JournalRoute
+  '/profile': typeof ProfileRoute
   '/schedule': typeof ScheduleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/achievements'
     | '/analytics'
     | '/coach'
     | '/focus'
     | '/habits'
+    | '/health'
     | '/home'
     | '/journal'
+    | '/profile'
     | '/schedule'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/achievements'
     | '/analytics'
     | '/coach'
     | '/focus'
     | '/habits'
+    | '/health'
     | '/home'
     | '/journal'
+    | '/profile'
     | '/schedule'
   id:
     | '__root__'
     | '/'
+    | '/achievements'
     | '/analytics'
     | '/coach'
     | '/focus'
     | '/habits'
+    | '/health'
     | '/home'
     | '/journal'
+    | '/profile'
     | '/schedule'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AchievementsRoute: typeof AchievementsRoute
   AnalyticsRoute: typeof AnalyticsRoute
   CoachRoute: typeof CoachRoute
   FocusRoute: typeof FocusRoute
   HabitsRoute: typeof HabitsRoute
+  HealthRoute: typeof HealthRoute
   HomeRoute: typeof HomeRoute
   JournalRoute: typeof JournalRoute
+  ProfileRoute: typeof ProfileRoute
   ScheduleRoute: typeof ScheduleRoute
 }
 
@@ -141,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/achievements': {
+      id: '/achievements'
+      path: '/achievements'
+      fullPath: '/achievements'
+      preLoaderRoute: typeof AchievementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analytics': {
@@ -171,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HabitsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/home': {
       id: '/home'
       path: '/home'
@@ -185,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schedule': {
       id: '/schedule'
       path: '/schedule'
@@ -197,12 +257,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AchievementsRoute: AchievementsRoute,
   AnalyticsRoute: AnalyticsRoute,
   CoachRoute: CoachRoute,
   FocusRoute: FocusRoute,
   HabitsRoute: HabitsRoute,
+  HealthRoute: HealthRoute,
   HomeRoute: HomeRoute,
   JournalRoute: JournalRoute,
+  ProfileRoute: ProfileRoute,
   ScheduleRoute: ScheduleRoute,
 }
 export const routeTree = rootRouteImport
