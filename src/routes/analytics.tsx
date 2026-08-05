@@ -1,0 +1,153 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import { AppShell } from "@/components/ascend/app-shell";
+import { PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
+import { useAscend } from "@/context/ascend";
+import { disciplineTrend, heatmap, monthTrend, yearTrend } from "@/data/mock";
+import { cn } from "@/lib/utils";
+
+export const Route = createFileRoute("/analytics")({
+  head: () => ({
+    meta: [
+      { title: "Analytics — ASCEND" },
+      {
+        name: "description",
+        content: "Discipline score trends, habit heat maps, focus hours and productivity graphs.",
+      },
+      { property: "og:title", content: "Analytics — ASCEND" },
+      { property: "og:description", content: "Measure progress over months, not days." },
+    ],
+  }),
+  component: AnalyticsPage,
+});
+
+const ranges = ["Week", "Month", "Year"] as const;
+
+function AnalyticsPage() {
+  const { disciplineScore, focusMinutes, habits } = useAscend();
+  const [range, setRange] = useState<(typeof ranges)[number]>("Week");
+
+  const data = range === "Week" ? disciplineTrend : range === "Month" ? monthTrend : yearTrend;
+  const habitPct = Math.round(
+    (habits.filter((h) => h.completedToday).length / habits.length) * 100,
+  );
+
+  return (
+    <AppShell title="Analytics">
+      <PageHeading title="Overview" subtitle="Trends beat single days." />
+
+      <div className="mb-5 flex gap-1.5 rounded-2xl border border-border bg-surface p-1">
+        {ranges.map((r) => (
+          <button
+            key={r}
+            onClick={() => setRange(r)}
+            className={cn(
+              "flex-1 rounded-xl py-1.5 text-xs transition-colors",
+              range === r ? "bg-primary text-primary-foreground" : "text-muted-foreground",
+            )}
+          >
+            {r}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <StatTile label="Discipline" value={`${disciplineScore}`} tone="primary" />
+        <StatTile label="Habit rate" value={`${habitPct}`} suffix="%" tone="success" />
+        <StatTile
+          label="Focus today"
+          value={`${Math.floor(focusMinutes / 60)}h ${focusMinutes % 60}m`}
+        />
+        <StatTile label="Best streak" value={`${Math.max(...habits.map((h) => h.bestStreak))}`} suffix="d" tone="warning" />
+      </div>
+
+      <section className="card-surface mt-5 px-4 py-4">
+        <SectionHeader title="Discipline trend" />
+        <div className="h-44 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={data} margin={{ top: 6, right: 4, left: 4, bottom: 0 }}>
+              <defs>
+                <linearGradient id="scoreFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.45} />
+                  <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis
+                dataKey="label"
+                tickLine={false}
+                axisLine={false}
+                interval="preserveStartEnd"
+                tick={{ fill: "var(--muted-foreground)", fontSize: 10 }}
+              />
+              <Tooltip
+                cursor={{ stroke: "var(--border)" }}
+                contentStyle={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 12,
+                  fontSize: 12,
+                  color: "var(--foreground)",
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="score"
+                stroke="var(--primary)"
+                strokeWidth={2}
+                fill="url(#scoreFill)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
+
+      <section className="card-surface mt-4 px-4 py-4">
+        <SectionHeader title="Focus minutes" />
+        <div className="h-36 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} margin={{ top: 6, right: 4, left: 4, bottom: 0 }}>
+              <XAxis
+                dataKey="label"
+                tickLine={false}
+                axisLine={false}
+                interval="preserveStartEnd"
+                tick={{ fill: "var(--muted-foreground)", fontSize: 10 }}
+              />
+              <Tooltip
+                cursor={{ fill: "var(--accent)" }}
+                contentStyle={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 12,
+                  fontSize: 12,
+                  color: "var(--foreground)",
+                }}
+              />
+              <Bar dataKey="focus" fill="var(--secondary)" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
+
+      <section className="card-surface mt-4 px-4 py-4">
+        <SectionHeader title="Habit heat map" />
+        <div className="grid grid-cols-13 gap-1">
+          {heatmap.map((level, i) => (
+            <span
+              key={i}
+              className="aspect-square rounded-[3px]"
+              style={{
+                background:
+                  level <= 0
+                    ? "var(--border)"
+                    : `color-mix(in oklab, var(--primary) ${Math.min(100, level * 26)}%, var(--border))`,
+              }}
+            />
+          ))}
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">Last 13 weeks of habit completion.</p>
+      </section>
+    </AppShell>
+  );
+}
