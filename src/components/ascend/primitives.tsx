@@ -63,11 +63,13 @@ export function StatTile({
   value,
   suffix,
   tone = "default",
+  icon: Icon,
 }: {
   label: string;
   value: string;
   suffix?: string;
   tone?: "default" | "primary" | "success" | "warning";
+  icon?: React.ComponentType<{ className?: string; strokeWidth?: number }>;
 }) {
   const toneClass = {
     default: "text-foreground",
@@ -78,7 +80,8 @@ export function StatTile({
 
   return (
     <div className="card-surface flex flex-col gap-1 px-3 py-3">
-      <span className="text-[0.68rem] uppercase tracking-[0.12em] text-muted-foreground">
+      <span className="flex items-center gap-1.5 text-[0.68rem] uppercase tracking-[0.12em] text-muted-foreground">
+        {Icon ? <Icon className="size-3.5" strokeWidth={1.75} /> : null}
         {label}
       </span>
       <span className={cn("num text-lg", toneClass)}>
@@ -92,12 +95,14 @@ export function StatTile({
 export function SectionHeader({
   title,
   action,
+  className,
 }: {
   title: string;
   action?: ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="mb-3 flex items-end justify-between">
+    <div className={cn("mb-3 flex items-end justify-between", className)}>
       <h2 className="text-base font-semibold text-foreground">{title}</h2>
       {action}
     </div>
@@ -106,10 +111,14 @@ export function SectionHeader({
 
 export function Meter({
   value,
+  max,
   tone = "primary",
+  className,
 }: {
   value: number;
+  max?: number;
   tone?: "primary" | "success" | "secondary" | "warning";
+  className?: string;
 }) {
   const bg = {
     primary: "bg-primary",
@@ -118,11 +127,13 @@ export function Meter({
     warning: "bg-warning",
   }[tone];
 
+  const pct = max ? (value / max) * 100 : value;
+
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-border">
+    <div className={cn("h-1.5 w-full overflow-hidden rounded-full bg-border", className)}>
       <div
         className={cn("h-full rounded-full transition-[width] duration-700 ease-out", bg)}
-        style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+        style={{ width: `${Math.min(100, Math.max(0, pct))}%` }}
       />
     </div>
   );
