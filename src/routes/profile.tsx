@@ -1,9 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Award, ChevronRight, LogOut } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
 import { useAscend } from "@/context/ascend";
+import { useAuth } from "@/hooks/use-auth";
 import { profile } from "@/data/mock";
 import mark from "@/assets/ascend-mark.png";
 
@@ -33,14 +34,17 @@ const links = [
 
 function ProfilePage() {
   const { disciplineScore, habits, achievements } = useAscend();
+  const { user, profile: account, signOut } = useAuth();
+  const navigate = useNavigate();
+  const name = account?.display_name ?? user?.email?.split("@")[0] ?? profile.name;
 
   return (
     <AppShell title="Profile">
       <div className="card-surface flex items-center gap-4 px-4 py-4">
-        <img src={mark} alt="" className="size-14 rounded-2xl" />
+        <img src={account?.avatar_url ?? mark} alt="" className="size-14 rounded-2xl object-cover" />
         <div className="min-w-0">
-          <p className="text-base text-foreground">{profile.name}</p>
-          <p className="truncate text-xs text-muted-foreground">{profile.email}</p>
+          <p className="text-base text-foreground">{name}</p>
+          <p className="truncate text-xs text-muted-foreground">{user?.email ?? profile.email}</p>
           <div className="mt-1.5 flex items-center gap-2">
             <span className="rounded-full bg-primary-soft px-2.5 py-0.5 text-[0.65rem] text-primary">
               Level {profile.level}
@@ -89,13 +93,17 @@ function ProfilePage() {
         ))}
       </ul>
 
-      <Link
-        to="/"
+      <button
+        type="button"
+        onClick={async () => {
+          await signOut();
+          void navigate({ to: "/", replace: true });
+        }}
         className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-border py-3 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <LogOut className="size-4" strokeWidth={1.75} />
         Sign out
-      </Link>
+      </button>
     </AppShell>
   );
 }
