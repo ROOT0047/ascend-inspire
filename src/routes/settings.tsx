@@ -1,9 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading, SectionHeader } from "@/components/ascend/primitives";
 import { Switch } from "@/components/ui/switch";
-import { profile } from "@/data/mock";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -18,23 +17,22 @@ export const Route = createFileRoute("/settings")({
 });
 
 const toggles = [
-  { id: "push", label: "Push notifications", detail: "Streaks, sessions and reviews" },
-  { id: "voice", label: "Voice alerts", detail: "Spoken reminders for key blocks" },
-  { id: "haptics", label: "Haptics", detail: "Feedback on completion" },
-  { id: "private", label: "Private journal lock", detail: "Require unlock to open entries" },
-];
+  { id: "push_enabled", label: "Push notifications", detail: "Streaks, sessions and reviews" },
+  { id: "voice_alerts_enabled", label: "Voice alerts", detail: "Spoken reminders for key blocks" },
+  { id: "haptics_enabled", label: "Haptics", detail: "Feedback on completion" },
+  {
+    id: "journal_lock_enabled",
+    label: "Private journal lock",
+    detail: "Require unlock to open entries",
+  },
+] as const;
 
 function SettingsPage() {
-  const [state, setState] = useState<Record<string, boolean>>({
-    push: true,
-    voice: true,
-    haptics: true,
-    private: false,
-  });
+  const { user, profile } = useAuth();
 
   return (
     <AppShell title="Settings">
-      <PageHeading title="Settings" subtitle={profile.timezone} />
+      <PageHeading title="Settings" subtitle={profile?.timezone ?? "UTC"} />
 
       <SectionHeader title="Preferences" />
       <ul className="card-surface divide-y divide-border overflow-hidden">
@@ -44,19 +42,22 @@ function SettingsPage() {
               <p className="text-sm text-foreground">{t.label}</p>
               <p className="mt-0.5 text-xs text-muted-foreground">{t.detail}</p>
             </div>
-            <Switch
-              checked={state[t.id] ?? false}
-              onCheckedChange={(v) => setState((p) => ({ ...p, [t.id]: v }))}
-            />
+            <Switch checked={profile?.[t.id] ?? false} disabled aria-readonly />
           </li>
         ))}
       </ul>
+      <Link
+        to="/profile/edit"
+        className="mt-2 block text-center text-xs text-primary transition-opacity hover:opacity-80"
+      >
+        Change preferences in profile editor
+      </Link>
 
       <SectionHeader title="Account" className="mt-6" />
       <div className="card-surface divide-y divide-border overflow-hidden text-sm">
         <p className="flex items-center justify-between px-4 py-3.5">
           <span className="text-muted-foreground">Email</span>
-          <span className="text-foreground">{profile.email}</span>
+          <span className="text-foreground">{user?.email}</span>
         </p>
         <p className="flex items-center justify-between px-4 py-3.5">
           <span className="text-muted-foreground">Theme</span>
