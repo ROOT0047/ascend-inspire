@@ -20,6 +20,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { AuthGate } from "@/components/ascend/auth-gate";
 
 const bottomNav = [
   { to: "/home", label: "Home", icon: Home },
@@ -103,7 +104,9 @@ export function AppShell({
           )}
         </header>
 
-        <main className="flex-1 px-4 pb-28 pt-5">{children}</main>
+        <main className="flex-1 px-4 pb-28 pt-5">
+          <AuthGate>{children}</AuthGate>
+        </main>
 
         <nav className="fixed inset-x-0 bottom-0 z-30 mx-auto w-full max-w-md border-t border-border/70 bg-background/90 px-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2 backdrop-blur-xl">
           <ul className="flex items-stretch justify-between">
