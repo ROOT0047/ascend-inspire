@@ -14,12 +14,19 @@ export type Profile = {
   id: string;
   display_name: string | null;
   avatar_url: string | null;
+  timezone: string;
+  push_enabled: boolean;
+  voice_alerts_enabled: boolean;
+  haptics_enabled: boolean;
+  journal_lock_enabled: boolean;
 };
 
 type AuthState = {
   session: Session | null;
   user: User | null;
   profile: Profile | null;
+  /** Displayable (signed) URL for the stored avatar, if any. */
+  avatarSrc: string | null;
   loading: boolean;
   refreshProfile: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -30,6 +37,7 @@ const AuthContext = createContext<AuthState | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,14 +57,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshProfile = useCallback(async () => {
     if (!userId) {
       setProfile(null);
+      setAvatarSrc(null);
       return;
     }
     const { data } = await supabase
       .from("profiles")
-      .select("id, display_name, avatar_url")
+      .select(
+        "id, display_name, avatar_url, timezone, push_enabled, voice_alerts_enabled, haptics_enabled, journal_lock_enabled",
+      )
       .eq("id", userId)
       .maybeSingle();
     setProfile(data ?? null);
+
+    const path = data?.avatar_url ?? null;
+    if (!path) {
+      setAvatarSrc(null);
+    } else if (path.startsWith("http")) {
+      setAvatarSrc(path);
+    } else {
+      const { data: signed } = await supabase.storage
+        .from("avatars")
+        .createSignedUrl(path, 60 * 60);
+      setAvatarSrc(signed?.signedUrl ?? null);
+    }
   }, [userId]);
 
   useEffect(() => {
@@ -66,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
     setProfile(null);
+    setAvatarSrc(null);
   }, []);
 
   const value = useMemo<AuthState>(
@@ -73,11 +97,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       user: session?.user ?? null,
       profile,
+      avatarSrc,
       loading,
       refreshProfile,
       signOut,
     }),
-    [session, profile, loading, refreshProfile, signOut],
+    [session, profile, avatarSrc, loading, refreshProfile, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
