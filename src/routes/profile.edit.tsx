@@ -64,9 +64,12 @@ function EditProfilePage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const initializedFor = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!profile) return;
+    // Initialize once per account so an avatar refresh never wipes unsaved edits.
+    if (!profile || initializedFor.current === profile.id) return;
+    initializedFor.current = profile.id;
     setDisplayName(profile.display_name ?? "");
     setTimezone(profile.timezone || "UTC");
     setPrefs({
