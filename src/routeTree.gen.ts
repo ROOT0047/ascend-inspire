@@ -20,11 +20,12 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as JournalRouteImport } from './routes/journal'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as NotificationsRouteImport } from './routes/notifications'
-import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RemindersRouteImport } from './routes/reminders'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SyncRouteImport } from './routes/sync'
+import { Route as ProfileIndexRouteImport } from './routes/profile.index'
+import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -81,11 +82,6 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RemindersRoute = RemindersRouteImport.update({
   id: '/reminders',
   path: '/reminders',
@@ -106,6 +102,16 @@ const SyncRoute = SyncRouteImport.update({
   path: '/sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileIndexRoute = ProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileEditRoute = ProfileEditRouteImport.update({
+  id: '/profile/edit',
+  path: '/profile/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -119,11 +125,12 @@ export interface FileRoutesByFullPath {
   '/journal': typeof JournalRoute
   '/learn': typeof LearnRoute
   '/notifications': typeof NotificationsRoute
-  '/profile': typeof ProfileRoute
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRoute
   '/sync': typeof SyncRoute
+  '/profile/edit': typeof ProfileEditRoute
+  '/profile/': typeof ProfileIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -137,11 +144,12 @@ export interface FileRoutesByTo {
   '/journal': typeof JournalRoute
   '/learn': typeof LearnRoute
   '/notifications': typeof NotificationsRoute
-  '/profile': typeof ProfileRoute
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRoute
   '/sync': typeof SyncRoute
+  '/profile/edit': typeof ProfileEditRoute
+  '/profile': typeof ProfileIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -156,11 +164,12 @@ export interface FileRoutesById {
   '/journal': typeof JournalRoute
   '/learn': typeof LearnRoute
   '/notifications': typeof NotificationsRoute
-  '/profile': typeof ProfileRoute
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRoute
   '/sync': typeof SyncRoute
+  '/profile/edit': typeof ProfileEditRoute
+  '/profile/': typeof ProfileIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -176,11 +185,12 @@ export interface FileRouteTypes {
     | '/journal'
     | '/learn'
     | '/notifications'
-    | '/profile'
     | '/reminders'
     | '/schedule'
     | '/settings'
     | '/sync'
+    | '/profile/edit'
+    | '/profile/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -194,11 +204,12 @@ export interface FileRouteTypes {
     | '/journal'
     | '/learn'
     | '/notifications'
-    | '/profile'
     | '/reminders'
     | '/schedule'
     | '/settings'
     | '/sync'
+    | '/profile/edit'
+    | '/profile'
   id:
     | '__root__'
     | '/'
@@ -212,11 +223,12 @@ export interface FileRouteTypes {
     | '/journal'
     | '/learn'
     | '/notifications'
-    | '/profile'
     | '/reminders'
     | '/schedule'
     | '/settings'
     | '/sync'
+    | '/profile/edit'
+    | '/profile/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -231,11 +243,12 @@ export interface RootRouteChildren {
   JournalRoute: typeof JournalRoute
   LearnRoute: typeof LearnRoute
   NotificationsRoute: typeof NotificationsRoute
-  ProfileRoute: typeof ProfileRoute
   RemindersRoute: typeof RemindersRoute
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRoute
   SyncRoute: typeof SyncRoute
+  ProfileEditRoute: typeof ProfileEditRoute
+  ProfileIndexRoute: typeof ProfileIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -317,13 +330,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/reminders': {
       id: '/reminders'
       path: '/reminders'
@@ -352,6 +358,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof ProfileIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile/edit': {
+      id: '/profile/edit'
+      path: '/profile/edit'
+      fullPath: '/profile/edit'
+      preLoaderRoute: typeof ProfileEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -367,11 +387,12 @@ const rootRouteChildren: RootRouteChildren = {
   JournalRoute: JournalRoute,
   LearnRoute: LearnRoute,
   NotificationsRoute: NotificationsRoute,
-  ProfileRoute: ProfileRoute,
   RemindersRoute: RemindersRoute,
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRoute,
   SyncRoute: SyncRoute,
+  ProfileEditRoute: ProfileEditRoute,
+  ProfileIndexRoute: ProfileIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

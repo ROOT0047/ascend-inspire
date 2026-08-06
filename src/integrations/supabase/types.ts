@@ -19,22 +19,37 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           display_name: string | null
+          haptics_enabled: boolean
           id: string
+          journal_lock_enabled: boolean
+          push_enabled: boolean
+          timezone: string
           updated_at: string
+          voice_alerts_enabled: boolean
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          haptics_enabled?: boolean
           id: string
+          journal_lock_enabled?: boolean
+          push_enabled?: boolean
+          timezone?: string
           updated_at?: string
+          voice_alerts_enabled?: boolean
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          haptics_enabled?: boolean
           id?: string
+          journal_lock_enabled?: boolean
+          push_enabled?: boolean
+          timezone?: string
           updated_at?: string
+          voice_alerts_enabled?: boolean
         }
         Relationships: []
       }
