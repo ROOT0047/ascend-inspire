@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { profile } from "@/data/mock";
 import mark from "@/assets/ascend-mark.png";
 
-export const Route = createFileRoute("/profile")({
+export const Route = createFileRoute("/profile/")({
   head: () => ({
     meta: [
       { title: "Profile — ASCEND" },
