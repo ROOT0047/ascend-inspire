@@ -25,6 +25,7 @@ import { Route as RemindersRouteImport } from './routes/reminders'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SyncRouteImport } from './routes/sync'
+import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -106,6 +107,11 @@ const SyncRoute = SyncRouteImport.update({
   path: '/sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileEditRoute = ProfileEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => ProfileRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -119,11 +125,12 @@ export interface FileRoutesByFullPath {
   '/journal': typeof JournalRoute
   '/learn': typeof LearnRoute
   '/notifications': typeof NotificationsRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRoute
   '/sync': typeof SyncRoute
+  '/profile/edit': typeof ProfileEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -137,11 +144,12 @@ export interface FileRoutesByTo {
   '/journal': typeof JournalRoute
   '/learn': typeof LearnRoute
   '/notifications': typeof NotificationsRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRoute
   '/sync': typeof SyncRoute
+  '/profile/edit': typeof ProfileEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -156,11 +164,12 @@ export interface FileRoutesById {
   '/journal': typeof JournalRoute
   '/learn': typeof LearnRoute
   '/notifications': typeof NotificationsRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRoute
   '/sync': typeof SyncRoute
+  '/profile/edit': typeof ProfileEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/sync'
+    | '/profile/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/sync'
+    | '/profile/edit'
   id:
     | '__root__'
     | '/'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/settings'
     | '/sync'
+    | '/profile/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -231,7 +243,7 @@ export interface RootRouteChildren {
   JournalRoute: typeof JournalRoute
   LearnRoute: typeof LearnRoute
   NotificationsRoute: typeof NotificationsRoute
-  ProfileRoute: typeof ProfileRoute
+  ProfileRoute: typeof ProfileRouteWithChildren
   RemindersRoute: typeof RemindersRoute
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRoute
@@ -352,8 +364,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/edit': {
+      id: '/profile/edit'
+      path: '/edit'
+      fullPath: '/profile/edit'
+      preLoaderRoute: typeof ProfileEditRouteImport
+      parentRoute: typeof ProfileRoute
+    }
   }
 }
+
+interface ProfileRouteChildren {
+  ProfileEditRoute: typeof ProfileEditRoute
+}
+
+const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileEditRoute: ProfileEditRoute,
+}
+
+const ProfileRouteWithChildren =
+  ProfileRoute._addFileChildren(ProfileRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -367,7 +397,7 @@ const rootRouteChildren: RootRouteChildren = {
   JournalRoute: JournalRoute,
   LearnRoute: LearnRoute,
   NotificationsRoute: NotificationsRoute,
-  ProfileRoute: ProfileRoute,
+  ProfileRoute: ProfileRouteWithChildren,
   RemindersRoute: RemindersRoute,
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRoute,

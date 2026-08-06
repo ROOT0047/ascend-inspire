@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Award, ChevronRight, LogOut } from "lucide-react";
+import { Award, ChevronRight, LogOut, Pencil } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/profile")({
 });
 
 const links = [
+  { to: "/profile/edit", label: "Edit profile" },
   { to: "/achievements", label: "Achievements" },
   { to: "/health", label: "Health" },
   { to: "/learn", label: "Learning" },
@@ -34,15 +35,15 @@ const links = [
 
 function ProfilePage() {
   const { disciplineScore, habits, achievements } = useAscend();
-  const { user, profile: account, signOut } = useAuth();
+  const { user, profile: account, avatarSrc, signOut } = useAuth();
   const navigate = useNavigate();
   const name = account?.display_name ?? user?.email?.split("@")[0] ?? profile.name;
 
   return (
     <AppShell title="Profile">
       <div className="card-surface flex items-center gap-4 px-4 py-4">
-        <img src={account?.avatar_url ?? mark} alt="" className="size-14 rounded-2xl object-cover" />
-        <div className="min-w-0">
+        <img src={avatarSrc ?? mark} alt="" className="size-14 rounded-2xl object-cover" />
+        <div className="min-w-0 flex-1">
           <p className="text-base text-foreground">{name}</p>
           <p className="truncate text-xs text-muted-foreground">{user?.email ?? profile.email}</p>
           <div className="mt-1.5 flex items-center gap-2">
@@ -54,6 +55,13 @@ function ProfilePage() {
             </span>
           </div>
         </div>
+        <Link
+          to="/profile/edit"
+          aria-label="Edit profile"
+          className="grid size-9 shrink-0 place-items-center rounded-xl border border-border bg-surface text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <Pencil className="size-4" strokeWidth={1.75} />
+        </Link>
       </div>
 
       <div className="mt-4 grid grid-cols-3 gap-2">
