@@ -108,9 +108,9 @@ const ProfileIndexRoute = ProfileIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileEditRoute = ProfileEditRouteImport.update({
-  id: '/edit',
-  path: '/edit',
-  getParentRoute: () => ProfileRoute,
+  id: '/profile/edit',
+  path: '/profile/edit',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -247,6 +247,7 @@ export interface RootRouteChildren {
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRoute
   SyncRoute: typeof SyncRoute
+  ProfileEditRoute: typeof ProfileEditRoute
   ProfileIndexRoute: typeof ProfileIndexRoute
 }
 
@@ -366,10 +367,10 @@ declare module '@tanstack/react-router' {
     }
     '/profile/edit': {
       id: '/profile/edit'
-      path: '/edit'
+      path: '/profile/edit'
       fullPath: '/profile/edit'
       preLoaderRoute: typeof ProfileEditRouteImport
-      parentRoute: typeof ProfileRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -390,18 +391,9 @@ const rootRouteChildren: RootRouteChildren = {
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRoute,
   SyncRoute: SyncRoute,
+  ProfileEditRoute: ProfileEditRoute,
   ProfileIndexRoute: ProfileIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
