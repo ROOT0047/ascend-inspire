@@ -7,7 +7,12 @@ import {
   type ReactNode,
 } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { AuthContext, type AuthState, type PreferenceKey } from "@/hooks/auth-context";
+import {
+  AuthContext,
+  type AuthState,
+  type PreferenceKey,
+  type Profile,
+} from "@/hooks/auth-context";
 import type { Session } from "@supabase/supabase-js";
 
 export type { Profile, PreferenceKey, AuthState } from "@/hooks/auth-context";
