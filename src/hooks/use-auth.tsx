@@ -9,6 +9,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import {
   AuthContext,
+  authDebug,
   type AuthState,
   type PreferenceKey,
   type Profile,
@@ -16,6 +17,7 @@ import {
 import type { Session } from "@supabase/supabase-js";
 
 export type { Profile, PreferenceKey, AuthState } from "@/hooks/auth-context";
+export { authDebug, isAuthDebugEnabled, setAuthDebugEnabled } from "@/hooks/auth-context";
 
 /** Safe fallback so a transient missing provider (e.g. dev HMR) never blanks the app. */
 const fallbackAuth: AuthState = {
@@ -38,15 +40,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    authDebug("AuthProvider mounted");
     const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
+      authDebug("auth state change", { event: _event, hasSession: !!next });
       setSession(next);
       setLoading(false);
     });
     supabase.auth.getSession().then(({ data }) => {
+      authDebug("initial getSession", { hasSession: !!data.session });
       setSession(data.session);
       setLoading(false);
     });
-    return () => sub.subscription.unsubscribe();
+    return () => {
+      authDebug("AuthProvider unmounted (hot-reload or navigation)");
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   const userId = session?.user.id ?? null;
@@ -64,6 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       )
       .eq("id", userId)
       .maybeSingle();
+    authDebug("profile loaded", { userId, found: !!data });
     setProfile(data ?? null);
 
     const path = data?.avatar_url ?? null;
@@ -125,5 +134,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
+  if (!ctx) {
+    authDebug(
+      "useAuth called without a provider in the tree — using signed-out fallback",
+    );
+  }
   return ctx ?? fallbackAuth;
 }
