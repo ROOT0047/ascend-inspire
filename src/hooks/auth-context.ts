@@ -47,3 +47,51 @@ const globalStore = globalThis as typeof globalThis & {
 
 export const AuthContext =
   globalStore[KEY] ?? (globalStore[KEY] = createContext<AuthState | null>(null));
+
+/**
+ * Developer-only debug logging.
+ * Enable in the browser console with:  __ascendAuthDebug(true)
+ * (persists in localStorage under "ascend:auth-debug"). Off by default and
+ * fully inert in production builds.
+ */
+const DEBUG_STORAGE_KEY = "ascend:auth-debug";
+
+const debugStore = globalThis as typeof globalThis & {
+  __ascendAuthDebugEnabled?: boolean;
+  __ascendAuthDebug?: (on?: boolean) => boolean;
+};
+
+export function isAuthDebugEnabled(): boolean {
+  if (!import.meta.env.DEV) return false;
+  if (typeof debugStore.__ascendAuthDebugEnabled === "boolean") {
+    return debugStore.__ascendAuthDebugEnabled;
+  }
+  try {
+    const stored = globalThis.localStorage?.getItem(DEBUG_STORAGE_KEY) === "1";
+    debugStore.__ascendAuthDebugEnabled = stored;
+    return stored;
+  } catch {
+    return false;
+  }
+}
+
+export function setAuthDebugEnabled(on: boolean): boolean {
+  debugStore.__ascendAuthDebugEnabled = on;
+  try {
+    if (on) globalThis.localStorage?.setItem(DEBUG_STORAGE_KEY, "1");
+    else globalThis.localStorage?.removeItem(DEBUG_STORAGE_KEY);
+  } catch {
+    /* storage unavailable — in-memory toggle still applies */
+  }
+  return on;
+}
+
+/** No-op unless debug logging is switched on in a dev build. */
+export function authDebug(message: string, ...details: unknown[]) {
+  if (!isAuthDebugEnabled()) return;
+  console.info(`[auth] ${message}`, ...details);
+}
+
+if (import.meta.env.DEV && !debugStore.__ascendAuthDebug) {
+  debugStore.__ascendAuthDebug = (on = true) => setAuthDebugEnabled(on);
+}
