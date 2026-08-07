@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading, SectionHeader } from "@/components/ascend/primitives";
 import { Switch } from "@/components/ui/switch";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth, type PreferenceKey } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -17,18 +18,28 @@ export const Route = createFileRoute("/settings")({
 });
 
 const toggles = [
+  { id: "reminders_enabled", label: "Reminders", detail: "Scheduled nudges for blocks and habits" },
   { id: "push_enabled", label: "Push notifications", detail: "Streaks, sessions and reviews" },
   { id: "voice_alerts_enabled", label: "Voice alerts", detail: "Spoken reminders for key blocks" },
+  { id: "focus_mode_enabled", label: "Focus mode", detail: "Silence alerts during deep work" },
   { id: "haptics_enabled", label: "Haptics", detail: "Feedback on completion" },
   {
     id: "journal_lock_enabled",
     label: "Private journal lock",
     detail: "Require unlock to open entries",
   },
-] as const;
+] as const satisfies ReadonlyArray<{ id: PreferenceKey; label: string; detail: string }>;
 
 function SettingsPage() {
-  const { user, profile } = useAuth();
+  const { user, profile, updatePreference } = useAuth();
+
+  async function onToggle(key: PreferenceKey, value: boolean) {
+    try {
+      await updatePreference(key, value);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save preference");
+    }
+  }
 
   return (
     <AppShell title="Settings">
@@ -42,7 +53,12 @@ function SettingsPage() {
               <p className="text-sm text-foreground">{t.label}</p>
               <p className="mt-0.5 text-xs text-muted-foreground">{t.detail}</p>
             </div>
-            <Switch checked={profile?.[t.id] ?? false} disabled aria-readonly />
+            <Switch
+              checked={profile?.[t.id] ?? false}
+              disabled={!profile}
+              aria-label={t.label}
+              onCheckedChange={(v) => void onToggle(t.id, v)}
+            />
           </li>
         ))}
       </ul>
@@ -50,7 +66,7 @@ function SettingsPage() {
         to="/profile/edit"
         className="mt-2 block text-center text-xs text-primary transition-opacity hover:opacity-80"
       >
-        Change preferences in profile editor
+        Edit name, avatar and timezone
       </Link>
 
       <SectionHeader title="Account" className="mt-6" />
