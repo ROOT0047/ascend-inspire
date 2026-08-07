@@ -19,10 +19,12 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           display_name: string | null
+          focus_mode_enabled: boolean
           haptics_enabled: boolean
           id: string
           journal_lock_enabled: boolean
           push_enabled: boolean
+          reminders_enabled: boolean
           timezone: string
           updated_at: string
           voice_alerts_enabled: boolean
@@ -31,10 +33,12 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          focus_mode_enabled?: boolean
           haptics_enabled?: boolean
           id: string
           journal_lock_enabled?: boolean
           push_enabled?: boolean
+          reminders_enabled?: boolean
           timezone?: string
           updated_at?: string
           voice_alerts_enabled?: boolean
@@ -43,10 +47,12 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
+          focus_mode_enabled?: boolean
           haptics_enabled?: boolean
           id?: string
           journal_lock_enabled?: boolean
           push_enabled?: boolean
+          reminders_enabled?: boolean
           timezone?: string
           updated_at?: string
           voice_alerts_enabled?: boolean
