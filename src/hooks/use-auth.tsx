@@ -45,6 +45,20 @@ type AuthState = {
 
 const AuthContext = createContext<AuthState | null>(null);
 
+/** Safe fallback so a transient missing provider (e.g. dev HMR) never blanks the app. */
+const fallbackAuth: AuthState = {
+  session: null,
+  user: null,
+  profile: null,
+  avatarSrc: null,
+  loading: true,
+  refreshProfile: async () => {},
+  updatePreference: async () => {},
+  signOut: async () => {
+    await supabase.auth.signOut();
+  },
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -139,6 +153,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
-  return ctx;
+  return ctx ?? fallbackAuth;
 }
