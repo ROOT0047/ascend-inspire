@@ -6,6 +6,7 @@ import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading, StatTile } from "@/components/ascend/primitives";
 import { Switch } from "@/components/ui/switch";
 import { useAscend } from "@/context/ascend";
+import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/focus")({
@@ -31,13 +32,22 @@ const presets = [
 
 function FocusPage() {
   const { logFocus, focusMinutes, sessions } = useAscend();
+  const { profile, updatePreference } = useAuth();
   const [mode, setMode] = useState<"pomodoro" | "stopwatch">("pomodoro");
   const [preset, setPreset] = useState<(typeof presets)[number]>(presets[0]);
   const [remaining, setRemaining] = useState(presets[0].minutes * 60);
   const [elapsed, setElapsed] = useState(0);
   const [running, setRunning] = useState(false);
-  const [deepWork, setDeepWork] = useState(false);
+  const deepWork = profile?.focus_mode_enabled ?? false;
   const logged = useRef(false);
+
+  async function setDeepWork(value: boolean) {
+    try {
+      await updatePreference("focus_mode_enabled", value);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save preference");
+    }
+  }
 
   useEffect(() => {
     if (!running) return;

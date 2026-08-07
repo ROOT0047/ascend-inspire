@@ -19,7 +19,17 @@ export type Profile = {
   voice_alerts_enabled: boolean;
   haptics_enabled: boolean;
   journal_lock_enabled: boolean;
+  reminders_enabled: boolean;
+  focus_mode_enabled: boolean;
 };
+
+export type PreferenceKey =
+  | "push_enabled"
+  | "voice_alerts_enabled"
+  | "haptics_enabled"
+  | "journal_lock_enabled"
+  | "reminders_enabled"
+  | "focus_mode_enabled";
 
 type AuthState = {
   session: Session | null;
@@ -29,6 +39,7 @@ type AuthState = {
   avatarSrc: string | null;
   loading: boolean;
   refreshProfile: () => Promise<void>;
+  updatePreference: (key: PreferenceKey, value: boolean) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -63,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data } = await supabase
       .from("profiles")
       .select(
-        "id, display_name, avatar_url, timezone, push_enabled, voice_alerts_enabled, haptics_enabled, journal_lock_enabled",
+        "id, display_name, avatar_url, timezone, push_enabled, voice_alerts_enabled, haptics_enabled, journal_lock_enabled, reminders_enabled, focus_mode_enabled",
       )
       .eq("id", userId)
       .maybeSingle();
@@ -92,6 +103,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAvatarSrc(null);
   }, []);
 
+  const updatePreference = useCallback(
+    async (key: PreferenceKey, value: boolean) => {
+      if (!userId) return;
+      const previous = profile;
+      setProfile((p) => (p ? { ...p, [key]: value } : p));
+      const { error } = await supabase
+        .from("profiles")
+        .update({ [key]: value } as Partial<Record<PreferenceKey, boolean>>)
+        .eq("id", userId);
+      if (error) {
+        setProfile(previous);
+        throw error;
+      }
+    },
+    [userId, profile],
+  );
+
   const value = useMemo<AuthState>(
     () => ({
       session,
@@ -100,9 +128,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       avatarSrc,
       loading,
       refreshProfile,
+      updatePreference,
       signOut,
     }),
-    [session, profile, avatarSrc, loading, refreshProfile, signOut],
+    [session, profile, avatarSrc, loading, refreshProfile, updatePreference, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

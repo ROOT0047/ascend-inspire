@@ -40,8 +40,10 @@ const schema = z.object({
 const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
 
 const prefFields = [
+  { key: "reminders_enabled", label: "Reminders", detail: "Scheduled nudges for blocks and habits" },
   { key: "push_enabled", label: "Push notifications", detail: "Streaks, sessions and reviews" },
   { key: "voice_alerts_enabled", label: "Voice alerts", detail: "Spoken reminders for key blocks" },
+  { key: "focus_mode_enabled", label: "Focus mode", detail: "Silence alerts during deep work" },
   { key: "haptics_enabled", label: "Haptics", detail: "Feedback on completion" },
   { key: "journal_lock_enabled", label: "Private journal lock", detail: "Require unlock to open entries" },
 ] as const;
@@ -56,8 +58,10 @@ function EditProfilePage() {
   const [displayName, setDisplayName] = useState("");
   const [timezone, setTimezone] = useState("UTC");
   const [prefs, setPrefs] = useState<Record<PrefKey, boolean>>({
+    reminders_enabled: true,
     push_enabled: true,
     voice_alerts_enabled: true,
+    focus_mode_enabled: true,
     haptics_enabled: true,
     journal_lock_enabled: false,
   });
@@ -73,8 +77,10 @@ function EditProfilePage() {
     setDisplayName(profile.display_name ?? "");
     setTimezone(profile.timezone || "UTC");
     setPrefs({
+      reminders_enabled: profile.reminders_enabled,
       push_enabled: profile.push_enabled,
       voice_alerts_enabled: profile.voice_alerts_enabled,
+      focus_mode_enabled: profile.focus_mode_enabled,
       haptics_enabled: profile.haptics_enabled,
       journal_lock_enabled: profile.journal_lock_enabled,
     });
