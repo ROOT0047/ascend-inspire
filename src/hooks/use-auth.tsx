@@ -110,7 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setProfile((p) => (p ? { ...p, [key]: value } : p));
       const { error } = await supabase
         .from("profiles")
-        .update({ [key]: value })
+        .update({ [key]: value } as Partial<Record<PreferenceKey, boolean>>)
         .eq("id", userId);
       if (error) {
         setProfile(previous);
