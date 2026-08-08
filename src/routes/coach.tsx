@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
 import { useAscend } from "@/context/ascend";
-import { coachReplies } from "@/data/mock";
+import { askCoach } from "@/lib/coach.functions";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/ascend-mark.png";
 
@@ -23,7 +25,8 @@ export const Route = createFileRoute("/coach")({
 });
 
 function CoachPage() {
-  const { coach, addCoachMessage } = useAscend();
+  const { coach, addCoachMessage, refreshCoach } = useAscend();
+  const ask = useServerFn(askCoach);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
@@ -37,23 +40,23 @@ function CoachPage() {
     inputRef.current?.focus();
   }, []);
 
-  function send(e: React.FormEvent) {
+  async function send(e: React.FormEvent) {
     e.preventDefault();
     const text = input.trim();
     if (!text || thinking) return;
     addCoachMessage({ id: Math.random().toString(36).slice(2), role: "user", content: text });
     setInput("");
     setThinking(true);
-    setTimeout(() => {
-      addCoachMessage({
-        id: Math.random().toString(36).slice(2),
-        role: "coach",
-        content:
-          coachReplies[Math.floor(Math.random() * coachReplies.length)] ?? coachReplies[0]!,
-      });
+    try {
+      await ask({ data: { message: text } });
+      await refreshCoach();
+    } catch (error) {
+      console.error(error);
+      toast.error("ASCEND AI couldn't reply. Try again in a moment.");
+    } finally {
       setThinking(false);
       inputRef.current?.focus();
-    }, 900);
+    }
   }
 
   return (
@@ -67,6 +70,11 @@ function CoachPage() {
       </div>
 
       <div className="space-y-3">
+        {coach.length === 0 && !thinking ? (
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Ask about today's plan, a habit you keep missing, or how to structure tomorrow.
+          </p>
+        ) : null}
         {coach.map((m) => (
           <div
             key={m.id}
@@ -91,7 +99,7 @@ function CoachPage() {
       </div>
 
       <form
-        onSubmit={send}
+        onSubmit={(e) => void send(e)}
         className="sticky bottom-2 mt-5 flex items-center gap-2 rounded-2xl border border-border bg-surface p-1.5"
       >
         <input

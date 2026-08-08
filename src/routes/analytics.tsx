@@ -4,7 +4,6 @@ import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } f
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
 import { useAscend } from "@/context/ascend";
-import { disciplineTrend, heatmap, monthTrend, yearTrend } from "@/data/mock";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/analytics")({
@@ -22,16 +21,17 @@ export const Route = createFileRoute("/analytics")({
   component: AnalyticsPage,
 });
 
-const ranges = ["Week", "Month", "Year"] as const;
+const ranges = ["Week", "Month"] as const;
 
 function AnalyticsPage() {
-  const { disciplineScore, focusMinutes, habits } = useAscend();
+  const { disciplineScore, focusMinutes, habits, weekTrend, monthTrend, heatmap } = useAscend();
   const [range, setRange] = useState<(typeof ranges)[number]>("Week");
 
-  const data = range === "Week" ? disciplineTrend : range === "Month" ? monthTrend : yearTrend;
-  const habitPct = Math.round(
-    (habits.filter((h) => h.completedToday).length / habits.length) * 100,
-  );
+  const data = range === "Week" ? weekTrend : monthTrend;
+  const habitPct = habits.length
+    ? Math.round((habits.filter((h) => h.completedToday).length / habits.length) * 100)
+    : 0;
+  const bestStreak = habits.length ? Math.max(...habits.map((h) => h.bestStreak)) : 0;
 
   return (
     <AppShell title="Analytics">
@@ -59,7 +59,7 @@ function AnalyticsPage() {
           label="Focus today"
           value={`${Math.floor(focusMinutes / 60)}h ${focusMinutes % 60}m`}
         />
-        <StatTile label="Best streak" value={`${Math.max(...habits.map((h) => h.bestStreak))}`} suffix="d" tone="warning" />
+        <StatTile label="Best streak" value={`${bestStreak}`} suffix="d" tone="warning" />
       </div>
 
       <section className="card-surface mt-5 px-4 py-4">
@@ -103,7 +103,7 @@ function AnalyticsPage() {
       </section>
 
       <section className="card-surface mt-4 px-4 py-4">
-        <SectionHeader title="Focus minutes" />
+        <SectionHeader title="Blocks completed" />
         <div className="h-36 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 6, right: 4, left: 4, bottom: 0 }}>
@@ -124,7 +124,7 @@ function AnalyticsPage() {
                   color: "var(--foreground)",
                 }}
               />
-              <Bar dataKey="focus" fill="var(--secondary)" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="tasks" fill="var(--secondary)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -133,20 +133,23 @@ function AnalyticsPage() {
       <section className="card-surface mt-4 px-4 py-4">
         <SectionHeader title="Habit heat map" />
         <div className="grid grid-cols-13 gap-1">
-          {heatmap.map((level, i) => (
-            <span
-              key={i}
-              className="aspect-square rounded-[3px]"
-              style={{
-                background:
-                  level <= 0
-                    ? "var(--border)"
-                    : `color-mix(in oklab, var(--primary) ${Math.min(100, level * 26)}%, var(--border))`,
-              }}
-            />
-          ))}
+          {heatmap.map((level, i) => {
+            const intensity = habits.length ? Math.min(1, level / habits.length) : 0;
+            return (
+              <span
+                key={i}
+                className="aspect-square rounded-[3px]"
+                style={{
+                  background:
+                    level <= 0
+                      ? "var(--border)"
+                      : `color-mix(in oklab, var(--primary) ${Math.round(25 + intensity * 75)}%, var(--border))`,
+                }}
+              />
+            );
+          })}
         </div>
-        <p className="mt-3 text-xs text-muted-foreground">Last 13 weeks of habit completion.</p>
+        <p className="mt-3 text-xs text-muted-foreground">Last 13 weeks of habit check-ins.</p>
       </section>
     </AppShell>
   );

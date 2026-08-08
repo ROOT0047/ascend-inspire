@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Flame, Plus } from "lucide-react";
+import { Check, Flame, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
@@ -35,10 +35,11 @@ export const Route = createFileRoute("/habits")({
 const filters = ["All", "Daily", "Weekly", "Monthly"] as const;
 
 function HabitsPage() {
-  const { habits, toggleHabit, addHabit } = useAscend();
+  const { habits, toggleHabit, addHabit, deleteHabit, loading } = useAscend();
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
+  const [cadence, setCadence] = useState<"Daily" | "Weekly" | "Monthly">("Daily");
 
   const visible = habits.filter((h) => filter === "All" || h.cadence === filter);
   const done = habits.filter((h) => h.completedToday).length;
@@ -48,7 +49,7 @@ function HabitsPage() {
       toast.error("Name the habit first");
       return;
     }
-    addHabit({ title: title.trim(), cadence: "Daily", goal: 1, unit: "session" });
+    addHabit({ title: title.trim(), cadence, goal: 1, unit: "session" });
     toast.success("Habit added");
     setTitle("");
     setOpen(false);
@@ -76,6 +77,17 @@ function HabitsPage() {
         ))}
       </div>
 
+      {loading ? (
+        <p className="text-xs tracking-[0.24em] text-muted-foreground">LOADING…</p>
+      ) : habits.length === 0 ? (
+        <div className="card-surface px-5 py-8 text-center">
+          <p className="text-sm text-foreground">No habits yet</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Add the first habit you want to hold every day.
+          </p>
+        </div>
+      ) : null}
+
       <ul className="space-y-3">
         {visible.map((habit) => (
           <li key={habit.id} className="card-surface px-4 py-3.5">
@@ -102,6 +114,13 @@ function HabitsPage() {
                 <Flame className="size-3.5" strokeWidth={2} />
                 <span className="num text-sm">{habit.streak}</span>
               </div>
+              <button
+                aria-label={`Delete ${habit.title}`}
+                onClick={() => deleteHabit(habit.id)}
+                className="grid size-8 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-destructive"
+              >
+                <Trash2 className="size-3.5" strokeWidth={1.75} />
+              </button>
             </div>
             <div className="mt-3 flex gap-[3px]">
               {habit.history.map((hit, i) => (
@@ -131,15 +150,32 @@ function HabitsPage() {
           <SheetHeader>
             <SheetTitle>New habit</SheetTitle>
           </SheetHeader>
-          <div className="space-y-1.5 px-4">
-            <Label htmlFor="habit-title">Habit</Label>
-            <Input
-              id="habit-title"
-              value={title}
-              maxLength={60}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Read 30 minutes"
-            />
+          <div className="space-y-4 px-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="habit-title">Habit</Label>
+              <Input
+                id="habit-title"
+                value={title}
+                maxLength={60}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Read 30 minutes"
+              />
+            </div>
+            <div className="flex gap-1.5 rounded-2xl border border-border bg-background p-1">
+              {(["Daily", "Weekly", "Monthly"] as const).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCadence(c)}
+                  className={cn(
+                    "flex-1 rounded-xl py-1.5 text-xs transition-colors",
+                    cadence === c ? "bg-primary text-primary-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
           </div>
           <SheetFooter>
             <Button onClick={submit} className="w-full">

@@ -3,6 +3,7 @@ import { CheckCircle2, ChevronRight, Circle, Droplet, Moon } from "lucide-react"
 import { AppShell } from "@/components/ascend/app-shell";
 import { Meter, ScoreRing, SectionHeader, StatTile } from "@/components/ascend/primitives";
 import { useAscend } from "@/context/ascend";
+import { useAuth } from "@/hooks/use-auth";
 import { healthStats, profile } from "@/data/mock";
 import { cn } from "@/lib/utils";
 
@@ -38,19 +39,22 @@ function HomePage() {
     sleep,
     toggleBlock,
     addWater,
+    loading,
   } = useAscend();
+  const { user, profile: account } = useAuth();
+  const name = account?.display_name ?? user?.email?.split("@")[0] ?? profile.name;
 
   const doneTasks = schedule.filter((b) => b.completed).length;
   const doneHabits = habits.filter((h) => h.completedToday).length;
-  const habitPct = Math.round((doneHabits / habits.length) * 100);
+  const habitPct = habits.length ? Math.round((doneHabits / habits.length) * 100) : 0;
   const mission = schedule.filter((b) => b.priority !== "Low").slice(0, 5);
-  const bestStreak = Math.max(...habits.map((h) => h.streak));
+  const bestStreak = habits.length ? Math.max(...habits.map((h) => h.streak)) : 0;
 
   return (
     <AppShell title="Home">
       <section className="rise">
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Good morning</p>
-        <h1 className="mt-1 text-2xl text-foreground">{profile.name}</h1>
+        <h1 className="mt-1 text-2xl text-foreground">{name}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Stay focused. Stay silent. Let the results make the noise.
         </p>
@@ -63,7 +67,7 @@ function HomePage() {
             <p className="text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
               Discipline
             </p>
-            <p className="num mt-0.5 text-sm text-success">+4 today</p>
+            <p className="num mt-0.5 text-sm text-success">Today</p>
           </div>
           <div className="space-y-1.5">
             <div className="flex justify-between text-xs text-muted-foreground">
@@ -79,7 +83,7 @@ function HomePage() {
                 {doneTasks}/{schedule.length}
               </span>
             </div>
-            <Meter value={(doneTasks / schedule.length) * 100} tone="secondary" />
+            <Meter value={schedule.length ? (doneTasks / schedule.length) * 100 : 0} tone="secondary" />
           </div>
         </div>
       </section>
@@ -108,6 +112,11 @@ function HomePage() {
           }
         />
         <ul className="card-surface divide-y divide-border overflow-hidden">
+          {mission.length === 0 ? (
+            <li className="px-4 py-6 text-center text-xs text-muted-foreground">
+              {loading ? "Loading…" : "Nothing planned yet — add a block on the Schedule page."}
+            </li>
+          ) : null}
           {mission.map((block) => (
             <li key={block.id}>
               <button

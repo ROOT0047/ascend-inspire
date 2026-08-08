@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Plus } from "lucide-react";
-import { useState } from "react";
+import { Check, Plus, Trash2 } from "lucide-react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading } from "@/components/ascend/primitives";
@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useAscend } from "@/context/ascend";
+import { isoDate, useAscend } from "@/context/ascend";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/schedule")({
@@ -33,16 +33,6 @@ export const Route = createFileRoute("/schedule")({
   component: SchedulePage,
 });
 
-const week = [
-  { day: "Mon", date: 18 },
-  { day: "Tue", date: 19 },
-  { day: "Wed", date: 20 },
-  { day: "Thu", date: 21 },
-  { day: "Fri", date: 22 },
-  { day: "Sat", date: 23 },
-  { day: "Sun", date: 24 },
-];
-
 const dotColor: Record<string, string> = {
   primary: "bg-primary",
   secondary: "bg-secondary",
@@ -52,12 +42,32 @@ const dotColor: Record<string, string> = {
 };
 
 function SchedulePage() {
-  const { schedule, toggleBlock, addBlock } = useAscend();
-  const [selected, setSelected] = useState(21);
+  const { schedule, toggleBlock, addBlock, deleteBlock, selectedDate, setSelectedDate, loading } =
+    useAscend();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [start, setStart] = useState("09:00");
   const [end, setEnd] = useState("10:00");
+
+  const week = useMemo(() => {
+    const today = new Date();
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      return {
+        iso: isoDate(d),
+        day: d.toLocaleDateString(undefined, { weekday: "short" }),
+        date: d.getDate(),
+      };
+    });
+  }, []);
+
+  const selectedLabel = useMemo(() => {
+    const [y, m, d] = selectedDate.split("-").map(Number);
+    return new Date(y!, m! - 1, d!);
+  }, [selectedDate]);
 
   const current = schedule.find((b) => !b.completed);
 
@@ -71,27 +81,33 @@ function SchedulePage() {
       description: "Added from the planner",
       startTime: start,
       endTime: end,
-      durationLabel: `${start}–${end}`,
       priority: "Medium",
       color: "primary",
     });
-    toast.success("Block added to today");
+    toast.success("Block added");
     setTitle("");
     setOpen(false);
   }
 
   return (
     <AppShell title="Schedule">
-      <PageHeading title="May 2026" subtitle="Thursday, 21 May" />
+      <PageHeading
+        title={selectedLabel.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
+        subtitle={selectedLabel.toLocaleDateString(undefined, {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+        })}
+      />
 
       <div className="-mx-1 mb-6 flex gap-1.5 overflow-x-auto px-1 pb-1">
         {week.map((d) => (
           <button
-            key={d.date}
-            onClick={() => setSelected(d.date)}
+            key={d.iso}
+            onClick={() => setSelectedDate(d.iso)}
             className={cn(
               "flex min-w-[3.1rem] flex-col items-center gap-1 rounded-2xl border px-2 py-2.5 transition-colors",
-              selected === d.date
+              selectedDate === d.iso
                 ? "border-primary bg-primary-soft text-foreground"
                 : "border-border bg-surface text-muted-foreground",
             )}
@@ -102,8 +118,21 @@ function SchedulePage() {
         ))}
       </div>
 
+      {loading ? (
+        <p className="text-xs tracking-[0.24em] text-muted-foreground">LOADING…</p>
+      ) : schedule.length === 0 ? (
+        <div className="card-surface px-5 py-8 text-center">
+          <p className="text-sm text-foreground">No blocks planned</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Add your first time block for this day.
+          </p>
+        </div>
+      ) : null}
+
       <ol className="relative space-y-2 pb-8 pl-[3.6rem]">
-        <span aria-hidden className="absolute left-[3.1rem] top-2 bottom-2 w-px bg-border" />
+        {schedule.length ? (
+          <span aria-hidden className="absolute left-[3.1rem] top-2 bottom-2 w-px bg-border" />
+        ) : null}
         {schedule.map((block) => {
           const isCurrent = current?.id === block.id;
           return (
@@ -148,6 +177,13 @@ function SchedulePage() {
                   )}
                 >
                   <Check className="size-4" strokeWidth={2} />
+                </button>
+                <button
+                  aria-label={`Delete ${block.title}`}
+                  onClick={() => deleteBlock(block.id)}
+                  className="grid size-8 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-destructive"
+                >
+                  <Trash2 className="size-3.5" strokeWidth={1.75} />
                 </button>
               </div>
             </li>
