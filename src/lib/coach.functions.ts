@@ -61,10 +61,8 @@ export const askCoach = createServerFn({ method: "POST" })
     let streamError: unknown = null;
     const result = streamText({
       model: gateway("google/gemini-3.6-flash"),
-      messages: [
-        { role: "system" as const, content: `${SYSTEM}\n\nUser data: ${contextLine}` },
-        ...priorMessages,
-      ],
+      instructions: `${SYSTEM}\n\nUser data: ${contextLine}`,
+      messages: priorMessages,
       onError: ({ error }) => {
         streamError = error;
         console.error("[coach] gateway stream error", error);
