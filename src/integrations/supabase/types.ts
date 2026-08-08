@@ -14,6 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
+      coach_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      habit_logs: {
+        Row: {
+          created_at: string
+          habit_id: string
+          id: string
+          log_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          habit_id: string
+          id?: string
+          log_date: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          habit_id?: string
+          id?: string
+          log_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_logs_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      habits: {
+        Row: {
+          archived: boolean
+          cadence: string
+          created_at: string
+          goal: number
+          icon: string
+          id: string
+          title: string
+          unit: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          archived?: boolean
+          cadence?: string
+          created_at?: string
+          goal?: number
+          icon?: string
+          id?: string
+          title: string
+          unit?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          archived?: boolean
+          cadence?: string
+          created_at?: string
+          goal?: number
+          icon?: string
+          id?: string
+          title?: string
+          unit?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -56,6 +151,51 @@ export type Database = {
           timezone?: string
           updated_at?: string
           voice_alerts_enabled?: boolean
+        }
+        Relationships: []
+      }
+      time_blocks: {
+        Row: {
+          block_date: string
+          color: string
+          completed: boolean
+          created_at: string
+          description: string
+          end_time: string
+          id: string
+          priority: string
+          start_time: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          block_date?: string
+          color?: string
+          completed?: boolean
+          created_at?: string
+          description?: string
+          end_time: string
+          id?: string
+          priority?: string
+          start_time: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          block_date?: string
+          color?: string
+          completed?: boolean
+          created_at?: string
+          description?: string
+          end_time?: string
+          id?: string
+          priority?: string
+          start_time?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
