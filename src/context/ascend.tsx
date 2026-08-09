@@ -76,6 +76,19 @@ function toBlock(r: BlockRow): ScheduleBlock {
 }
 
 export type TrendPoint = { label: string; score: number; tasks: number };
+export type WeekDayPlan = {
+  iso: string;
+  day: string;
+  date: number;
+  total: number;
+  done: number;
+};
+
+export function startOfWeekISO(from = new Date()) {
+  const d = new Date(from);
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+  return isoDate(d);
+}
 
 /* ------------------------------------------------------------------ */
 /* context                                                             */
@@ -99,8 +112,12 @@ type AscendState = {
   monthTrend: TrendPoint[];
   heatmap: number[];
   toggleBlock: (id: string) => void;
-  addBlock: (block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">) => void;
+  addBlock: (
+    block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">,
+    options?: { weekdays?: number[]; weeks?: number },
+  ) => void;
   deleteBlock: (id: string) => void;
+  weekPlan: WeekDayPlan[];
   toggleHabit: (id: string) => void;
   addHabit: (habit: Pick<Habit, "title" | "cadence" | "goal" | "unit">) => void;
   deleteHabit: (id: string) => void;
@@ -370,18 +387,40 @@ export function AscendProvider({ children }: { children: ReactNode }) {
   });
 
   const addBlockMutation = useMutation({
-    mutationFn: async (block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">) => {
+    mutationFn: async ({
+      block,
+      options,
+    }: {
+      block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">;
+      options?: { weekdays?: number[]; weeks?: number };
+    }) => {
       if (!userId) return;
-      const { error } = await supabase.from("time_blocks").insert({
-        user_id: userId,
-        block_date: selectedDate,
-        title: block.title,
-        description: block.description,
-        start_time: block.startTime,
-        end_time: block.endTime,
-        priority: block.priority,
-        color: block.color,
-      });
+      const weekdays = options?.weekdays?.length ? options.weekdays : null;
+      const weeks = Math.max(1, Math.min(8, options?.weeks ?? 1));
+      const dates: string[] = [];
+      if (weekdays) {
+        const base = startOfWeekISO(new Date(`${selectedDate}T00:00:00`));
+        for (let w = 0; w < weeks; w++) {
+          for (const wd of weekdays) dates.push(shiftISO(base, w * 7 + wd));
+        }
+      } else {
+        dates.push(selectedDate);
+      }
+      const today = todayISO();
+      const rows = Array.from(new Set(dates))
+        .filter((d) => d >= today || d === selectedDate)
+        .map((block_date) => ({
+          user_id: userId,
+          block_date,
+          title: block.title,
+          description: block.description,
+          start_time: block.startTime,
+          end_time: block.endTime,
+          priority: block.priority,
+          color: block.color,
+        }));
+      if (!rows.length) return;
+      const { error } = await supabase.from("time_blocks").insert(rows);
       if (error) throw error;
     },
     onSuccess: invalidateBlocks,
@@ -463,6 +502,23 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     setWater((prev) => Math.min(4000, prev + ml));
   }, []);
 
+  const weekPlan = useMemo<WeekDayPlan[]>(() => {
+    const base = startOfWeekISO(new Date(`${selectedDate}T00:00:00`));
+    return Array.from({ length: 7 }, (_, i) => {
+      const iso = shiftISO(base, i);
+      const [y, m, d] = iso.split("-").map(Number);
+      const dt = new Date(y!, m! - 1, d!);
+      const stats = blockStats.get(iso);
+      return {
+        iso,
+        day: dt.toLocaleDateString(undefined, { weekday: "short" }),
+        date: dt.getDate(),
+        total: stats?.total ?? 0,
+        done: stats?.done ?? 0,
+      };
+    });
+  }, [selectedDate, blockStats]);
+
   const loading =
     enabled &&
     (blocksQuery.isLoading || habitsQuery.isLoading || logsQuery.isLoading);
@@ -473,6 +529,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       selectedDate,
       setSelectedDate,
       schedule: blocksQuery.data ?? [],
+      weekPlan,
       habits,
       journal,
       achievements,
@@ -486,7 +543,8 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       monthTrend,
       heatmap,
       toggleBlock: (id) => toggleBlockMutation.mutate(id),
-      addBlock: (b) => addBlockMutation.mutate(b),
+      addBlock: (b, options) =>
+        addBlockMutation.mutate(options ? { block: b, options } : { block: b }),
       deleteBlock: (id) => deleteBlockMutation.mutate(id),
       toggleHabit: (id) => toggleHabitMutation.mutate(id),
       addHabit: (h) => addHabitMutation.mutate(h),
@@ -501,6 +559,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       loading,
       selectedDate,
       blocksQuery.data,
+      weekPlan,
       habits,
       journal,
       achievements,
