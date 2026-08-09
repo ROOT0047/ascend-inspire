@@ -543,7 +543,8 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       monthTrend,
       heatmap,
       toggleBlock: (id) => toggleBlockMutation.mutate(id),
-      addBlock: (b, options) => addBlockMutation.mutate({ block: b, options }),
+      addBlock: (b, options) =>
+        addBlockMutation.mutate(options ? { block: b, options } : { block: b }),
       deleteBlock: (id) => deleteBlockMutation.mutate(id),
       toggleHabit: (id) => toggleHabitMutation.mutate(id),
       addHabit: (h) => addHabitMutation.mutate(h),
