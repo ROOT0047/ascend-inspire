@@ -68,7 +68,7 @@ export type AscendNotification = {
 export async function showSystemNotification(input: AscendNotification): Promise<boolean> {
   if (notificationPermission() !== "granted") return false;
   const options: NotificationOptions & { vibrate?: number[]; renotify?: boolean } = {
-    body: input.body,
+    ...(input.body ? { body: input.body } : {}),
     tag: input.tag ?? `ascend-${Date.now()}`,
     icon: "/app-icon-192.png",
     badge: "/app-icon-192.png",
