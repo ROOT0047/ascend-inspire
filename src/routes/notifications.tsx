@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Bell } from "lucide-react";
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading } from "@/components/ascend/primitives";
+import { NotificationPermissionCard } from "@/components/ascend/notification-permission-card";
 import { notifications } from "@/data/mock";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +22,9 @@ function NotificationsPage() {
   return (
     <AppShell title="Notifications">
       <PageHeading title="Alerts" />
+      <div className="mb-4">
+        <NotificationPermissionCard />
+      </div>
       <ul className="space-y-2.5">
         {notifications.map((n) => (
           <li

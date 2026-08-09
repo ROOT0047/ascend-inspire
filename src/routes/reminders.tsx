@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading, SectionHeader } from "@/components/ascend/primitives";
+import { NotificationPermissionCard } from "@/components/ascend/notification-permission-card";
 import { Switch } from "@/components/ui/switch";
 import { reminders as seed } from "@/data/mock";
 import { useAuth, type PreferenceKey } from "@/hooks/use-auth";
@@ -45,7 +46,10 @@ function RemindersPage() {
     <AppShell title="Reminders">
       <PageHeading title="Nudges" subtitle="Alerts that protect the routine." />
 
-      <SectionHeader title="Delivery" />
+      <SectionHeader title="Device" />
+      <NotificationPermissionCard />
+
+      <SectionHeader title="Delivery" className="mt-6" />
       <ul className="card-surface divide-y divide-border overflow-hidden">
         {channels.map((c) => (
           <li key={c.id} className="flex items-center gap-3 px-4 py-3.5">
