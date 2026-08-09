@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { isoDate, useAscend } from "@/context/ascend";
+import { useAscend } from "@/context/ascend";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/schedule")({
@@ -42,27 +42,24 @@ const dotColor: Record<string, string> = {
 };
 
 function SchedulePage() {
-  const { schedule, toggleBlock, addBlock, deleteBlock, selectedDate, setSelectedDate, loading } =
+  const { schedule, toggleBlock, addBlock, deleteBlock, selectedDate, setSelectedDate, loading, weekPlan } =
     useAscend();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [start, setStart] = useState("09:00");
   const [end, setEnd] = useState("10:00");
+  const [repeatDays, setRepeatDays] = useState<number[]>([]);
+  const [weeks, setWeeks] = useState(1);
 
-  const week = useMemo(() => {
-    const today = new Date();
-    const monday = new Date(today);
-    monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(monday);
-      d.setDate(monday.getDate() + i);
-      return {
-        iso: isoDate(d),
-        day: d.toLocaleDateString(undefined, { weekday: "short" }),
-        date: d.getDate(),
-      };
-    });
-  }, []);
+  const week = weekPlan;
+  const weekTotals = useMemo(
+    () =>
+      week.reduce(
+        (acc, d) => ({ total: acc.total + d.total, done: acc.done + d.done }),
+        { total: 0, done: 0 },
+      ),
+    [week],
+  );
 
   const selectedLabel = useMemo(() => {
     const [y, m, d] = selectedDate.split("-").map(Number);
@@ -76,16 +73,25 @@ function SchedulePage() {
       toast.error("Give the block a name");
       return;
     }
-    addBlock({
-      title: title.trim(),
-      description: "Added from the planner",
-      startTime: start,
-      endTime: end,
-      priority: "Medium",
-      color: "primary",
-    });
-    toast.success("Block added");
+    addBlock(
+      {
+        title: title.trim(),
+        description: "Added from the planner",
+        startTime: start,
+        endTime: end,
+        priority: "Medium",
+        color: "primary",
+      },
+      repeatDays.length ? { weekdays: repeatDays, weeks } : undefined,
+    );
+    toast.success(
+      repeatDays.length
+        ? `Planned on ${repeatDays.length} day${repeatDays.length > 1 ? "s" : ""} × ${weeks} week${weeks > 1 ? "s" : ""}`
+        : "Block added",
+    );
     setTitle("");
+    setRepeatDays([]);
+    setWeeks(1);
     setOpen(false);
   }
 
@@ -106,7 +112,7 @@ function SchedulePage() {
             key={d.iso}
             onClick={() => setSelectedDate(d.iso)}
             className={cn(
-              "flex min-w-[3.1rem] flex-col items-center gap-1 rounded-2xl border px-2 py-2.5 transition-colors",
+              "flex min-w-[3.1rem] flex-col items-center gap-1 rounded-2xl border px-2 py-2 transition-colors",
               selectedDate === d.iso
                 ? "border-primary bg-primary-soft text-foreground"
                 : "border-border bg-surface text-muted-foreground",
@@ -114,8 +120,33 @@ function SchedulePage() {
           >
             <span className="text-[0.62rem] uppercase tracking-wider">{d.day}</span>
             <span className="num text-sm">{d.date}</span>
+            <span
+              className={cn(
+                "num rounded-full px-1.5 text-[0.58rem] leading-4",
+                d.total === 0
+                  ? "text-muted-foreground/60"
+                  : d.done === d.total
+                    ? "bg-success/15 text-success"
+                    : "bg-primary/12 text-primary",
+              )}
+            >
+              {d.total ? `${d.done}/${d.total}` : "—"}
+            </span>
           </button>
         ))}
+      </div>
+
+      <div className="card-surface mb-5 flex items-center justify-between px-4 py-3">
+        <div>
+          <p className="text-xs tracking-[0.18em] uppercase text-muted-foreground">This week</p>
+          <p className="mt-0.5 text-sm text-foreground">
+            <span className="num">{weekTotals.done}</span> of{" "}
+            <span className="num">{weekTotals.total}</span> blocks done
+          </p>
+        </div>
+        <span className="num text-lg text-primary">
+          {weekTotals.total ? Math.round((weekTotals.done / weekTotals.total) * 100) : 0}%
+        </span>
       </div>
 
       {loading ? (
@@ -232,6 +263,56 @@ function SchedulePage() {
                   onChange={(e) => setEnd(e.target.value)}
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Repeat weekly on</Label>
+              <div className="flex gap-1.5">
+                {week.map((d, i) => {
+                  const on = repeatDays.includes(i);
+                  return (
+                    <button
+                      key={d.iso}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() =>
+                        setRepeatDays((prev) =>
+                          prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i],
+                        )
+                      }
+                      className={cn(
+                        "flex-1 rounded-xl border py-1.5 text-[0.65rem] uppercase transition-colors",
+                        on
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border text-muted-foreground",
+                      )}
+                    >
+                      {d.day.slice(0, 2)}
+                    </button>
+                  );
+                })}
+              </div>
+              {repeatDays.length ? (
+                <div className="flex items-center gap-1.5 rounded-2xl border border-border bg-background p-1">
+                  {[1, 2, 4, 8].map((w) => (
+                    <button
+                      key={w}
+                      type="button"
+                      onClick={() => setWeeks(w)}
+                      className={cn(
+                        "flex-1 rounded-xl py-1.5 text-xs transition-colors",
+                        weeks === w ? "bg-primary text-primary-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {w}w
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-[0.68rem] text-muted-foreground">
+                  Leave empty to add this block to the selected day only.
+                </p>
+              )}
             </div>
           </div>
           <SheetFooter>
