@@ -18,11 +18,15 @@ import {
 import { useAscend } from "@/context/ascend";
 import { cn } from "@/lib/utils";
 
+type ScheduleSearch = { date?: string; block?: string };
+
 export const Route = createFileRoute("/schedule")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    date: typeof search['date'] === "string" ? (search['date'] as string) : undefined,
-    block: typeof search['block'] === "string" ? (search['block'] as string) : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): ScheduleSearch => {
+    const out: ScheduleSearch = {};
+    if (typeof search['date'] === "string") out.date = search['date'];
+    if (typeof search['block'] === "string") out.block = search['block'];
+    return out;
+  },
   head: () => ({
     meta: [
       { title: "Schedule — ASCEND" },
