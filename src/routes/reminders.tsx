@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mic } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading, SectionHeader } from "@/components/ascend/primitives";
@@ -10,7 +10,11 @@ import { reminders as seed } from "@/data/mock";
 import { useAuth, type PreferenceKey } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
+type RemindersSearch = { reminder?: string };
+
 export const Route = createFileRoute("/reminders")({
+  validateSearch: (search: Record<string, unknown>): RemindersSearch =>
+    typeof search['reminder'] === "string" ? { reminder: search['reminder'] } : {},
   head: () => ({
     meta: [
       { title: "Reminders — ASCEND" },
@@ -31,8 +35,16 @@ const channels = [
 function RemindersPage() {
   const [items, setItems] = useState(seed);
   const { profile, updatePreference } = useAuth();
+  const { reminder: focusedId } = Route.useSearch();
+  const focusRef = useRef<HTMLLIElement | null>(null);
   const remindersOn = profile?.reminders_enabled ?? false;
   const voiceOn = profile?.voice_alerts_enabled ?? false;
+
+  useEffect(() => {
+    if (focusedId && focusRef.current) {
+      focusRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [focusedId]);
 
   async function onToggle(key: PreferenceKey, value: boolean) {
     try {
@@ -75,7 +87,14 @@ function RemindersPage() {
         )}
       >
         {items.map((r) => (
-          <li key={r.id} className="flex items-center gap-3 px-4 py-3.5">
+          <li
+            key={r.id}
+            ref={focusedId === r.id ? focusRef : undefined}
+            className={cn(
+              "flex items-center gap-3 px-4 py-3.5",
+              focusedId === r.id && "bg-primary-soft",
+            )}
+          >
             <div className="min-w-0 flex-1">
               <p className="flex items-center gap-1.5 truncate text-sm text-foreground">
                 {r.title}
