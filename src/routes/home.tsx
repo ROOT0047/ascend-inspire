@@ -5,6 +5,7 @@ import { Meter, ScoreRing, SectionHeader, StatTile } from "@/components/ascend/p
 import { useAscend } from "@/context/ascend";
 import { useAuth } from "@/hooks/use-auth";
 import { healthStats, profile } from "@/data/mock";
+import { quoteForDate } from "@/data/quotes";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/home")({
@@ -49,6 +50,7 @@ function HomePage() {
   const habitPct = habits.length ? Math.round((doneHabits / habits.length) * 100) : 0;
   const mission = schedule.filter((b) => b.priority !== "Low").slice(0, 5);
   const bestStreak = habits.length ? Math.max(...habits.map((h) => h.streak)) : 0;
+  const quote = quoteForDate();
 
   return (
     <AppShell title="Home">
@@ -191,9 +193,9 @@ function HomePage() {
         <p className="text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
           Today's quote
         </p>
-        <p className="mt-2 text-base leading-relaxed text-foreground">{profile.quote.text}</p>
-        <p className="mt-2 text-sm text-muted-foreground">{profile.quote.translation}</p>
-        <p className="mt-3 text-xs text-primary">— {profile.quote.author}</p>
+        <p className="mt-2 text-base leading-relaxed text-foreground">{quote.text}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{quote.translation}</p>
+        <p className="mt-3 text-xs text-primary">— {quote.author}</p>
       </section>
     </AppShell>
   );
