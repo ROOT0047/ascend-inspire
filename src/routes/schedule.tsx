@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Plus, Trash2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
 import { PageHeading } from "@/components/ascend/primitives";
@@ -18,7 +18,15 @@ import {
 import { useAscend } from "@/context/ascend";
 import { cn } from "@/lib/utils";
 
+type ScheduleSearch = { date?: string; block?: string };
+
 export const Route = createFileRoute("/schedule")({
+  validateSearch: (search: Record<string, unknown>): ScheduleSearch => {
+    const out: ScheduleSearch = {};
+    if (typeof search['date'] === "string") out.date = search['date'];
+    if (typeof search['block'] === "string") out.block = search['block'];
+    return out;
+  },
   head: () => ({
     meta: [
       { title: "Schedule — ASCEND" },
@@ -44,7 +52,11 @@ const dotColor: Record<string, string> = {
 function SchedulePage() {
   const { schedule, toggleBlock, addBlock, deleteBlock, selectedDate, setSelectedDate, loading, weekPlan } =
     useAscend();
+  const { date: dateParam, block: blockParam } = Route.useSearch();
+  const navigate = Route.useNavigate();
   const [open, setOpen] = useState(false);
+  const [focusedId, setFocusedId] = useState<string | null>(null);
+  const focusRef = useRef<HTMLLIElement | null>(null);
   const [title, setTitle] = useState("");
   const [start, setStart] = useState("09:00");
   const [end, setEnd] = useState("10:00");
@@ -67,6 +79,34 @@ function SchedulePage() {
   }, [selectedDate]);
 
   const current = schedule.find((b) => !b.completed);
+  const focusedBlock = focusedId ? schedule.find((b) => b.id === focusedId) : undefined;
+
+  // Deep link from a notification tap: jump to the right day…
+  useEffect(() => {
+    if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam) && dateParam !== selectedDate) {
+      setSelectedDate(dateParam);
+    }
+  }, [dateParam, selectedDate, setSelectedDate]);
+
+  // …then focus the exact block once that day's data is in.
+  useEffect(() => {
+    if (!blockParam) return;
+    if (!schedule.some((b) => b.id === blockParam)) return;
+    setFocusedId(blockParam);
+  }, [blockParam, schedule]);
+
+  useEffect(() => {
+    if (focusedId && focusRef.current) {
+      focusRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [focusedId]);
+
+  function clearFocus() {
+    setFocusedId(null);
+    if (dateParam || blockParam) {
+      void navigate({ to: "/schedule", search: {}, replace: true });
+    }
+  }
 
   function submit() {
     if (!title.trim()) {
@@ -166,8 +206,9 @@ function SchedulePage() {
         ) : null}
         {schedule.map((block) => {
           const isCurrent = current?.id === block.id;
+          const isFocused = focusedId === block.id;
           return (
-            <li key={block.id} className="relative">
+            <li key={block.id} className="relative" ref={isFocused ? focusRef : undefined}>
               <span className="num absolute -left-[3.6rem] top-4 w-11 text-right text-xs text-muted-foreground">
                 {block.startTime}
               </span>
@@ -182,9 +223,14 @@ function SchedulePage() {
                 className={cn(
                   "card-surface flex items-center gap-3 px-4 py-3",
                   isCurrent && "border-primary shadow-[var(--glow-primary)]",
+                  isFocused && "border-primary ring-2 ring-primary/40",
                 )}
               >
-                <div className="min-w-0 flex-1">
+                <button
+                  type="button"
+                  onClick={() => setFocusedId(block.id)}
+                  className="min-w-0 flex-1 text-left"
+                >
                   <p
                     className={cn(
                       "truncate text-sm",
@@ -196,7 +242,7 @@ function SchedulePage() {
                   <p className="mt-0.5 truncate text-xs text-muted-foreground">
                     {block.durationLabel} · {block.priority}
                   </p>
-                </div>
+                </button>
                 <button
                   aria-label={block.completed ? "Mark incomplete" : "Mark complete"}
                   onClick={() => toggleBlock(block.id)}
@@ -221,6 +267,53 @@ function SchedulePage() {
           );
         })}
       </ol>
+
+      <Sheet open={Boolean(focusedBlock)} onOpenChange={(v) => (v ? null : clearFocus())}>
+        <SheetContent side="bottom" className="mx-auto max-w-md rounded-t-3xl border-border bg-surface">
+          <SheetHeader>
+            <SheetTitle>{focusedBlock?.title ?? "Block"}</SheetTitle>
+          </SheetHeader>
+          {focusedBlock ? (
+            <div className="space-y-4 px-4">
+              <p className="num text-sm text-muted-foreground">
+                {selectedLabel.toLocaleDateString(undefined, {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                })}{" "}
+                · {focusedBlock.startTime} — {focusedBlock.endTime}
+              </p>
+              <p className="text-sm text-foreground">
+                {focusedBlock.description || "No notes for this block."}
+              </p>
+              <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                <span className="rounded-full border border-border px-2.5 py-1">
+                  {focusedBlock.priority} priority
+                </span>
+                <span className="rounded-full border border-border px-2.5 py-1">
+                  {focusedBlock.durationLabel}
+                </span>
+                <span className="rounded-full border border-border px-2.5 py-1">
+                  {focusedBlock.completed ? "Completed" : "Pending"}
+                </span>
+              </div>
+            </div>
+          ) : null}
+          <SheetFooter className="gap-2">
+            <Button
+              onClick={() => {
+                if (focusedBlock) toggleBlock(focusedBlock.id);
+              }}
+              className="w-full"
+            >
+              {focusedBlock?.completed ? "Mark incomplete" : "Mark complete"}
+            </Button>
+            <Button variant="outline" onClick={clearFocus} className="w-full">
+              Close
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger

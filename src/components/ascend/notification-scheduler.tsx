@@ -88,7 +88,7 @@ export function NotificationScheduler() {
             key,
             title: delta <= 0 ? `${block.title} starts now` : `${block.title} in ${delta} min`,
             body: block.description || `${block.startTime} — ${block.endTime} · ${block.priority} priority`,
-            url: "/schedule",
+            url: `/schedule?date=${date}&block=${block.id}`,
           });
         }
       }
@@ -106,7 +106,7 @@ export function NotificationScheduler() {
             key,
             title: reminder.title,
             body: `Scheduled nudge · ${reminder.repeat}`,
-            url: "/reminders",
+            url: `/reminders?reminder=${reminder.id}`,
           });
         }
       }
