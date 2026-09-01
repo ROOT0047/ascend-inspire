@@ -110,7 +110,7 @@ function xpForLevel(level: number) {
 }
 
 function rankForLevel(level: number) {
-  let current = RANKS[0]!.name;
+  let current: string = RANKS[0]!.name;
   let next: string | null = null;
   for (const r of RANKS) {
     if (level >= r.level) current = r.name;
