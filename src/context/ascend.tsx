@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import {
   healthStats,
-  seedJournal,
+  
   type Achievement,
   type CoachMessage,
   type Habit,
