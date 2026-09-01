@@ -31,6 +31,7 @@ export type JournalEntry = {
   mood: "Focused" | "Calm" | "Tired" | "Driven";
   content: string;
   createdAt: string;
+  entryDate?: string;
 };
 
 export type Achievement = {
