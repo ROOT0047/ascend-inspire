@@ -172,6 +172,7 @@ type AscendState = {
   habits: Habit[];
   journal: JournalEntry[];
   achievements: Achievement[];
+  progression: Progression;
   coach: CoachMessage[];
   focusMinutes: number;
   sessions: number;
