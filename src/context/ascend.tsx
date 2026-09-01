@@ -209,7 +209,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
   const qc = useQueryClient();
 
   const [selectedDate, setSelectedDate] = useState<string>(todayISO());
-  const [journal, setJournal] = useState<JournalEntry[]>(seedJournal);
+  
   const [focusMinutes, setFocusMinutes] = useState(0);
   const [sessions, setSessions] = useState(0);
   const [water, setWater] = useState(0);
