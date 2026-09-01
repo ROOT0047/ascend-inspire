@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Award, ChevronRight, LogOut, Pencil } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/ascend/app-shell";
-import { Meter, PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
+import { Meter, SectionHeader, StatTile } from "@/components/ascend/primitives";
 import { useAscend } from "@/context/ascend";
 import { useAuth } from "@/hooks/use-auth";
 import { profile } from "@/data/mock";
