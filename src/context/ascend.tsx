@@ -432,6 +432,19 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     [habitRows.length, completedBlocks, bestStreak, perfectDay, totalCheckins],
   );
 
+  const progression = useMemo(
+    () =>
+      computeProgression({
+        checkins: totalCheckins,
+        completedBlocks,
+        bestStreak,
+        disciplineScore,
+        badges: achievements.filter((a) => a.unlocked).length,
+      }),
+    [totalCheckins, completedBlocks, bestStreak, disciplineScore, achievements],
+  );
+
+
   /* ---------------------------- mutations -------------------------- */
 
   const invalidateBlocks = useCallback(() => {
