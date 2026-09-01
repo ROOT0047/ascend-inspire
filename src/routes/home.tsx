@@ -41,6 +41,8 @@ function HomePage() {
     toggleBlock,
     addWater,
     loading,
+    achievements,
+    progression,
   } = useAscend();
   const { user, profile: account } = useAuth();
   const name = account?.display_name ?? user?.email?.split("@")[0] ?? profile.name;
@@ -51,6 +53,8 @@ function HomePage() {
   const mission = schedule.filter((b) => b.priority !== "Low").slice(0, 5);
   const bestStreak = habits.length ? Math.max(...habits.map((h) => h.streak)) : 0;
   const quote = quoteForDate();
+  const earned = achievements.filter((a) => a.unlocked);
+
 
   return (
     <AppShell title="Home">
