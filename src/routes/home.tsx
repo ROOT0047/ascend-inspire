@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, ChevronRight, Circle, Droplet, Moon } from "lucide-react";
+import { Award, CheckCircle2, ChevronRight, Circle, Droplet, Moon, Shield } from "lucide-react";
 import { AppShell } from "@/components/ascend/app-shell";
 import { Meter, ScoreRing, SectionHeader, StatTile } from "@/components/ascend/primitives";
 import { useAscend } from "@/context/ascend";
