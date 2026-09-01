@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Award, ChevronRight, LogOut, Pencil } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
+import { Meter, SectionHeader, StatTile } from "@/components/ascend/primitives";
 import { useAscend } from "@/context/ascend";
 import { useAuth } from "@/hooks/use-auth";
 import { profile } from "@/data/mock";
@@ -34,7 +34,7 @@ const links = [
 ] as const;
 
 function ProfilePage() {
-  const { disciplineScore, habits, achievements } = useAscend();
+  const { disciplineScore, habits, achievements, progression } = useAscend();
   const { user, profile: account, avatarSrc, signOut } = useAuth();
   const navigate = useNavigate();
   const name = account?.display_name ?? user?.email?.split("@")[0] ?? profile.name;
@@ -48,10 +48,10 @@ function ProfilePage() {
           <p className="truncate text-xs text-muted-foreground">{user?.email ?? profile.email}</p>
           <div className="mt-1.5 flex items-center gap-2">
             <span className="rounded-full bg-primary-soft px-2.5 py-0.5 text-[0.65rem] text-primary">
-              Level {profile.level}
+              Level {progression.level}
             </span>
             <span className="rounded-full bg-warning/15 px-2.5 py-0.5 text-[0.65rem] text-warning">
-              {profile.rank}
+              {progression.rank}
             </span>
           </div>
         </div>
@@ -64,6 +64,25 @@ function ProfilePage() {
         </Link>
       </div>
 
+      <div className="card-surface mt-3 px-4 py-4">
+        <div className="flex items-end justify-between">
+          <p className="text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
+            Progression
+          </p>
+          <p className="num text-xs text-muted-foreground">
+            {progression.levelXp} / {progression.levelSpan} XP
+          </p>
+        </div>
+        <div className="mt-2.5">
+          <Meter value={progression.progress} />
+        </div>
+        <p className="mt-2 text-[0.7rem] text-muted-foreground">
+          {progression.nextRank
+            ? `${progression.xpToNext} XP to level ${progression.level + 1} — ${progression.nextRank} unlocks at higher levels`
+            : `${progression.xpToNext} XP to level ${progression.level + 1} — highest rank held`}
+        </p>
+      </div>
+
       <div className="mt-4 grid grid-cols-3 gap-2">
         <StatTile label="Discipline" value={`${disciplineScore}`} tone="primary" />
         <StatTile label="Habits" value={`${habits.length}`} />
@@ -73,6 +92,7 @@ function ProfilePage() {
           tone="warning"
         />
       </div>
+
 
       <SectionHeader title="Recent badges" className="mt-6" />
       <div className="flex gap-2 overflow-x-auto pb-1">

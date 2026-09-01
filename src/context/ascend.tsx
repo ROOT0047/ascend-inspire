@@ -84,6 +84,76 @@ export type WeekDayPlan = {
   done: number;
 };
 
+export type Progression = {
+  xp: number;
+  level: number;
+  rank: string;
+  nextRank: string | null;
+  levelXp: number;
+  levelSpan: number;
+  progress: number;
+  xpToNext: number;
+};
+
+const RANKS = [
+  { level: 1, name: "Novice" },
+  { level: 4, name: "Disciplined" },
+  { level: 8, name: "Focused" },
+  { level: 12, name: "Relentless" },
+  { level: 18, name: "Elite" },
+  { level: 25, name: "Sovereign" },
+] as const;
+
+/** Cumulative XP required to reach a given level (level 1 = 0). */
+function xpForLevel(level: number) {
+  return 50 * (level - 1) * level;
+}
+
+function rankForLevel(level: number) {
+  let current: string = RANKS[0]!.name;
+  let next: string | null = null;
+  for (const r of RANKS) {
+    if (level >= r.level) current = r.name;
+    else {
+      next = r.name;
+      break;
+    }
+  }
+  return { rank: current, nextRank: next };
+}
+
+export function computeProgression(input: {
+  checkins: number;
+  completedBlocks: number;
+  bestStreak: number;
+  disciplineScore: number;
+  badges: number;
+}): Progression {
+  const xp = Math.round(
+    input.checkins * 12 +
+      input.completedBlocks * 6 +
+      input.bestStreak * 20 +
+      input.badges * 75 +
+      input.disciplineScore,
+  );
+  let level = 1;
+  while (xpForLevel(level + 1) <= xp && level < 99) level++;
+  const base = xpForLevel(level);
+  const nextAt = xpForLevel(level + 1);
+  const levelXp = xp - base;
+  const levelSpan = nextAt - base;
+  return {
+    xp,
+    level,
+    ...rankForLevel(level),
+    levelXp,
+    levelSpan,
+    progress: Math.round((levelXp / levelSpan) * 100),
+    xpToNext: Math.max(0, nextAt - xp),
+  };
+}
+
+
 export function startOfWeekISO(from = new Date()) {
   const d = new Date(from);
   d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
@@ -102,6 +172,7 @@ type AscendState = {
   habits: Habit[];
   journal: JournalEntry[];
   achievements: Achievement[];
+  progression: Progression;
   coach: CoachMessage[];
   focusMinutes: number;
   sessions: number;
@@ -362,6 +433,19 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     [habitRows.length, completedBlocks, bestStreak, perfectDay, totalCheckins],
   );
 
+  const progression = useMemo(
+    () =>
+      computeProgression({
+        checkins: totalCheckins,
+        completedBlocks,
+        bestStreak,
+        disciplineScore,
+        badges: achievements.filter((a) => a.unlocked).length,
+      }),
+    [totalCheckins, completedBlocks, bestStreak, disciplineScore, achievements],
+  );
+
+
   /* ---------------------------- mutations -------------------------- */
 
   const invalidateBlocks = useCallback(() => {
@@ -533,6 +617,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       habits,
       journal,
       achievements,
+      progression,
       coach: coachQuery.data ?? [],
       focusMinutes,
       sessions,
@@ -563,6 +648,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       habits,
       journal,
       achievements,
+      progression,
       coachQuery.data,
       focusMinutes,
       sessions,

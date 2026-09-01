@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, ChevronRight, Circle, Droplet, Moon } from "lucide-react";
+import { Award, CheckCircle2, ChevronRight, Circle, Droplet, Moon, Shield } from "lucide-react";
 import { AppShell } from "@/components/ascend/app-shell";
 import { Meter, ScoreRing, SectionHeader, StatTile } from "@/components/ascend/primitives";
 import { useAscend } from "@/context/ascend";
@@ -41,6 +41,8 @@ function HomePage() {
     toggleBlock,
     addWater,
     loading,
+    achievements,
+    progression,
   } = useAscend();
   const { user, profile: account } = useAuth();
   const name = account?.display_name ?? user?.email?.split("@")[0] ?? profile.name;
@@ -51,6 +53,8 @@ function HomePage() {
   const mission = schedule.filter((b) => b.priority !== "Low").slice(0, 5);
   const bestStreak = habits.length ? Math.max(...habits.map((h) => h.streak)) : 0;
   const quote = quoteForDate();
+  const earned = achievements.filter((a) => a.unlocked);
+
 
   return (
     <AppShell title="Home">
@@ -100,6 +104,62 @@ function HomePage() {
         />
         <StatTile label="Streak" value={`${bestStreak}`} suffix="d" tone="warning" />
       </section>
+
+      <section className="card-surface mt-4 px-5 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Shield className="size-4 text-primary" strokeWidth={1.75} />
+            <p className="text-sm text-foreground">
+              Level {progression.level}
+              <span className="ml-2 rounded-full bg-warning/15 px-2 py-0.5 text-[0.65rem] text-warning">
+                {progression.rank}
+              </span>
+            </p>
+          </div>
+          <p className="num text-[0.7rem] text-muted-foreground">
+            {progression.levelXp}/{progression.levelSpan} XP
+          </p>
+        </div>
+        <div className="mt-3">
+          <Meter value={progression.progress} />
+        </div>
+        <p className="mt-2 text-[0.7rem] text-muted-foreground">
+          {progression.xpToNext} XP to level {progression.level + 1}
+          {progression.nextRank ? ` — next rank ${progression.nextRank}` : " — top rank held"}
+        </p>
+      </section>
+
+      <section className="mt-4">
+        <SectionHeader
+          title="Badges earned"
+          action={
+            <Link
+              to="/achievements"
+              className="flex items-center gap-0.5 text-xs text-primary transition-opacity hover:opacity-80"
+            >
+              View all <ChevronRight className="size-3.5" strokeWidth={2} />
+            </Link>
+          }
+        />
+        {earned.length === 0 ? (
+          <p className="card-surface px-4 py-5 text-center text-xs text-muted-foreground">
+            No badges yet — log a habit or finish a block to start earning.
+          </p>
+        ) : (
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {earned.map((a) => (
+              <div key={a.id} className="card-surface min-w-[8.5rem] px-3 py-3">
+                <Award className="size-4 text-warning" strokeWidth={1.75} />
+                <p className="mt-2 text-xs text-foreground">{a.name}</p>
+                <p className="mt-1 text-[0.65rem] leading-relaxed text-muted-foreground">
+                  {a.detail}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
 
       <section className="mt-7">
         <SectionHeader
