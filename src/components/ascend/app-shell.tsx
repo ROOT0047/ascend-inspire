@@ -13,6 +13,7 @@ import {
   Home,
   Menu,
   NotebookPen,
+  Shield,
   Timer,
   User,
 } from "lucide-react";
@@ -36,6 +37,7 @@ const drawerNav = [
   { to: "/journal", label: "Journal", icon: NotebookPen },
   { to: "/learn", label: "Learn", icon: BookOpen },
   { to: "/health", label: "Health", icon: Heart },
+  { to: "/level", label: "Level", icon: Shield },
   { to: "/achievements", label: "Achievements", icon: Award },
   { to: "/reminders", label: "Reminders", icon: Bell },
   { to: "/sync", label: "Sync", icon: CloudCog },
