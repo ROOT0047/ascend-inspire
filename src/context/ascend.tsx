@@ -272,7 +272,33 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     },
   });
 
+  const journalQuery = useQuery({
+    queryKey: ["journal", userId],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("journal_entries")
+        .select("id, title, mood, content, entry_date")
+        .order("entry_date", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return (data ?? []).map((e) => ({
+        id: e.id,
+        title: e.title,
+        mood: e.mood as JournalEntry["mood"],
+        content: e.content,
+        entryDate: e.entry_date,
+        createdAt: new Date(`${e.entry_date}T00:00:00`).toLocaleDateString(undefined, {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        }),
+      })) satisfies JournalEntry[];
+    },
+  });
+
   const coachQuery = useQuery({
+
     queryKey: ["coach", userId],
     enabled,
     queryFn: async () => {
@@ -562,9 +588,30 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     onSuccess: invalidateHabits,
   });
 
-  const addJournal = useCallback((entry: Pick<JournalEntry, "title" | "mood" | "content">) => {
-    setJournal((prev) => [{ ...entry, id: uid(), createdAt: "Today" }, ...prev]);
-  }, []);
+  const addJournalMutation = useMutation({
+    mutationFn: async (entry: Pick<JournalEntry, "title" | "mood" | "content">) => {
+      if (!userId) return;
+      const { error } = await supabase.from("journal_entries").insert({
+        user_id: userId,
+        title: entry.title,
+        mood: entry.mood,
+        content: entry.content,
+        entry_date: todayISO(),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["journal"] });
+    },
+  });
+
+  const addJournal = useCallback(
+    (entry: Pick<JournalEntry, "title" | "mood" | "content">) => {
+      addJournalMutation.mutate(entry);
+    },
+    [addJournalMutation],
+  );
+
 
   const addCoachMessage = useCallback(
     (message: CoachMessage) => {
@@ -615,7 +662,8 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       schedule: blocksQuery.data ?? [],
       weekPlan,
       habits,
-      journal,
+      journal: journalQuery.data ?? [],
+
       achievements,
       progression,
       coach: coachQuery.data ?? [],
@@ -646,7 +694,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       blocksQuery.data,
       weekPlan,
       habits,
-      journal,
+      journalQuery.data,
       achievements,
       progression,
       coachQuery.data,
