@@ -662,7 +662,8 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       schedule: blocksQuery.data ?? [],
       weekPlan,
       habits,
-      journal,
+      journal: journalQuery.data ?? [],
+
       achievements,
       progression,
       coach: coachQuery.data ?? [],
