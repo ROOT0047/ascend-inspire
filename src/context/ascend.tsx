@@ -562,9 +562,30 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     onSuccess: invalidateHabits,
   });
 
-  const addJournal = useCallback((entry: Pick<JournalEntry, "title" | "mood" | "content">) => {
-    setJournal((prev) => [{ ...entry, id: uid(), createdAt: "Today" }, ...prev]);
-  }, []);
+  const addJournalMutation = useMutation({
+    mutationFn: async (entry: Pick<JournalEntry, "title" | "mood" | "content">) => {
+      if (!userId) return;
+      const { error } = await supabase.from("journal_entries").insert({
+        user_id: userId,
+        title: entry.title,
+        mood: entry.mood,
+        content: entry.content,
+        entry_date: todayISO(),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["journal"] });
+    },
+  });
+
+  const addJournal = useCallback(
+    (entry: Pick<JournalEntry, "title" | "mood" | "content">) => {
+      addJournalMutation.mutate(entry);
+    },
+    [addJournalMutation],
+  );
+
 
   const addCoachMessage = useCallback(
     (message: CoachMessage) => {
