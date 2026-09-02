@@ -19,6 +19,7 @@ import { Route as HealthRouteImport } from './routes/health'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as JournalRouteImport } from './routes/journal'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as LevelRouteImport } from './routes/level'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as RemindersRouteImport } from './routes/reminders'
 import { Route as ScheduleRouteImport } from './routes/schedule'
@@ -77,6 +78,11 @@ const LearnRoute = LearnRouteImport.update({
   path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LevelRoute = LevelRouteImport.update({
+  id: '/level',
+  path: '/level',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/journal': typeof JournalRoute
   '/learn': typeof LearnRoute
+  '/level': typeof LevelRoute
   '/notifications': typeof NotificationsRoute
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/journal': typeof JournalRoute
   '/learn': typeof LearnRoute
+  '/level': typeof LevelRoute
   '/notifications': typeof NotificationsRoute
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/journal': typeof JournalRoute
   '/learn': typeof LearnRoute
+  '/level': typeof LevelRoute
   '/notifications': typeof NotificationsRoute
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/journal'
     | '/learn'
+    | '/level'
     | '/notifications'
     | '/reminders'
     | '/schedule'
@@ -203,6 +213,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/journal'
     | '/learn'
+    | '/level'
     | '/notifications'
     | '/reminders'
     | '/schedule'
@@ -222,6 +233,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/journal'
     | '/learn'
+    | '/level'
     | '/notifications'
     | '/reminders'
     | '/schedule'
@@ -242,6 +254,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   JournalRoute: typeof JournalRoute
   LearnRoute: typeof LearnRoute
+  LevelRoute: typeof LevelRoute
   NotificationsRoute: typeof NotificationsRoute
   RemindersRoute: typeof RemindersRoute
   ScheduleRoute: typeof ScheduleRoute
@@ -323,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/level': {
+      id: '/level'
+      path: '/level'
+      fullPath: '/level'
+      preLoaderRoute: typeof LevelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications': {
       id: '/notifications'
       path: '/notifications'
@@ -386,6 +406,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   JournalRoute: JournalRoute,
   LearnRoute: LearnRoute,
+  LevelRoute: LevelRoute,
   NotificationsRoute: NotificationsRoute,
   RemindersRoute: RemindersRoute,
   ScheduleRoute: ScheduleRoute,

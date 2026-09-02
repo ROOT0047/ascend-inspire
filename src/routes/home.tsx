@@ -105,7 +105,7 @@ function HomePage() {
         <StatTile label="Streak" value={`${bestStreak}`} suffix="d" tone="warning" />
       </section>
 
-      <section className="card-surface mt-4 px-5 py-4">
+      <Link to="/level" className="card-surface mt-4 block px-5 py-4 transition-colors hover:border-primary/40">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Shield className="size-4 text-primary" strokeWidth={1.75} />
@@ -127,7 +127,7 @@ function HomePage() {
           {progression.xpToNext} XP to level {progression.level + 1}
           {progression.nextRank ? ` — next rank ${progression.nextRank}` : " — top rank held"}
         </p>
-      </section>
+      </Link>
 
       <section className="mt-4">
         <SectionHeader
