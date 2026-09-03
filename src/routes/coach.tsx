@@ -64,7 +64,7 @@ function CoachPage() {
       <div className="mb-5 flex items-center gap-3">
         <img src={logo} alt="" className="size-10 rounded-xl" />
         <div>
-          <p className="text-sm text-foreground">ASCEND AI</p>
+          <h1 className="text-sm text-foreground">ASCEND AI Coach</h1>
           <p className="text-xs text-muted-foreground">Analytical. Direct. Never flattering.</p>
         </div>
       </div>
