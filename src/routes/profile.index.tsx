@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Award, ChevronRight, LogOut, Pencil } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/ascend/app-shell";
-import { Meter, SectionHeader, StatTile } from "@/components/ascend/primitives";
+import { Meter, PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
 import { useAscend } from "@/context/ascend";
 import { useAuth } from "@/hooks/use-auth";
 import { profile } from "@/data/mock";
@@ -41,6 +41,7 @@ function ProfilePage() {
 
   return (
     <AppShell title="Profile">
+      <PageHeading title="Your Profile" subtitle="Rank, level and lifetime discipline stats" />
       <div className="card-surface flex items-center gap-4 px-4 py-4">
         <img src={avatarSrc ?? mark} alt="" className="size-14 rounded-2xl object-cover" />
         <div className="min-w-0 flex-1">
