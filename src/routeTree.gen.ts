@@ -24,6 +24,7 @@ import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as RemindersRouteImport } from './routes/reminders'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SyncRouteImport } from './routes/sync'
 import { Route as ProfileIndexRouteImport } from './routes/profile.index'
 import { Route as ProfileEditRouteImport } from './routes/profile.edit'
@@ -103,6 +104,11 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SyncRoute = SyncRouteImport.update({
   id: '/sync',
   path: '/sync',
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sync': typeof SyncRoute
   '/profile/edit': typeof ProfileEditRoute
   '/profile/': typeof ProfileIndexRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sync': typeof SyncRoute
   '/profile/edit': typeof ProfileEditRoute
   '/profile': typeof ProfileIndexRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/reminders': typeof RemindersRoute
   '/schedule': typeof ScheduleRoute
   '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sync': typeof SyncRoute
   '/profile/edit': typeof ProfileEditRoute
   '/profile/': typeof ProfileIndexRoute
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/reminders'
     | '/schedule'
     | '/settings'
+    | '/sitemap.xml'
     | '/sync'
     | '/profile/edit'
     | '/profile/'
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/reminders'
     | '/schedule'
     | '/settings'
+    | '/sitemap.xml'
     | '/sync'
     | '/profile/edit'
     | '/profile'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/reminders'
     | '/schedule'
     | '/settings'
+    | '/sitemap.xml'
     | '/sync'
     | '/profile/edit'
     | '/profile/'
@@ -259,6 +271,7 @@ export interface RootRouteChildren {
   RemindersRoute: typeof RemindersRoute
   ScheduleRoute: typeof ScheduleRoute
   SettingsRoute: typeof SettingsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SyncRoute: typeof SyncRoute
   ProfileEditRoute: typeof ProfileEditRoute
   ProfileIndexRoute: typeof ProfileIndexRoute
@@ -371,6 +384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sync': {
       id: '/sync'
       path: '/sync'
@@ -411,6 +431,7 @@ const rootRouteChildren: RootRouteChildren = {
   RemindersRoute: RemindersRoute,
   ScheduleRoute: ScheduleRoute,
   SettingsRoute: SettingsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SyncRoute: SyncRoute,
   ProfileEditRoute: ProfileEditRoute,
   ProfileIndexRoute: ProfileIndexRoute,
