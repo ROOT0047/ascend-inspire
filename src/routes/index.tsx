@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Chrome, Loader2, Mail } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
@@ -181,6 +181,23 @@ function Login() {
               : "Already enrolled? Sign in"}
           </button>
         </form>
+
+        <section className="space-y-3 pb-4 text-center">
+          <h2 className="text-sm font-semibold tracking-wide text-foreground">
+            A discipline operating system for your day
+          </h2>
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            ASCEND combines schedule planning, habit tracking, deep focus
+            sessions, health monitoring, journaling and an AI coach in one
+            app — so every day is planned, measured and improved.
+          </p>
+          <Link
+            to="/features"
+            className="inline-block text-xs font-medium text-primary underline-offset-4 transition-colors hover:underline"
+          >
+            Explore the discipline app features
+          </Link>
+        </section>
       </div>
     </div>
   );
