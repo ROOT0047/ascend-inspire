@@ -28,6 +28,7 @@ import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SyncRouteImport } from './routes/sync'
+import { Route as TimeBlockingAppRouteImport } from './routes/time-blocking-app'
 import { Route as ProfileIndexRouteImport } from './routes/profile.index'
 import { Route as ProfileEditRouteImport } from './routes/profile.edit'
 
@@ -126,6 +127,11 @@ const SyncRoute = SyncRouteImport.update({
   path: '/sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TimeBlockingAppRoute = TimeBlockingAppRouteImport.update({
+  id: '/time-blocking-app',
+  path: '/time-blocking-app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileIndexRoute = ProfileIndexRouteImport.update({
   id: '/profile/',
   path: '/profile/',
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sync': typeof SyncRoute
+  '/time-blocking-app': typeof TimeBlockingAppRoute
   '/profile/edit': typeof ProfileEditRoute
   '/profile/': typeof ProfileIndexRoute
 }
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sync': typeof SyncRoute
+  '/time-blocking-app': typeof TimeBlockingAppRoute
   '/profile/edit': typeof ProfileEditRoute
   '/profile': typeof ProfileIndexRoute
 }
@@ -204,6 +212,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sync': typeof SyncRoute
+  '/time-blocking-app': typeof TimeBlockingAppRoute
   '/profile/edit': typeof ProfileEditRoute
   '/profile/': typeof ProfileIndexRoute
 }
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/sitemap.xml'
     | '/sync'
+    | '/time-blocking-app'
     | '/profile/edit'
     | '/profile/'
   fileRoutesByTo: FileRoutesByTo
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/sitemap.xml'
     | '/sync'
+    | '/time-blocking-app'
     | '/profile/edit'
     | '/profile'
   id:
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/sitemap.xml'
     | '/sync'
+    | '/time-blocking-app'
     | '/profile/edit'
     | '/profile/'
   fileRoutesById: FileRoutesById
@@ -299,6 +311,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SyncRoute: typeof SyncRoute
+  TimeBlockingAppRoute: typeof TimeBlockingAppRoute
   ProfileEditRoute: typeof ProfileEditRoute
   ProfileIndexRoute: typeof ProfileIndexRoute
 }
@@ -438,6 +451,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/time-blocking-app': {
+      id: '/time-blocking-app'
+      path: '/time-blocking-app'
+      fullPath: '/time-blocking-app'
+      preLoaderRoute: typeof TimeBlockingAppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/': {
       id: '/profile/'
       path: '/profile'
@@ -475,6 +495,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SyncRoute: SyncRoute,
+  TimeBlockingAppRoute: TimeBlockingAppRoute,
   ProfileEditRoute: ProfileEditRoute,
   ProfileIndexRoute: ProfileIndexRoute,
 }
