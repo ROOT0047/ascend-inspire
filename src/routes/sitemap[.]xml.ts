@@ -7,15 +7,20 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        // Every other route renders behind the auth gate, so "/" is the only public page.
+        // Public routes only: "/" (login) and "/features". Everything else is behind the auth gate.
+        const paths = ["/", "/features"];
         const xml = [
           `<?xml version="1.0" encoding="UTF-8"?>`,
           `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
-          `  <url>`,
-          `    <loc>${BASE_URL}/</loc>`,
-          `    <changefreq>weekly</changefreq>`,
-          `    <priority>1.0</priority>`,
-          `  </url>`,
+          ...paths.map((p) =>
+            [
+              `  <url>`,
+              `    <loc>${BASE_URL}${p}</loc>`,
+              `    <changefreq>weekly</changefreq>`,
+              `    <priority>${p === "/" ? "1.0" : "0.8"}</priority>`,
+              `  </url>`,
+            ].join("\n"),
+          ),
           `</urlset>`,
         ].join("\n");
 
