@@ -30,6 +30,15 @@ function scoreLabel(score: number) {
   return "Slipping";
 }
 
+function timeGreeting(timezone?: string | null) {
+  const now = timezone ? new Date(new Date().toLocaleString("en-US", { timeZone: timezone })) : new Date();
+  const hour = now.getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  if (hour < 21) return "Good evening";
+  return "Good night";
+}
+
 function HomePage() {
   const {
     disciplineScore,
@@ -59,7 +68,7 @@ function HomePage() {
   return (
     <AppShell title="Home">
       <section className="rise">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Good morning</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{timeGreeting(account?.timezone)}</p>
         <h1 className="mt-1 text-2xl text-foreground">Daily Discipline Dashboard</h1>
         <p className="mt-1 text-sm text-foreground">{name}</p>
         <p className="mt-1 text-sm text-muted-foreground">
