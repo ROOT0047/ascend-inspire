@@ -68,7 +68,7 @@ function HomePage() {
   return (
     <AppShell title="Home">
       <section className="rise">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Good morning</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{timeGreeting(account?.timezone)}</p>
         <h1 className="mt-1 text-2xl text-foreground">Daily Discipline Dashboard</h1>
         <p className="mt-1 text-sm text-foreground">{name}</p>
         <p className="mt-1 text-sm text-muted-foreground">
