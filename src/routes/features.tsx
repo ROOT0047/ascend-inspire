@@ -156,6 +156,9 @@ function Features() {
         </section>
 
         <footer className="flex flex-col items-center gap-2 pb-4 text-center text-xs text-muted-foreground">
+          <Link to="/time-blocking-app" className="underline-offset-4 hover:underline">
+            ASCEND time blocking app
+          </Link>
           <Link to="/habit-tracker" className="underline-offset-4 hover:underline">
             Why ASCEND is the best habit tracker app
           </Link>
