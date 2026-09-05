@@ -31,8 +31,16 @@ function scoreLabel(score: number) {
 }
 
 function timeGreeting(timezone?: string | null) {
-  const now = timezone ? new Date(new Date().toLocaleString("en-US", { timeZone: timezone })) : new Date();
-  const hour = now.getHours();
+  let hour = new Date().getHours();
+  if (timezone) {
+    try {
+      hour = Number(
+        new Intl.DateTimeFormat("en-US", { hour: "numeric", hour12: false, timeZone: timezone }).format(new Date()),
+      );
+    } catch {
+      hour = new Date().getHours();
+    }
+  }
   if (hour < 12) return "Good morning";
   if (hour < 17) return "Good afternoon";
   if (hour < 21) return "Good evening";
