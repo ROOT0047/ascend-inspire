@@ -192,6 +192,12 @@ function Login() {
             app — so every day is planned, measured and improved.
           </p>
           <Link
+            to="/ascend"
+            className="inline-block text-xs font-medium text-primary underline-offset-4 transition-colors hover:underline"
+          >
+            About ASCEND
+          </Link>
+          <Link
             to="/features"
             className="inline-block text-xs font-medium text-primary underline-offset-4 transition-colors hover:underline"
           >
