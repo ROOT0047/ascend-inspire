@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as AscendRouteImport } from './routes/ascend'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as FocusRouteImport } from './routes/focus'
@@ -45,6 +46,11 @@ const AchievementsRoute = AchievementsRouteImport.update({
 const AnalyticsRoute = AnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AscendRoute = AscendRouteImport.update({
+  id: '/ascend',
+  path: '/ascend',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoachRoute = CoachRouteImport.update({
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
+  '/ascend': typeof AscendRoute
   '/coach': typeof CoachRoute
   '/features': typeof FeaturesRoute
   '/focus': typeof FocusRoute
@@ -171,6 +178,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
+  '/ascend': typeof AscendRoute
   '/coach': typeof CoachRoute
   '/features': typeof FeaturesRoute
   '/focus': typeof FocusRoute
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
+  '/ascend': typeof AscendRoute
   '/coach': typeof CoachRoute
   '/features': typeof FeaturesRoute
   '/focus': typeof FocusRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/'
     | '/achievements'
     | '/analytics'
+    | '/ascend'
     | '/coach'
     | '/features'
     | '/focus'
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/'
     | '/achievements'
     | '/analytics'
+    | '/ascend'
     | '/coach'
     | '/features'
     | '/focus'
@@ -270,6 +281,7 @@ export interface FileRouteTypes {
     | '/'
     | '/achievements'
     | '/analytics'
+    | '/ascend'
     | '/coach'
     | '/features'
     | '/focus'
@@ -295,6 +307,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AchievementsRoute: typeof AchievementsRoute
   AnalyticsRoute: typeof AnalyticsRoute
+  AscendRoute: typeof AscendRoute
   CoachRoute: typeof CoachRoute
   FeaturesRoute: typeof FeaturesRoute
   FocusRoute: typeof FocusRoute
@@ -337,6 +350,13 @@ declare module '@tanstack/react-router' {
       path: '/analytics'
       fullPath: '/analytics'
       preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ascend': {
+      id: '/ascend'
+      path: '/ascend'
+      fullPath: '/ascend'
+      preLoaderRoute: typeof AscendRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/coach': {
@@ -479,6 +499,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AchievementsRoute: AchievementsRoute,
   AnalyticsRoute: AnalyticsRoute,
+  AscendRoute: AscendRoute,
   CoachRoute: CoachRoute,
   FeaturesRoute: FeaturesRoute,
   FocusRoute: FocusRoute,
