@@ -16,21 +16,22 @@ import mark from "@/assets/ascend-mark.png";
 export const Route = createFileRoute("/ascend")({
   head: () => ({
     meta: [
-      { title: "ASCEND — Discipline shapes destiny" },
+      { title: "ASCEND — The Discipline Operating System" },
       {
         name: "description",
         content:
-          "ASCEND is the discipline operating system for schedule planning, habit tracking, deep focus, health, journaling and AI coaching. Build discipline. Master yourself.",
+          "Discover the ASCEND brand: a discipline operating system built on intention, consistency, focus and reflection, with habit streaks, time blocks and an AI coach.",
       },
       {
         property: "og:title",
-        content: "ASCEND — Discipline shapes destiny",
+        content: "ASCEND — The Operating System for Discipline",
       },
       {
         property: "og:description",
         content:
-          "The discipline operating system for schedule planning, habit tracking, deep focus, health, journaling and AI coaching.",
+          "The ASCEND story: four pillars of discipline, daily habit streaks, focused time blocks and an AI coach that keeps you accountable.",
       },
+
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ascend-inspire.lovable.app/ascend" },
     ],
