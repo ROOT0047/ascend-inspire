@@ -13,16 +13,16 @@ import { lovable } from "@/integrations/lovable/index";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ASCEND — Discipline shapes destiny" },
+      { title: "AROHA — Discipline shapes destiny" },
       {
         name: "description",
         content:
-          "Sign in to ASCEND, the discipline operating system for schedule, habits, focus, health and AI coaching.",
+          "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching.",
       },
-      { property: "og:title", content: "ASCEND — Discipline shapes destiny" },
+      { property: "og:title", content: "AROHA — Discipline shapes destiny" },
       {
         property: "og:description",
-        content: "Sign in to ASCEND, the discipline operating system for schedule, habits, focus, health and AI coaching.",
+        content: "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching.",
       },
     ],
   }),
@@ -94,12 +94,12 @@ function Login() {
         <div className="rise flex flex-col items-center justify-center pt-6 text-center">
           <img
             src={mark}
-            alt="ASCEND logo"
+            alt="AROHA logo"
             width={816}
             height={816}
             className="size-16 drop-shadow-[0_0_28px_oklch(0.618_0.207_288/0.55)]"
           />
-          <h1 className="mt-6 text-3xl tracking-[0.28em] text-foreground">ASCEND</h1>
+          <h1 className="mt-6 text-3xl tracking-[0.28em] text-foreground">AROHA</h1>
           <p className="mt-3 text-sm text-muted-foreground">Discipline shapes destiny.</p>
           <p className="mt-1 text-xs text-muted-foreground/80">
             Master your habits. Master yourself.
@@ -184,10 +184,10 @@ function Login() {
 
         <section className="space-y-3 pb-4 text-center">
           <h2 className="text-sm font-semibold tracking-wide text-foreground">
-            A discipline operating system for your day
+            A personal evolution system for your day
           </h2>
           <p className="text-xs leading-relaxed text-muted-foreground">
-            ASCEND combines schedule planning, habit tracking, deep focus
+            AROHA combines schedule planning, habit tracking, deep focus
             sessions, health monitoring, journaling and an AI coach in one
             app — so every day is planned, measured and improved.
           </p>
@@ -195,7 +195,7 @@ function Login() {
             to="/ascend"
             className="inline-block text-xs font-medium text-primary underline-offset-4 transition-colors hover:underline"
           >
-            About ASCEND
+            About AROHA
           </Link>
           <Link
             to="/features"

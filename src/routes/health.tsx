@@ -9,9 +9,9 @@ import { healthStats } from "@/data/mock";
 export const Route = createFileRoute("/health")({
   head: () => ({
     meta: [
-      { title: "Health — ASCEND" },
+      { title: "Health — AROHA" },
       { name: "description", content: "Water, sleep, steps, weight and workout tracking in one view." },
-      { property: "og:title", content: "Health — ASCEND" },
+      { property: "og:title", content: "Health — AROHA" },
       { property: "og:description", content: "Sleep, hydration and training are the inputs." },
     ],
   }),

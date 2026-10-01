@@ -38,6 +38,42 @@ export type Database = {
         }
         Relationships: []
       }
+      goals: {
+        Row: {
+          attribute: string
+          completed: boolean
+          created_at: string
+          id: string
+          progress: number
+          target_date: string | null
+          title: string
+          user_id: string
+          why: string | null
+        }
+        Insert: {
+          attribute?: string
+          completed?: boolean
+          created_at?: string
+          id?: string
+          progress?: number
+          target_date?: string | null
+          title: string
+          user_id: string
+          why?: string | null
+        }
+        Update: {
+          attribute?: string
+          completed?: boolean
+          created_at?: string
+          id?: string
+          progress?: number
+          target_date?: string | null
+          title?: string
+          user_id?: string
+          why?: string | null
+        }
+        Relationships: []
+      }
       habit_logs: {
         Row: {
           created_at: string

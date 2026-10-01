@@ -6,9 +6,9 @@ import { learningItems } from "@/data/mock";
 export const Route = createFileRoute("/learn")({
   head: () => ({
     meta: [
-      { title: "Learning — ASCEND" },
+      { title: "Learning — AROHA" },
       { name: "description", content: "Books, courses, languages and skill practice tracked by progress." },
-      { property: "og:title", content: "Learning — ASCEND" },
+      { property: "og:title", content: "Learning — AROHA" },
       { property: "og:description", content: "Track books, courses and skills by real progress." },
     ],
   }),

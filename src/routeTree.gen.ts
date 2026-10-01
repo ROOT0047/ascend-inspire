@@ -16,6 +16,7 @@ import { Route as AscendRouteImport } from './routes/ascend'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as FocusRouteImport } from './routes/focus'
+import { Route as GoalsRouteImport } from './routes/goals'
 import { Route as HabitTrackerRouteImport } from './routes/habit-tracker'
 import { Route as HabitsRouteImport } from './routes/habits'
 import { Route as HealthRouteImport } from './routes/health'
@@ -66,6 +67,11 @@ const FeaturesRoute = FeaturesRouteImport.update({
 const FocusRoute = FocusRouteImport.update({
   id: '/focus',
   path: '/focus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoalsRoute = GoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HabitTrackerRoute = HabitTrackerRouteImport.update({
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/coach': typeof CoachRoute
   '/features': typeof FeaturesRoute
   '/focus': typeof FocusRoute
+  '/goals': typeof GoalsRoute
   '/habit-tracker': typeof HabitTrackerRoute
   '/habits': typeof HabitsRoute
   '/health': typeof HealthRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/coach': typeof CoachRoute
   '/features': typeof FeaturesRoute
   '/focus': typeof FocusRoute
+  '/goals': typeof GoalsRoute
   '/habit-tracker': typeof HabitTrackerRoute
   '/habits': typeof HabitsRoute
   '/health': typeof HealthRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/coach': typeof CoachRoute
   '/features': typeof FeaturesRoute
   '/focus': typeof FocusRoute
+  '/goals': typeof GoalsRoute
   '/habit-tracker': typeof HabitTrackerRoute
   '/habits': typeof HabitsRoute
   '/health': typeof HealthRoute
@@ -235,6 +244,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/features'
     | '/focus'
+    | '/goals'
     | '/habit-tracker'
     | '/habits'
     | '/health'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/features'
     | '/focus'
+    | '/goals'
     | '/habit-tracker'
     | '/habits'
     | '/health'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/coach'
     | '/features'
     | '/focus'
+    | '/goals'
     | '/habit-tracker'
     | '/habits'
     | '/health'
@@ -311,6 +323,7 @@ export interface RootRouteChildren {
   CoachRoute: typeof CoachRoute
   FeaturesRoute: typeof FeaturesRoute
   FocusRoute: typeof FocusRoute
+  GoalsRoute: typeof GoalsRoute
   HabitTrackerRoute: typeof HabitTrackerRoute
   HabitsRoute: typeof HabitsRoute
   HealthRoute: typeof HealthRoute
@@ -378,6 +391,13 @@ declare module '@tanstack/react-router' {
       path: '/focus'
       fullPath: '/focus'
       preLoaderRoute: typeof FocusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/goals': {
+      id: '/goals'
+      path: '/goals'
+      fullPath: '/goals'
+      preLoaderRoute: typeof GoalsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/habit-tracker': {
@@ -503,6 +523,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoachRoute: CoachRoute,
   FeaturesRoute: FeaturesRoute,
   FocusRoute: FocusRoute,
+  GoalsRoute: GoalsRoute,
   HabitTrackerRoute: HabitTrackerRoute,
   HabitsRoute: HabitsRoute,
   HealthRoute: HealthRoute,

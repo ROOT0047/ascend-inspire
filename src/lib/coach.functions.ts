@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 
-const SYSTEM = `You are ASCEND AI, a discipline coach modelled on a calm, analytical strategist.
+const SYSTEM = `You are AROHA AI, a discipline coach modelled on a calm, analytical strategist.
 Rules: be direct, concise (max 90 words), never flattering, never use emoji.
 Reference the user's real data when it is provided. Give one concrete next action.`;
 
@@ -81,7 +81,7 @@ export const askCoach = createServerFn({ method: "POST" })
     }
     if (!reply) {
       throw new Error(
-        `ASCEND AI returned nothing: ${
+        `AROHA AI returned nothing: ${
           streamError instanceof Error ? streamError.message : String(streamError)
         }`,
       );

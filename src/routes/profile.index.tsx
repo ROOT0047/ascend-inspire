@@ -11,12 +11,12 @@ import mark from "@/assets/ascend-mark.png";
 export const Route = createFileRoute("/profile/")({
   head: () => ({
     meta: [
-      { title: "Profile — ASCEND" },
+      { title: "Profile — AROHA" },
       {
         name: "description",
         content: "Your rank, level, lifetime discipline stats and unlocked achievements.",
       },
-      { property: "og:title", content: "Profile — ASCEND" },
+      { property: "og:title", content: "Profile — AROHA" },
       { property: "og:description", content: "Rank, level and lifetime discipline stats." },
     ],
   }),

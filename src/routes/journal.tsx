@@ -22,12 +22,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/journal")({
   head: () => ({
     meta: [
-      { title: "Journal — ASCEND" },
+      { title: "Journal — AROHA" },
       {
         name: "description",
         content: "Daily reflection with mood tracking and a private, distraction-free writing surface.",
       },
-      { property: "og:title", content: "Journal — ASCEND" },
+      { property: "og:title", content: "Journal — AROHA" },
       { property: "og:description", content: "Write the day down. Patterns surface later." },
     ],
   }),

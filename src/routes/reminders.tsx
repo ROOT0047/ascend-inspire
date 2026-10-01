@@ -17,9 +17,9 @@ export const Route = createFileRoute("/reminders")({
     typeof search['reminder'] === "string" ? { reminder: search['reminder'] } : {},
   head: () => ({
     meta: [
-      { title: "Reminders — ASCEND" },
+      { title: "Reminders — AROHA" },
       { name: "description", content: "Smart wake-up, workout, hydration and journal reminders with voice alerts." },
-      { property: "og:title", content: "Reminders — ASCEND" },
+      { property: "og:title", content: "Reminders — AROHA" },
       { property: "og:description", content: "Smart, voice-enabled nudges at the right hour." },
     ],
   }),

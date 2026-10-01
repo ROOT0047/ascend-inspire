@@ -1,4 +1,4 @@
-// Notification-only worker for ASCEND.
+// Notification-only worker for AROHA.
 // Android requires ServiceWorkerRegistration.showNotification() to post system
 // notifications. This worker intentionally has NO fetch/caching handlers, so it
 // can never serve stale HTML or assets.
