@@ -14,6 +14,7 @@ import {
   Menu,
   NotebookPen,
   Shield,
+  Target,
   Timer,
   User,
 } from "lucide-react";
@@ -32,6 +33,7 @@ const bottomNav = [
 ] as const;
 
 const drawerNav = [
+  { to: "/goals", label: "Goals", icon: Target },
   { to: "/habits", label: "Habits", icon: CheckCircle2 },
   { to: "/coach", label: "AROHA AI", icon: Brain },
   { to: "/journal", label: "Journal", icon: NotebookPen },
