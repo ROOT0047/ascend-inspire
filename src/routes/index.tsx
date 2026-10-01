@@ -13,13 +13,13 @@ import { lovable } from "@/integrations/lovable/index";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AROHA — Discipline shapes destiny" },
+      { title: "AROHA — Your Personal Evolution System" },
       {
         name: "description",
         content:
           "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching.",
       },
-      { property: "og:title", content: "AROHA — Discipline shapes destiny" },
+      { property: "og:title", content: "AROHA — Your Personal Evolution System" },
       {
         property: "og:description",
         content: "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching.",
@@ -100,7 +100,7 @@ function Login() {
             className="size-16 drop-shadow-[0_0_28px_oklch(0.618_0.207_288/0.55)]"
           />
           <h1 className="mt-6 text-3xl tracking-[0.28em] text-foreground">AROHA</h1>
-          <p className="mt-3 text-sm text-muted-foreground">Discipline shapes destiny.</p>
+          <p className="mt-3 text-sm text-muted-foreground">Your Personal Evolution System.</p>
           <p className="mt-1 text-xs text-muted-foreground/80">
             Master your habits. Master yourself.
           </p>
@@ -131,7 +131,7 @@ function Login() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@ascend.app"
+              placeholder="you@aroha.app"
               autoComplete="email"
             />
           </div>
