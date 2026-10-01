@@ -34,7 +34,7 @@ export function NotificationPermissionCard() {
       setPermission(next);
       if (next === "granted") {
         await showSystemNotification({
-          title: "ASCEND alerts are live",
+          title: "AROHA alerts are live",
           body: "Blocks and nudges will now appear in your notification shade.",
           tag: "ascend-enabled",
           vibrate: profile?.haptics_enabled ?? false,
@@ -52,7 +52,7 @@ export function NotificationPermissionCard() {
     if (profile?.haptics_enabled) vibrate([60, 40, 60]);
     const ok = await showSystemNotification({
       title: "Workout window opens in 10 minutes",
-      body: "Test alert from ASCEND.",
+      body: "Test alert from AROHA.",
       tag: "ascend-test",
       url: "/schedule",
       vibrate: profile?.haptics_enabled ?? false,
@@ -65,7 +65,7 @@ export function NotificationPermissionCard() {
       <div className="card-surface flex items-start gap-3 px-4 py-3.5">
         <TriangleAlert className="mt-0.5 size-4.5 text-warning" strokeWidth={1.75} />
         <p className="text-xs text-muted-foreground">
-          This browser can't post system notifications. Open ASCEND in Chrome on Android to get
+          This browser can't post system notifications. Open AROHA in Chrome on Android to get
           alerts in the notification shade.
         </p>
       </div>
@@ -83,7 +83,7 @@ export function NotificationPermissionCard() {
               ? "Alerts appear in your Android notification shade."
               : permission === "denied"
                 ? "Blocked. Re-allow notifications for this site in browser settings."
-                : "Allow ASCEND to post alerts to your device."}
+                : "Allow AROHA to post alerts to your device."}
           </p>
         </div>
         {permission === "granted" ? (
@@ -115,7 +115,7 @@ export function NotificationPermissionCard() {
       {!installed ? (
         <p className="flex items-start gap-2 text-[0.68rem] leading-relaxed text-muted-foreground">
           <Smartphone className="mt-0.5 size-3.5 shrink-0" strokeWidth={1.75} />
-          For reliable delivery, install ASCEND: open the browser menu and choose “Add to Home
+          For reliable delivery, install AROHA: open the browser menu and choose “Add to Home
           screen”.
         </p>
       ) : null}

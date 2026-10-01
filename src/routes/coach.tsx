@@ -12,12 +12,12 @@ import logo from "@/assets/ascend-mark.png";
 export const Route = createFileRoute("/coach")({
   head: () => ({
     meta: [
-      { title: "ASCEND AI — Your Discipline Coach" },
+      { title: "AROHA AI — Your Discipline Coach" },
       {
         name: "description",
         content: "A calm, analytical AI coach that reviews your day, finds patterns and sets tomorrow's priorities.",
       },
-      { property: "og:title", content: "ASCEND AI — Your Discipline Coach" },
+      { property: "og:title", content: "AROHA AI — Your Discipline Coach" },
       { property: "og:description", content: "Daily briefings, pattern analysis, honest feedback." },
     ],
   }),
@@ -52,7 +52,7 @@ function CoachPage() {
       await refreshCoach();
     } catch (error) {
       console.error(error);
-      toast.error("ASCEND AI couldn't reply. Try again in a moment.");
+      toast.error("AROHA AI couldn't reply. Try again in a moment.");
     } finally {
       setThinking(false);
       inputRef.current?.focus();
@@ -60,11 +60,11 @@ function CoachPage() {
   }
 
   return (
-    <AppShell title="ASCEND AI">
+    <AppShell title="AROHA AI">
       <div className="mb-5 flex items-center gap-3">
         <img src={logo} alt="" className="size-10 rounded-xl" />
         <div>
-          <h1 className="text-sm text-foreground">ASCEND AI Coach</h1>
+          <h1 className="text-sm text-foreground">AROHA AI Coach</h1>
           <p className="text-xs text-muted-foreground">Analytical. Direct. Never flattering.</p>
         </div>
       </div>
@@ -93,7 +93,7 @@ function CoachPage() {
           </div>
         ))}
         {thinking ? (
-          <p className="text-xs text-muted-foreground">ASCEND AI is analysing…</p>
+          <p className="text-xs text-muted-foreground">AROHA AI is analysing…</p>
         ) : null}
         <div ref={endRef} />
       </div>

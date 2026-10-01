@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/notifications")({
   head: () => ({
     meta: [
-      { title: "Notifications — ASCEND" },
+      { title: "Notifications — AROHA" },
       { name: "description", content: "Streak warnings, session reminders and weekly review alerts." },
-      { property: "og:title", content: "Notifications — ASCEND" },
+      { property: "og:title", content: "Notifications — AROHA" },
       { property: "og:description", content: "Streak warnings and review alerts in one feed." },
     ],
   }),

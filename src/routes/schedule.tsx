@@ -29,12 +29,12 @@ export const Route = createFileRoute("/schedule")({
   },
   head: () => ({
     meta: [
-      { title: "Schedule — ASCEND" },
+      { title: "Schedule — AROHA" },
       {
         name: "description",
         content: "Time-blocked daily planner with priorities, recurring blocks and color labels.",
       },
-      { property: "og:title", content: "Schedule — ASCEND" },
+      { property: "og:title", content: "Schedule — AROHA" },
       { property: "og:description", content: "Plan the day in blocks and hold the line." },
     ],
   }),

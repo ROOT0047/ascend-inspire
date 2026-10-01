@@ -11,12 +11,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/home")({
   head: () => ({
     meta: [
-      { title: "Today — ASCEND" },
+      { title: "Today — AROHA" },
       {
         name: "description",
         content: "Your discipline score, today's mission, focus time and habit progress at a glance.",
       },
-      { property: "og:title", content: "Today — ASCEND" },
+      { property: "og:title", content: "Today — AROHA" },
       { property: "og:description", content: "Discipline score, mission and habit progress." },
     ],
   }),

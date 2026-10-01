@@ -13,15 +13,15 @@ import mark from "@/assets/ascend-mark.png";
 export const Route = createFileRoute("/habit-tracker")({
   head: () => ({
     meta: [
-      { title: "Best Habit Tracker App with AI Coaching — ASCEND" },
+      { title: "Best Habit Tracker App with AI Coaching — AROHA" },
       {
         name: "description",
         content:
-          "ASCEND goes beyond a habit tracker: daily check-ins, streaks, a live discipline score, schedule planning and an AI coach that keeps you consistent. Free to start.",
+          "AROHA goes beyond a habit tracker: daily check-ins, streaks, a live discipline score, schedule planning and an AI coach that keeps you consistent. Free to start.",
       },
       {
         property: "og:title",
-        content: "Best Habit Tracker App with AI Coaching — ASCEND",
+        content: "Best Habit Tracker App with AI Coaching — AROHA",
       },
       {
         property: "og:description",
@@ -42,12 +42,12 @@ const pillars = [
   {
     icon: Flame,
     title: "Streaks that actually motivate",
-    text: "Check in daily and build unbroken streaks. ASCEND surfaces your longest runs and current momentum so a missed day never becomes a missed month.",
+    text: "Check in daily and build unbroken streaks. AROHA surfaces your longest runs and current momentum so a missed day never becomes a missed month.",
   },
   {
     icon: TrendingUp,
     title: "A discipline score, not just checkboxes",
-    text: "Most habit trackers count taps. ASCEND computes a live discipline score from your check-ins, completed schedule blocks and focus sessions — so you see real consistency, not vanity streaks.",
+    text: "Most habit trackers count taps. AROHA computes a live discipline score from your check-ins, completed schedule blocks and focus sessions — so you see real consistency, not vanity streaks.",
   },
   {
     icon: Sparkles,
@@ -92,20 +92,20 @@ function HabitTracker() {
         <header className="flex flex-col items-center text-center">
           <img
             src={mark}
-            alt="ASCEND logo"
+            alt="AROHA logo"
             width={816}
             height={816}
             className="size-16 drop-shadow-[0_0_28px_oklch(0.618_0.207_288/0.55)]"
           />
           <p className="mt-6 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-            ASCEND
+            AROHA
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             The best habit tracker app for real discipline
           </h1>
           <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">
             Looking for the best habit tracker app? Most trackers stop at
-            checkboxes and streaks. ASCEND is a discipline operating system:
+            checkboxes and streaks. AROHA is a personal evolution system:
             it tracks your habits, plans your day, times your focus sessions
             and scores your consistency — with an AI coach that keeps you
             honest.
@@ -149,7 +149,7 @@ function HabitTracker() {
           </ul>
           <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
             A traditional habit tracker tells you whether you showed up.
-            ASCEND shows you whether your whole system — schedule, habits,
+            AROHA shows you whether your whole system — schedule, habits,
             focus and recovery — is working, and helps you fix what is not.
           </p>
           <Link

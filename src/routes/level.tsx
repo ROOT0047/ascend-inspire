@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/level")({
   head: () => ({
     meta: [
-      { title: "Level & Rank — ASCEND" },
+      { title: "Level & Rank — AROHA" },
       { name: "description", content: "Your XP, rank, badges, and progress toward the next level." },
-      { property: "og:title", content: "Level & Rank — ASCEND" },
+      { property: "og:title", content: "Level & Rank — AROHA" },
       { property: "og:description", content: "Track XP, ranks, and badges earned through daily execution." },
     ],
   }),

@@ -33,7 +33,7 @@ const bottomNav = [
 
 const drawerNav = [
   { to: "/habits", label: "Habits", icon: CheckCircle2 },
-  { to: "/coach", label: "ASCEND AI", icon: Brain },
+  { to: "/coach", label: "AROHA AI", icon: Brain },
   { to: "/journal", label: "Journal", icon: NotebookPen },
   { to: "/learn", label: "Learn", icon: BookOpen },
   { to: "/health", label: "Health", icon: Heart },
@@ -70,7 +70,7 @@ export function AppShell({
             <SheetContent side="left" className="w-72 border-border bg-surface p-0">
               <SheetHeader className="border-b border-border px-5 py-4">
                 <SheetTitle className="flex items-center gap-2 text-left text-base tracking-[0.24em]">
-                  ASCEND
+                  AROHA
                 </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-1 p-3">

@@ -64,7 +64,7 @@
 :root {
   --radius: 1.25rem;
 
-  /* ASCEND — tactical dark system */
+  /* AROHA — tactical dark system */
   --background: oklch(0.157 0.018 262);
   --foreground: oklch(0.972 0.004 250);
   --surface: oklch(0.215 0.017 260);

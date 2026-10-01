@@ -46,7 +46,7 @@ function minutesOfDay(time: string): number | null {
 }
 
 /**
- * Delivers ASCEND alerts to the Android notification shade while the app is
+ * Delivers AROHA alerts to the Android notification shade while the app is
  * open or backgrounded on the device. Renders nothing.
  */
 export function NotificationScheduler() {

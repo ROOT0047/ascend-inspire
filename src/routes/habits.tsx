@@ -20,12 +20,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/habits")({
   head: () => ({
     meta: [
-      { title: "Habits — ASCEND" },
+      { title: "Habits — AROHA" },
       {
         name: "description",
         content: "Daily, weekly and monthly habits with streaks, misses and 30-day consistency grids.",
       },
-      { property: "og:title", content: "Habits — ASCEND" },
+      { property: "og:title", content: "Habits — AROHA" },
       { property: "og:description", content: "Build streaks. Track every miss honestly." },
     ],
   }),

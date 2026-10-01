@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/sync")({
   head: () => ({
     meta: [
-      { title: "Sync & Backup — ASCEND" },
+      { title: "Sync & Backup — AROHA" },
       { name: "description", content: "Offline-first storage with cloud sync, export and restore for your data." },
-      { property: "og:title", content: "Sync & Backup — ASCEND" },
+      { property: "og:title", content: "Sync & Backup — AROHA" },
       { property: "og:description", content: "Offline-first, with cloud sync and export." },
     ],
   }),

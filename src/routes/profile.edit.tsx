@@ -16,12 +16,12 @@ import mark from "@/assets/ascend-mark.png";
 export const Route = createFileRoute("/profile/edit")({
   head: () => ({
     meta: [
-      { title: "Edit profile — ASCEND" },
+      { title: "Edit profile — AROHA" },
       {
         name: "description",
-        content: "Update your display name, avatar, timezone and reminder preferences in ASCEND.",
+        content: "Update your display name, avatar, timezone and reminder preferences in AROHA.",
       },
-      { property: "og:title", content: "Edit profile — ASCEND" },
+      { property: "og:title", content: "Edit profile — AROHA" },
       { property: "og:description", content: "Update your display name, avatar and preferences." },
     ],
   }),

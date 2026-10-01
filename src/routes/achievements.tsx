@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/achievements")({
   head: () => ({
     meta: [
-      { title: "Achievements — ASCEND" },
+      { title: "Achievements — AROHA" },
       { name: "description", content: "Badges, levels and milestones earned through consistency." },
-      { property: "og:title", content: "Achievements — ASCEND" },
+      { property: "og:title", content: "Achievements — AROHA" },
       { property: "og:description", content: "Badges earned through consistency, not intensity." },
     ],
   }),

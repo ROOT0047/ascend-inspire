@@ -9,12 +9,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/analytics")({
   head: () => ({
     meta: [
-      { title: "Analytics — ASCEND" },
+      { title: "Analytics — AROHA" },
       {
         name: "description",
         content: "Discipline score trends, habit heat maps, focus hours and productivity graphs.",
       },
-      { property: "og:title", content: "Analytics — ASCEND" },
+      { property: "og:title", content: "Analytics — AROHA" },
       { property: "og:description", content: "Measure progress over months, not days." },
     ],
   }),

@@ -8,9 +8,9 @@ import { useAuth, type PreferenceKey } from "@/hooks/use-auth";
 export const Route = createFileRoute("/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — ASCEND" },
-      { name: "description", content: "Theme, notifications, privacy and account preferences for ASCEND." },
-      { property: "og:title", content: "Settings — ASCEND" },
+      { title: "Settings — AROHA" },
+      { name: "description", content: "Theme, notifications, privacy and account preferences for AROHA." },
+      { property: "og:title", content: "Settings — AROHA" },
       { property: "og:description", content: "Theme, notifications and privacy preferences." },
     ],
   }),

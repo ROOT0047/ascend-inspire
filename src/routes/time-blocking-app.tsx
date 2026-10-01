@@ -13,15 +13,15 @@ import mark from "@/assets/ascend-mark.png";
 export const Route = createFileRoute("/time-blocking-app")({
   head: () => ({
     meta: [
-      { title: "ASCEND — Time Blocking App for Daily Schedule Planning" },
+      { title: "AROHA — Time Blocking App for Daily Schedule Planning" },
       {
         name: "description",
         content:
-          "ASCEND is a time blocking app that helps you plan your day in focused blocks, set recurring weekly tasks, and get notified before every block starts. Build discipline with scheduled intentions.",
+          "AROHA is a time blocking app that helps you plan your day in focused blocks, set recurring weekly tasks, and get notified before every block starts. Build discipline with scheduled intentions.",
       },
       {
         property: "og:title",
-        content: "ASCEND — Time Blocking App for Daily Schedule Planning",
+        content: "AROHA — Time Blocking App for Daily Schedule Planning",
       },
       {
         property: "og:description",
@@ -83,20 +83,20 @@ function TimeBlockingApp() {
         <header className="flex flex-col items-center text-center">
           <img
             src={mark}
-            alt="ASCEND logo"
+            alt="AROHA logo"
             width={816}
             height={816}
             className="size-16 drop-shadow-[0_0_28px_oklch(0.618_0.207_288/0.55)]"
           />
           <p className="mt-6 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-            ASCEND
+            AROHA
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             The time blocking app that turns your calendar into discipline
           </h1>
           <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">
             Time blocking is more than scheduling — it is a commitment system.
-            ASCEND helps you plan your day in focused blocks, repeat what
+            AROHA helps you plan your day in focused blocks, repeat what
             matters, and follow through with notifications that keep you on
             track.
           </p>
@@ -131,7 +131,7 @@ function TimeBlockingApp() {
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground">
             Calendars remind you of meetings; time blocking claims space for
-            your own priorities. ASCEND combines blocks with habits, focus
+            your own priorities. AROHA combines blocks with habits, focus
             sessions and an AI coach so your schedule becomes a daily operating
             system, not just a list of events.
           </p>
@@ -145,10 +145,10 @@ function TimeBlockingApp() {
 
         <footer className="flex flex-col items-center gap-2 pb-4 text-center text-xs text-muted-foreground">
           <Link to="/features" className="underline-offset-4 hover:underline">
-            Explore all ASCEND features
+            Explore all AROHA features
           </Link>
           <Link to="/habit-tracker" className="underline-offset-4 hover:underline">
-            Why ASCEND is the best habit tracker app
+            Why AROHA is the best habit tracker app
           </Link>
           <Link to="/" className="underline-offset-4 hover:underline">
             Back to sign in

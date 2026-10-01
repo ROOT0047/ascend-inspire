@@ -14,15 +14,15 @@ import mark from "@/assets/ascend-mark.png";
 export const Route = createFileRoute("/features")({
   head: () => ({
     meta: [
-      { title: "ASCEND — The Discipline App for Habits, Focus and Schedule" },
+      { title: "AROHA — The Discipline App for Habits, Focus and Schedule" },
       {
         name: "description",
         content:
-          "ASCEND is a discipline app that unifies schedule planning, habit streaks, deep focus sessions, health tracking, journaling and AI coaching into one daily operating system.",
+          "AROHA is a discipline app that unifies schedule planning, habit streaks, deep focus sessions, health tracking, journaling and AI coaching into one daily operating system.",
       },
       {
         property: "og:title",
-        content: "ASCEND — The Discipline App for Habits, Focus and Schedule",
+        content: "AROHA — The Discipline App for Habits, Focus and Schedule",
       },
       {
         property: "og:description",
@@ -94,19 +94,19 @@ function Features() {
         <header className="flex flex-col items-center text-center">
           <img
             src={mark}
-            alt="ASCEND logo"
+            alt="AROHA logo"
             width={816}
             height={816}
             className="size-16 drop-shadow-[0_0_28px_oklch(0.618_0.207_288/0.55)]"
           />
           <p className="mt-6 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-            ASCEND
+            AROHA
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             The discipline app that runs your whole day
           </h1>
           <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">
-            Discipline is not motivation — it is a system. ASCEND is a
+            Discipline is not motivation — it is a system. AROHA is a
             discipline app that turns your intentions into scheduled blocks,
             tracked habits, focused sessions and measurable progress, with an
             AI coach keeping you honest.
@@ -141,7 +141,7 @@ function Features() {
             Why a discipline app instead of another to-do list?
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground">
-            To-do lists record what you intend. ASCEND measures what you
+            To-do lists record what you intend. AROHA measures what you
             actually do: every completed block, every habit check-in and every
             focus session feeds your discipline score, level and rank. You see
             exactly where you are consistent and where you slip — and the AI
@@ -157,10 +157,10 @@ function Features() {
 
         <footer className="flex flex-col items-center gap-2 pb-4 text-center text-xs text-muted-foreground">
           <Link to="/time-blocking-app" className="underline-offset-4 hover:underline">
-            ASCEND time blocking app
+            AROHA time blocking app
           </Link>
           <Link to="/habit-tracker" className="underline-offset-4 hover:underline">
-            Why ASCEND is the best habit tracker app
+            Why AROHA is the best habit tracker app
           </Link>
           <Link to="/" className="underline-offset-4 hover:underline">
             Back to sign in

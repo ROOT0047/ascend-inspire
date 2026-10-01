@@ -12,12 +12,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/focus")({
   head: () => ({
     meta: [
-      { title: "Focus — ASCEND" },
+      { title: "Focus — AROHA" },
       {
         name: "description",
         content: "Pomodoro timer, stopwatch and deep work mode to eliminate distractions.",
       },
-      { property: "og:title", content: "Focus — ASCEND" },
+      { property: "og:title", content: "Focus — AROHA" },
       { property: "og:description", content: "Deep work, measured in sessions." },
     ],
   }),

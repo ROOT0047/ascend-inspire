@@ -16,20 +16,20 @@ import mark from "@/assets/ascend-mark.png";
 export const Route = createFileRoute("/ascend")({
   head: () => ({
     meta: [
-      { title: "ASCEND — The Discipline Operating System" },
+      { title: "AROHA — The Personal Evolution System" },
       {
         name: "description",
         content:
-          "Discover the ASCEND brand: a discipline operating system built on intention, consistency, focus and reflection, with habit streaks, time blocks and an AI coach.",
+          "Discover the AROHA brand: a personal evolution system built on intention, consistency, focus and reflection, with habit streaks, time blocks and an AI coach.",
       },
       {
         property: "og:title",
-        content: "ASCEND — The Operating System for Discipline",
+        content: "AROHA — The Personal Evolution System",
       },
       {
         property: "og:description",
         content:
-          "The ASCEND story: four pillars of discipline, daily habit streaks, focused time blocks and an AI coach that keeps you accountable.",
+          "The AROHA story: four pillars of discipline, daily habit streaks, focused time blocks and an AI coach that keeps you accountable.",
       },
 
       { property: "og:type", content: "website" },
@@ -46,7 +46,7 @@ const pillars = [
   {
     icon: Target,
     title: "Intention",
-    text: "Discipline starts with a clear aim. ASCEND turns your goals into a daily plan you can follow.",
+    text: "Discipline starts with a clear aim. AROHA turns your goals into a daily plan you can follow.",
   },
   {
     icon: Flame,
@@ -120,19 +120,19 @@ function BrandPage() {
         <header className="flex flex-col items-center text-center">
           <img
             src={mark}
-            alt="ASCEND logo"
+            alt="AROHA logo"
             width={816}
             height={816}
             className="size-20 drop-shadow-[0_0_32px_oklch(0.618_0.207_288/0.55)]"
           />
           <p className="mt-6 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-            ASCEND
+            AROHA
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
             Discipline shapes destiny.
           </h1>
           <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">
-            ASCEND is a discipline operating system for your life. Plan your
+            AROHA is a personal evolution system for your life. Plan your
             schedule, build unbreakable habits, focus deeply, track your health,
             journal daily and learn from an AI coach — all in one place.
           </p>
@@ -175,7 +175,7 @@ function BrandPage() {
             Built for people who take self-mastery seriously
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground">
-            ASCEND is not a simple to-do list. It is a complete operating system
+            AROHA is not a simple to-do list. It is a complete operating system
             for discipline: your schedule, habits, focus, health, journal and
             AI coach work together to turn intention into daily execution.
           </p>
@@ -199,7 +199,7 @@ function BrandPage() {
             Your next level is one decision away.
           </h2>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed opacity-90">
-            Join ASCEND and turn discipline into a system you can see, measure and
+            Join AROHA and turn discipline into a system you can see, measure and
             improve every single day.
           </p>
           <Link
@@ -213,7 +213,7 @@ function BrandPage() {
 
         <footer className="flex flex-col items-center gap-2 pb-4 text-center text-xs text-muted-foreground">
           <Link to="/features" className="underline-offset-4 hover:underline">
-            Explore ASCEND features
+            Explore AROHA features
           </Link>
           <Link to="/habit-tracker" className="underline-offset-4 hover:underline">
             Best habit tracker app
