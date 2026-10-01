@@ -82,14 +82,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "google-site-verification", content: "ZtCktlzZgR7TA04pgsIUmlFyXG9cSbLm1iWRgmFazAQ" },
-      { title: "AROHA — Discipline shapes destiny" },
+      { title: "AROHA — Your Personal Evolution System" },
       {
         name: "description",
         content:
           "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching.",
       },
       { name: "author", content: "AROHA" },
-      { property: "og:title", content: "AROHA — Discipline shapes destiny" },
+      { property: "og:title", content: "AROHA — Your Personal Evolution System" },
       {
         property: "og:description",
         content: "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching.",
@@ -97,7 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "AROHA — Discipline shapes destiny" },
+      { name: "twitter:title", content: "AROHA — Your Personal Evolution System" },
       { name: "twitter:description", content: "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1d082f8d-414c-49f8-a302-4b22b1e0fe5f" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1d082f8d-414c-49f8-a302-4b22b1e0fe5f" },

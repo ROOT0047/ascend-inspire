@@ -129,7 +129,7 @@ function BrandPage() {
             AROHA
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-            Discipline shapes destiny.
+            Your Personal Evolution System.
           </h1>
           <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">
             AROHA is a personal evolution system for your life. Plan your
