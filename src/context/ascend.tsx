@@ -542,6 +542,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateBlocks,
+    onError: notifyError,
   });
 
   const addBlockMutation = useMutation({
@@ -582,6 +583,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateBlocks,
+    onError: notifyError,
   });
 
   const deleteBlockMutation = useMutation({
@@ -590,6 +592,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateBlocks,
+    onError: notifyError,
   });
 
   const toggleHabitMutation = useMutation({
@@ -611,6 +614,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       }
     },
     onSuccess: invalidateHabits,
+    onError: notifyError,
   });
 
   const addHabitMutation = useMutation({
@@ -626,6 +630,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateHabits,
+    onError: notifyError,
   });
 
   const deleteHabitMutation = useMutation({
@@ -634,6 +639,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateHabits,
+    onError: notifyError,
   });
 
   const addJournalMutation = useMutation({
@@ -650,7 +656,9 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["journal"] });
+      toast.success("Reflection saved");
     },
+    onError: notifyError,
   });
 
   const addJournal = useCallback(
