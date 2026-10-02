@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as ArohaRouteImport } from './routes/aroha'
 import { Route as AscendRouteImport } from './routes/ascend'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as FeaturesRouteImport } from './routes/features'
@@ -47,6 +48,11 @@ const AchievementsRoute = AchievementsRouteImport.update({
 const AnalyticsRoute = AnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArohaRoute = ArohaRouteImport.update({
+  id: '/aroha',
+  path: '/aroha',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AscendRoute = AscendRouteImport.update({
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
+  '/aroha': typeof ArohaRoute
   '/ascend': typeof AscendRoute
   '/coach': typeof CoachRoute
   '/features': typeof FeaturesRoute
@@ -185,6 +192,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
+  '/aroha': typeof ArohaRoute
   '/ascend': typeof AscendRoute
   '/coach': typeof CoachRoute
   '/features': typeof FeaturesRoute
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
+  '/aroha': typeof ArohaRoute
   '/ascend': typeof AscendRoute
   '/coach': typeof CoachRoute
   '/features': typeof FeaturesRoute
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/'
     | '/achievements'
     | '/analytics'
+    | '/aroha'
     | '/ascend'
     | '/coach'
     | '/features'
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/'
     | '/achievements'
     | '/analytics'
+    | '/aroha'
     | '/ascend'
     | '/coach'
     | '/features'
@@ -292,6 +303,7 @@ export interface FileRouteTypes {
     | '/'
     | '/achievements'
     | '/analytics'
+    | '/aroha'
     | '/ascend'
     | '/coach'
     | '/features'
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AchievementsRoute: typeof AchievementsRoute
   AnalyticsRoute: typeof AnalyticsRoute
+  ArohaRoute: typeof ArohaRoute
   AscendRoute: typeof AscendRoute
   CoachRoute: typeof CoachRoute
   FeaturesRoute: typeof FeaturesRoute
@@ -363,6 +376,13 @@ declare module '@tanstack/react-router' {
       path: '/analytics'
       fullPath: '/analytics'
       preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aroha': {
+      id: '/aroha'
+      path: '/aroha'
+      fullPath: '/aroha'
+      preLoaderRoute: typeof ArohaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ascend': {
@@ -519,6 +539,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AchievementsRoute: AchievementsRoute,
   AnalyticsRoute: AnalyticsRoute,
+  ArohaRoute: ArohaRoute,
   AscendRoute: AscendRoute,
   CoachRoute: CoachRoute,
   FeaturesRoute: FeaturesRoute,

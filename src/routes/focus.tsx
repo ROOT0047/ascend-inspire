@@ -198,7 +198,7 @@ function FocusPage() {
       <div className="mt-4 grid grid-cols-3 gap-2">
         <StatTile label="Today" value={`${Math.floor(focusMinutes / 60)}h ${focusMinutes % 60}m`} tone="primary" />
         <StatTile label="Sessions" value={`${sessions}`} />
-        <StatTile label="Avg block" value="48" suffix="m" tone="success" />
+        <StatTile label="Avg block" value={`${sessions ? Math.round(focusMinutes / sessions) : 0}`} suffix="m" tone="success" />
       </div>
     </AppShell>
   );

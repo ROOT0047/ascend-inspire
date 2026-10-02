@@ -19,7 +19,7 @@ export const Route = createFileRoute("/health")({
 });
 
 function HealthPage() {
-  const { water, sleep, addWater } = useAscend();
+  const { water, sleep, addWater, setSleep } = useAscend();
 
   return (
     <AppShell title="Health">
@@ -46,12 +46,19 @@ function HealthPage() {
       <section className="card-surface mt-4 px-4 py-4">
         <div className="flex items-center gap-2">
           <Moon className="size-4 text-primary" strokeWidth={1.75} />
-          <p className="text-sm text-foreground">Sleep</p>
+          <p className="text-sm text-foreground">Sleep last night</p>
           <span className="num ml-auto text-sm text-muted-foreground">
             {sleep}h / {healthStats.sleepGoal}h
           </span>
         </div>
         <Meter value={sleep} max={healthStats.sleepGoal} className="mt-3" />
+        <div className="mt-3 flex gap-2">
+          {[6, 7, 7.5, 8, 9].map((h) => (
+            <Button key={h} variant={sleep === h ? "default" : "outline"} className="flex-1 px-0" onClick={() => setSleep(h)}>
+              {h}h
+            </Button>
+          ))}
+        </div>
       </section>
 
       <SectionHeader title="This week" className="mt-6" />

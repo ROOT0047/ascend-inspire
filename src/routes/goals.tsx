@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Plus, Target, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
 import { Meter, PageHeading, SectionHeader } from "@/components/ascend/primitives";
 import { supabase } from "@/integrations/supabase/client";
@@ -45,11 +46,18 @@ function GoalsPage() {
 
   const add = useMutation({
     mutationFn: async () => {
-      if (!user || !title.trim()) return;
+      if (!user) return;
+      const t = title.trim();
+      const w = why.trim();
+      if (!t) throw new Error("Give your goal a title");
+      if (t.length > 120) throw new Error("Title must be 120 characters or less");
+      if (w.length > 500) throw new Error("Why must be 500 characters or less");
+      if (targetDate && targetDate < new Date().toISOString().slice(0, 10))
+        throw new Error("Target date can't be in the past");
       const { error } = await supabase.from("goals").insert({
         user_id: user.id,
-        title: title.trim(),
-        why: why.trim() || null,
+        title: t,
+        why: w || null,
         attribute,
         target_date: targetDate || null,
       });
@@ -59,17 +67,21 @@ function GoalsPage() {
       setTitle("");
       setWhy("");
       setTargetDate("");
+      toast.success("Goal added");
       void refresh();
     },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Could not save goal"),
   });
 
   const update = useMutation({
     mutationFn: async (v: { id: string; progress?: number; completed?: boolean }) => {
       const { id, ...patch } = v;
+      if (patch.progress !== undefined) patch.progress = Math.max(0, Math.min(100, Math.round(patch.progress)));
       const { error } = await supabase.from("goals").update(patch).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => void refresh(),
+    onError: () => toast.error("Could not update goal"),
   });
 
   const remove = useMutation({
@@ -77,7 +89,11 @@ function GoalsPage() {
       const { error } = await supabase.from("goals").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => void refresh(),
+    onSuccess: () => {
+      toast.success("Goal deleted");
+      void refresh();
+    },
+    onError: () => toast.error("Could not delete goal"),
   });
 
   const goals = goalsQuery.data ?? [];

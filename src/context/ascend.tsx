@@ -7,8 +7,13 @@ import {
   type ReactNode,
 } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { totalXp, type XpInput } from "@/lib/xp";
+
+const notifyError = (e: unknown) =>
+  toast.error(e instanceof Error ? e.message : "Something went wrong — please try again");
 import {
   healthStats,
   
@@ -122,20 +127,8 @@ function rankForLevel(level: number) {
   return { rank: current, nextRank: next };
 }
 
-export function computeProgression(input: {
-  checkins: number;
-  completedBlocks: number;
-  bestStreak: number;
-  disciplineScore: number;
-  badges: number;
-}): Progression {
-  const xp = Math.round(
-    input.checkins * 12 +
-      input.completedBlocks * 6 +
-      input.bestStreak * 20 +
-      input.badges * 75 +
-      input.disciplineScore,
-  );
+export function computeProgression(input: XpInput): Progression {
+  const xp = totalXp(input);
   let level = 1;
   while (xpForLevel(level + 1) <= xp && level < 99) level++;
   const base = xpForLevel(level);
@@ -197,6 +190,10 @@ type AscendState = {
   refreshCoach: () => Promise<void>;
   logFocus: (minutes: number) => void;
   addWater: (ml: number) => void;
+  setSleep: (hours: number) => void;
+  focusSessionsToday: number;
+  journaledToday: boolean;
+  goalsCount: number;
 };
 
 const AscendContext = createContext<AscendState | null>(null);
@@ -209,14 +206,54 @@ export function AscendProvider({ children }: { children: ReactNode }) {
   const qc = useQueryClient();
 
   const [selectedDate, setSelectedDate] = useState<string>(todayISO());
-  
-  const [focusMinutes, setFocusMinutes] = useState(0);
-  const [sessions, setSessions] = useState(0);
-  const [water, setWater] = useState(0);
-  const [sleep] = useState(healthStats.sleep);
 
   const rangeStart = useMemo(() => isoDate(new Date(Date.now() - 90 * DAY)), []);
   const enabled = !!userId;
+  const todayKey = todayISO();
+
+  const dailyLogsQuery = useQuery({
+    queryKey: ["daily-logs", userId, rangeStart],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("daily_logs")
+        .select("log_date, water_ml, sleep_hours")
+        .gte("log_date", rangeStart);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const focusQuery = useQuery({
+    queryKey: ["focus-sessions", userId, rangeStart],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("focus_sessions")
+        .select("session_date, duration_min, completed")
+        .gte("session_date", rangeStart);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const goalsQuery = useQuery({
+    queryKey: ["goals", userId],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("goals").select("*").order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const todayLog = (dailyLogsQuery.data ?? []).find((l) => l.log_date === todayKey);
+  const water = todayLog?.water_ml ?? 0;
+  const sleep = Number(todayLog?.sleep_hours ?? 0);
+  const todaySessions = (focusQuery.data ?? []).filter((s) => s.session_date === todayKey && s.completed);
+  const focusMinutes = todaySessions.reduce((a, s) => a + s.duration_min, 0);
+  const sessions = todaySessions.length;
+  void healthStats;
 
   const blocksQuery = useQuery({
     queryKey: ["blocks", userId, selectedDate],
@@ -459,6 +496,13 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     [habitRows.length, completedBlocks, bestStreak, perfectDay, totalCheckins],
   );
 
+  const focusSessionCount = (focusQuery.data ?? []).filter((s) => s.completed).length;
+  const journalDays = new Set((journalQuery.data ?? []).map((j) => j.entryDate)).size;
+  const healthDays = (dailyLogsQuery.data ?? []).filter(
+    (l) => l.water_ml > 0 || Number(l.sleep_hours) > 0,
+  ).length;
+  const goalsCompleted = (goalsQuery.data ?? []).filter((g) => g.completed).length;
+
   const progression = useMemo(
     () =>
       computeProgression({
@@ -467,8 +511,12 @@ export function AscendProvider({ children }: { children: ReactNode }) {
         bestStreak,
         disciplineScore,
         badges: achievements.filter((a) => a.unlocked).length,
+        focusSessions: focusSessionCount,
+        journalDays,
+        healthDays,
+        goalsCompleted,
       }),
-    [totalCheckins, completedBlocks, bestStreak, disciplineScore, achievements],
+    [totalCheckins, completedBlocks, bestStreak, disciplineScore, achievements, focusSessionCount, journalDays, healthDays, goalsCompleted],
   );
 
 
@@ -494,6 +542,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateBlocks,
+    onError: notifyError,
   });
 
   const addBlockMutation = useMutation({
@@ -534,6 +583,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateBlocks,
+    onError: notifyError,
   });
 
   const deleteBlockMutation = useMutation({
@@ -542,6 +592,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateBlocks,
+    onError: notifyError,
   });
 
   const toggleHabitMutation = useMutation({
@@ -563,6 +614,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       }
     },
     onSuccess: invalidateHabits,
+    onError: notifyError,
   });
 
   const addHabitMutation = useMutation({
@@ -578,6 +630,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateHabits,
+    onError: notifyError,
   });
 
   const deleteHabitMutation = useMutation({
@@ -586,6 +639,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
     },
     onSuccess: invalidateHabits,
+    onError: notifyError,
   });
 
   const addJournalMutation = useMutation({
@@ -602,7 +656,9 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["journal"] });
+      toast.success("Reflection saved");
     },
+    onError: notifyError,
   });
 
   const addJournal = useCallback(
@@ -624,14 +680,46 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     await qc.invalidateQueries({ queryKey: ["coach", userId] });
   }, [qc, userId]);
 
-  const logFocus = useCallback((minutes: number) => {
-    setFocusMinutes((prev) => prev + minutes);
-    setSessions((prev) => prev + 1);
-  }, []);
+  const focusMutation = useMutation({
+    mutationFn: async (minutes: number) => {
+      if (!userId) return;
+      const m = Math.max(1, Math.min(600, Math.round(minutes)));
+      const { error } = await supabase
+        .from("focus_sessions")
+        .insert({ user_id: userId, duration_min: m, session_date: todayISO(), completed: true });
+      if (error) throw error;
+    },
+    onSuccess: () => void qc.invalidateQueries({ queryKey: ["focus-sessions"] }),
+    onError: notifyError,
+  });
 
-  const addWater = useCallback((ml: number) => {
-    setWater((prev) => Math.min(4000, prev + ml));
-  }, []);
+  const healthMutation = useMutation({
+    mutationFn: async (patch: { water_ml?: number; sleep_hours?: number }) => {
+      if (!userId) return;
+      const { error } = await supabase
+        .from("daily_logs")
+        .upsert(
+          { user_id: userId, log_date: todayISO(), water_ml: water, sleep_hours: sleep, ...patch },
+          { onConflict: "user_id,log_date" },
+        );
+      if (error) throw error;
+    },
+    onSuccess: () => void qc.invalidateQueries({ queryKey: ["daily-logs"] }),
+    onError: notifyError,
+  });
+
+  const logFocus = useCallback((minutes: number) => focusMutation.mutate(minutes), [focusMutation]);
+  const addWater = useCallback(
+    (ml: number) => healthMutation.mutate({ water_ml: Math.max(0, Math.min(8000, water + ml)) }),
+    [healthMutation, water],
+  );
+  const setSleep = useCallback(
+    (hours: number) => {
+      const h = Math.max(0, Math.min(16, Math.round(hours * 4) / 4));
+      healthMutation.mutate({ sleep_hours: h }, { onSuccess: () => toast.success("Sleep saved") });
+    },
+    [healthMutation],
+  );
 
   const weekPlan = useMemo<WeekDayPlan[]>(() => {
     const base = startOfWeekISO(new Date(`${selectedDate}T00:00:00`));
@@ -687,6 +775,10 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       refreshCoach,
       logFocus,
       addWater,
+      setSleep,
+      focusSessionsToday: sessions,
+      journaledToday: (journalQuery.data ?? []).some((j) => j.entryDate === todayKey),
+      goalsCount: (goalsQuery.data ?? []).filter((g) => !g.completed).length,
     }),
     [
       loading,
@@ -717,6 +809,9 @@ export function AscendProvider({ children }: { children: ReactNode }) {
       refreshCoach,
       logFocus,
       addWater,
+      setSleep,
+      todayKey,
+      goalsQuery.data,
     ],
   );
 

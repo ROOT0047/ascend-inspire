@@ -3,6 +3,7 @@ import { Award, CheckCircle2, ChevronRight, Circle, Droplet, Moon, Shield } from
 import { AppShell } from "@/components/ascend/app-shell";
 import { Meter, ScoreRing, SectionHeader, StatTile } from "@/components/ascend/primitives";
 import { useAscend } from "@/context/ascend";
+import { TodayLoop } from "@/components/ascend/today-loop";
 import { useAuth } from "@/hooks/use-auth";
 import { healthStats, profile } from "@/data/mock";
 import { quoteForDate } from "@/data/quotes";
@@ -111,6 +112,8 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      <TodayLoop />
 
       <section className="mt-4 grid grid-cols-4 gap-2">
         <StatTile label="Tasks" value={`${doneTasks}/${schedule.length}`} />
