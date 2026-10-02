@@ -38,6 +38,84 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_logs: {
+        Row: {
+          created_at: string
+          energy: number | null
+          id: string
+          log_date: string
+          mood: string | null
+          notes: string
+          sleep_hours: number
+          updated_at: string
+          user_id: string
+          water_ml: number
+          weight_kg: number | null
+        }
+        Insert: {
+          created_at?: string
+          energy?: number | null
+          id?: string
+          log_date: string
+          mood?: string | null
+          notes?: string
+          sleep_hours?: number
+          updated_at?: string
+          user_id: string
+          water_ml?: number
+          weight_kg?: number | null
+        }
+        Update: {
+          created_at?: string
+          energy?: number | null
+          id?: string
+          log_date?: string
+          mood?: string | null
+          notes?: string
+          sleep_hours?: number
+          updated_at?: string
+          user_id?: string
+          water_ml?: number
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
+      focus_sessions: {
+        Row: {
+          block_id: string | null
+          completed: boolean
+          created_at: string
+          duration_min: number
+          goal_id: string | null
+          id: string
+          session_date: string
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          block_id?: string | null
+          completed?: boolean
+          created_at?: string
+          duration_min?: number
+          goal_id?: string | null
+          id?: string
+          session_date?: string
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          block_id?: string | null
+          completed?: boolean
+          created_at?: string
+          duration_min?: number
+          goal_id?: string | null
+          id?: string
+          session_date?: string
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           attribute: string
