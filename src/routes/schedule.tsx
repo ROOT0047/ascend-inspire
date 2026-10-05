@@ -56,6 +56,7 @@ function SchedulePage() {
   const { date: dateParam, block: blockParam } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [open, setOpen] = useState(false);
+  const [templatesOpen, setTemplatesOpen] = useState(false);
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const focusRef = useRef<HTMLLIElement | null>(null);
   const [title, setTitle] = useState("");
