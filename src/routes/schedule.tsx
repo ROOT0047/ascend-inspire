@@ -197,7 +197,7 @@ function SchedulePage() {
         ))}
       </div>
 
-      <div className="card-surface mb-5 flex items-center justify-between px-4 py-3">
+      <div className="card-surface mb-5 flex items-center justify-between gap-3 px-4 py-3">
         <div>
           <p className="text-xs tracking-[0.18em] uppercase text-muted-foreground">This week</p>
           <p className="mt-0.5 text-sm text-foreground">
