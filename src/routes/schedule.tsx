@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Plus, Trash2 } from "lucide-react";
+import { Check, LayoutTemplate, Plus, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
@@ -16,6 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useAscend } from "@/context/ascend";
+import { scheduleTemplates } from "@/data/templates";
 import { cn } from "@/lib/utils";
 
 type ScheduleSearch = { date?: string; block?: string };
@@ -55,6 +56,7 @@ function SchedulePage() {
   const { date: dateParam, block: blockParam } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [open, setOpen] = useState(false);
+  const [templatesOpen, setTemplatesOpen] = useState(false);
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const focusRef = useRef<HTMLLIElement | null>(null);
   const [title, setTitle] = useState("");
@@ -135,6 +137,25 @@ function SchedulePage() {
     setOpen(false);
   }
 
+  function applyTemplate(templateId: string) {
+    const template = scheduleTemplates.find((t) => t.id === templateId);
+    if (!template) return;
+    for (const b of template.blocks) {
+      addBlock({
+        title: b.title,
+        description: b.description,
+        startTime: b.startTime,
+        endTime: b.endTime,
+        priority: b.priority,
+        color: b.color,
+      });
+    }
+    toast.success(
+      `${template.name} template added — ${template.blocks.length} blocks planned for this day`,
+    );
+    setTemplatesOpen(false);
+  }
+
   return (
     <AppShell title="Schedule">
       <PageHeading
@@ -176,7 +197,7 @@ function SchedulePage() {
         ))}
       </div>
 
-      <div className="card-surface mb-5 flex items-center justify-between px-4 py-3">
+      <div className="card-surface mb-5 flex items-center justify-between gap-3 px-4 py-3">
         <div>
           <p className="text-xs tracking-[0.18em] uppercase text-muted-foreground">This week</p>
           <p className="mt-0.5 text-sm text-foreground">
@@ -184,9 +205,19 @@ function SchedulePage() {
             <span className="num">{weekTotals.total}</span> blocks done
           </p>
         </div>
-        <span className="num text-lg text-primary">
-          {weekTotals.total ? Math.round((weekTotals.done / weekTotals.total) * 100) : 0}%
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="num text-lg text-primary">
+            {weekTotals.total ? Math.round((weekTotals.done / weekTotals.total) * 100) : 0}%
+          </span>
+          <button
+            type="button"
+            onClick={() => setTemplatesOpen(true)}
+            aria-label="Open schedule templates"
+            className="grid size-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          >
+            <LayoutTemplate className="size-4" strokeWidth={1.75} />
+          </button>
+        </div>
       </div>
 
       {loading ? (
@@ -309,6 +340,40 @@ function SchedulePage() {
               {focusedBlock?.completed ? "Mark incomplete" : "Mark complete"}
             </Button>
             <Button variant="outline" onClick={clearFocus} className="w-full">
+              Close
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={templatesOpen} onOpenChange={setTemplatesOpen}>
+        <SheetContent side="bottom" className="mx-auto max-w-md rounded-t-3xl border-border bg-surface">
+          <SheetHeader>
+            <SheetTitle>Schedule templates</SheetTitle>
+          </SheetHeader>
+          <div className="space-y-2.5 px-4 pb-2">
+            <p className="text-xs text-muted-foreground">
+              Fill the selected day with a ready-made plan. Existing blocks are kept.
+            </p>
+            {scheduleTemplates.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => applyTemplate(t.id)}
+                className="card-surface flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:border-primary"
+              >
+                <div className="min-w-0">
+                  <p className="text-sm text-foreground">{t.name}</p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">{t.tagline}</p>
+                </div>
+                <span className="num shrink-0 rounded-full border border-border px-2 py-0.5 text-[0.65rem] text-muted-foreground">
+                  {t.blocks.length} blocks
+                </span>
+              </button>
+            ))}
+          </div>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setTemplatesOpen(false)} className="w-full">
               Close
             </Button>
           </SheetFooter>
