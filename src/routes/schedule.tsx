@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Plus, Trash2 } from "lucide-react";
+import { Check, LayoutTemplate, Plus, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/ascend/app-shell";
@@ -16,6 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useAscend } from "@/context/ascend";
+import { scheduleTemplates } from "@/data/templates";
 import { cn } from "@/lib/utils";
 
 type ScheduleSearch = { date?: string; block?: string };
