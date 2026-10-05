@@ -346,6 +346,40 @@ function SchedulePage() {
         </SheetContent>
       </Sheet>
 
+      <Sheet open={templatesOpen} onOpenChange={setTemplatesOpen}>
+        <SheetContent side="bottom" className="mx-auto max-w-md rounded-t-3xl border-border bg-surface">
+          <SheetHeader>
+            <SheetTitle>Schedule templates</SheetTitle>
+          </SheetHeader>
+          <div className="space-y-2.5 px-4 pb-2">
+            <p className="text-xs text-muted-foreground">
+              Fill the selected day with a ready-made plan. Existing blocks are kept.
+            </p>
+            {scheduleTemplates.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => applyTemplate(t.id)}
+                className="card-surface flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:border-primary"
+              >
+                <div className="min-w-0">
+                  <p className="text-sm text-foreground">{t.name}</p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">{t.tagline}</p>
+                </div>
+                <span className="num shrink-0 rounded-full border border-border px-2 py-0.5 text-[0.65rem] text-muted-foreground">
+                  {t.blocks.length} blocks
+                </span>
+              </button>
+            ))}
+          </div>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setTemplatesOpen(false)} className="w-full">
+              Close
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger
           aria-label="Add time block"
