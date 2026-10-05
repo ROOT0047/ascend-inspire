@@ -137,6 +137,25 @@ function SchedulePage() {
     setOpen(false);
   }
 
+  function applyTemplate(templateId: string) {
+    const template = scheduleTemplates.find((t) => t.id === templateId);
+    if (!template) return;
+    for (const b of template.blocks) {
+      addBlock({
+        title: b.title,
+        description: b.description,
+        startTime: b.startTime,
+        endTime: b.endTime,
+        priority: b.priority,
+        color: b.color,
+      });
+    }
+    toast.success(
+      `${template.name} template added — ${template.blocks.length} blocks planned for this day`,
+    );
+    setTemplatesOpen(false);
+  }
+
   return (
     <AppShell title="Schedule">
       <PageHeading
