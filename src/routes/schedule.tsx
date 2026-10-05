@@ -205,9 +205,19 @@ function SchedulePage() {
             <span className="num">{weekTotals.total}</span> blocks done
           </p>
         </div>
-        <span className="num text-lg text-primary">
-          {weekTotals.total ? Math.round((weekTotals.done / weekTotals.total) * 100) : 0}%
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="num text-lg text-primary">
+            {weekTotals.total ? Math.round((weekTotals.done / weekTotals.total) * 100) : 0}%
+          </span>
+          <button
+            type="button"
+            onClick={() => setTemplatesOpen(true)}
+            aria-label="Open schedule templates"
+            className="grid size-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          >
+            <LayoutTemplate className="size-4" strokeWidth={1.75} />
+          </button>
+        </div>
       </div>
 
       {loading ? (
