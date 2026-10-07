@@ -13,7 +13,7 @@ function shift(date: string, days: number) {
   return d.toISOString().slice(0, 10);
 }
 
-function extractJson(text: string): Record<string, unknown> {
+function extractJson(text: string): { summary?: unknown; missions?: unknown; plan?: unknown; insights?: unknown } {
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
   if (start < 0 || end <= start) throw new Error("AROHA AI returned an unreadable plan. Try again.");
