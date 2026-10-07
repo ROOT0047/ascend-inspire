@@ -80,6 +80,45 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_reviews: {
+        Row: {
+          created_at: string
+          id: string
+          insights: Json
+          kind: string
+          missions: Json
+          plan: Json
+          review_date: string
+          summary: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          insights?: Json
+          kind: string
+          missions?: Json
+          plan?: Json
+          review_date: string
+          summary?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          insights?: Json
+          kind?: string
+          missions?: Json
+          plan?: Json
+          review_date?: string
+          summary?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       focus_sessions: {
         Row: {
           block_id: string | null
