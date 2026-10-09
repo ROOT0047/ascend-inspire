@@ -1,7 +1,7 @@
 /** Legacy names appear only here to preserve existing device preferences. */
 const LEGACY_PREFERENCES = [
-  ["aroha:auth-debug", "aroha:auth-debug"],
-  ["aroha:fired-notifications", "aroha:fired-notifications"],
+  ["ascend:auth-debug", "aroha:auth-debug"],
+  ["ascend:fired-notifications", "aroha:fired-notifications"],
 ] as const;
 
 export function migrateBrandPreferences(): void {
