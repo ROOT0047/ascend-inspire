@@ -157,7 +157,7 @@ export function startOfWeekISO(from = new Date()) {
 /* context                                                             */
 /* ------------------------------------------------------------------ */
 
-type AscendState = {
+type ArohaState = {
   loading: boolean;
   selectedDate: string;
   setSelectedDate: (iso: string) => void;
@@ -196,11 +196,11 @@ type AscendState = {
   goalsCount: number;
 };
 
-const AscendContext = createContext<AscendState | null>(null);
+const ArohaContext = createContext<ArohaState | null>(null);
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
-export function AscendProvider({ children }: { children: ReactNode }) {
+export function ArohaProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const userId = user?.id ?? null;
   const qc = useQueryClient();
@@ -742,7 +742,7 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     enabled &&
     (blocksQuery.isLoading || habitsQuery.isLoading || logsQuery.isLoading);
 
-  const value = useMemo<AscendState>(
+  const value = useMemo<ArohaState>(
     () => ({
       loading,
       selectedDate,
@@ -815,11 +815,11 @@ export function AscendProvider({ children }: { children: ReactNode }) {
     ],
   );
 
-  return <AscendContext.Provider value={value}>{children}</AscendContext.Provider>;
+  return <ArohaContext.Provider value={value}>{children}</ArohaContext.Provider>;
 }
 
-export function useAscend() {
-  const ctx = useContext(AscendContext);
-  if (!ctx) throw new Error("useAscend must be used inside AscendProvider");
+export function useAroha() {
+  const ctx = useContext(ArohaContext);
+  if (!ctx) throw new Error("useAroha must be used inside ArohaProvider");
   return ctx;
 }

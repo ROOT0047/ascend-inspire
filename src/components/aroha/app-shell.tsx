@@ -22,7 +22,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { AuthGate } from "@/components/ascend/auth-gate";
+import { AuthGate } from "@/components/aroha/auth-gate";
 
 const bottomNav = [
   { to: "/home", label: "Home", icon: Home },

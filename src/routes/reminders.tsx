@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Mic } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading, SectionHeader } from "@/components/ascend/primitives";
-import { NotificationPermissionCard } from "@/components/ascend/notification-permission-card";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading, SectionHeader } from "@/components/aroha/primitives";
+import { NotificationPermissionCard } from "@/components/aroha/notification-permission-card";
 import { Switch } from "@/components/ui/switch";
 import { reminders as seed } from "@/data/mock";
 import { useAuth, type PreferenceKey } from "@/hooks/use-auth";
@@ -21,6 +21,8 @@ export const Route = createFileRoute("/reminders")({
       { name: "description", content: "Smart wake-up, workout, hydration and journal reminders with voice alerts." },
       { property: "og:title", content: "Reminders — AROHA" },
       { property: "og:description", content: "Smart, voice-enabled nudges at the right hour." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: RemindersPage,

@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, LayoutTemplate, Plus, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading } from "@/components/ascend/primitives";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading } from "@/components/aroha/primitives";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useAscend } from "@/context/ascend";
+import { useAroha } from "@/context/aroha";
 import { scheduleTemplates } from "@/data/templates";
 import { cn } from "@/lib/utils";
 
@@ -37,6 +37,8 @@ export const Route = createFileRoute("/schedule")({
       },
       { property: "og:title", content: "Schedule — AROHA" },
       { property: "og:description", content: "Plan the day in blocks and hold the line." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SchedulePage,
@@ -52,7 +54,7 @@ const dotColor: Record<string, string> = {
 
 function SchedulePage() {
   const { schedule, toggleBlock, addBlock, deleteBlock, selectedDate, setSelectedDate, loading, weekPlan } =
-    useAscend();
+    useAroha();
   const { date: dateParam, block: blockParam } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [open, setOpen] = useState(false);

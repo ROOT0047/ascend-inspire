@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-const BASE_URL = "https://ascend-inspire.lovable.app";
+const BASE_URL = "https://aroha-os.lovable.app";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
         // Public routes only. Everything else is behind the auth gate.
-        const paths = ["/", "/ascend", "/features", "/habit-tracker", "/time-blocking-app"];
+        const paths = ["/", "/aroha", "/features", "/habit-tracker", "/time-blocking-app"];
         const xml = [
           `<?xml version="1.0" encoding="UTF-8"?>`,
           `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,

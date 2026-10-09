@@ -55,7 +55,7 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
   return result;
 }
 
-export type AscendNotification = {
+export type ArohaNotification = {
   title: string;
   body?: string;
   tag?: string;
@@ -65,11 +65,11 @@ export type AscendNotification = {
   silent?: boolean;
 };
 
-export async function showSystemNotification(input: AscendNotification): Promise<boolean> {
+export async function showSystemNotification(input: ArohaNotification): Promise<boolean> {
   if (notificationPermission() !== "granted") return false;
   const options: NotificationOptions & { vibrate?: number[]; renotify?: boolean } = {
     ...(input.body ? { body: input.body } : {}),
-    tag: input.tag ?? `ascend-${Date.now()}`,
+    tag: input.tag ?? `aroha-${Date.now()}`,
     icon: "/app-icon-192.png",
     badge: "/app-icon-192.png",
     data: { url: input.url ?? "/home" },

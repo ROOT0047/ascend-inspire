@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award, CheckCircle2, ChevronRight, Circle, Droplet, Moon, Shield } from "lucide-react";
-import { AppShell } from "@/components/ascend/app-shell";
-import { Meter, ScoreRing, SectionHeader, StatTile } from "@/components/ascend/primitives";
-import { useAscend } from "@/context/ascend";
-import { TodayLoop } from "@/components/ascend/today-loop";
+import { AppShell } from "@/components/aroha/app-shell";
+import { Meter, ScoreRing, SectionHeader, StatTile } from "@/components/aroha/primitives";
+import { useAroha } from "@/context/aroha";
+import { TodayLoop } from "@/components/aroha/today-loop";
 import { useAuth } from "@/hooks/use-auth";
 import { healthStats, profile } from "@/data/mock";
 import { quoteForDate } from "@/data/quotes";
@@ -19,6 +19,8 @@ export const Route = createFileRoute("/home")({
       },
       { property: "og:title", content: "Today — AROHA" },
       { property: "og:description", content: "Discipline score, mission and habit progress." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: HomePage,
@@ -61,7 +63,7 @@ function HomePage() {
     loading,
     achievements,
     progression,
-  } = useAscend();
+  } = useAroha();
   const { user, profile: account } = useAuth();
   const name = account?.display_name ?? user?.email?.split("@")[0] ?? profile.name;
 

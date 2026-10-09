@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading } from "@/components/ascend/primitives";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading } from "@/components/aroha/primitives";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { useAscend } from "@/context/ascend";
+import { useAroha } from "@/context/aroha";
 import type { JournalEntry } from "@/data/mock";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +29,8 @@ export const Route = createFileRoute("/journal")({
       },
       { property: "og:title", content: "Journal — AROHA" },
       { property: "og:description", content: "Write the day down. Patterns surface later." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: JournalPage,
@@ -37,7 +39,7 @@ export const Route = createFileRoute("/journal")({
 const moods: JournalEntry["mood"][] = ["Focused", "Calm", "Tired", "Driven"];
 
 function JournalPage() {
-  const { journal, addJournal } = useAscend();
+  const { journal, addJournal } = useAroha();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [mood, setMood] = useState<JournalEntry["mood"]>("Focused");

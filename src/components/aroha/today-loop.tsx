@@ -1,11 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { CheckCircle2, Circle } from "lucide-react";
-import { useAscend } from "@/context/ascend";
+import { useAroha } from "@/context/aroha";
 import { cn } from "@/lib/utils";
 
 /** The AROHA loop: Goal → Plan → Mission → Focus → Habit → Journal → Review → Level Up. */
 export function TodayLoop() {
-  const { goalsCount, schedule, focusSessionsToday, habits, journaledToday, disciplineScore } = useAscend();
+  const { goalsCount, schedule, focusSessionsToday, habits, journaledToday, disciplineScore } = useAroha();
   const steps = [
     { label: "Goal", to: "/goals", done: goalsCount > 0 },
     { label: "Plan", to: "/schedule", done: schedule.length > 0 },

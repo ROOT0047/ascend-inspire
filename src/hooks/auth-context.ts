@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { migrateBrandPreferences } from "@/lib/brand-preferences";
 import type { Session, User } from "@supabase/supabase-js";
 
 export type Profile = {
@@ -40,7 +41,7 @@ export type AuthState = {
  * fresh context while mounted consumers still read the old one, which makes
  * `useAuth` see `null` and blanks routes like the login screen.
  */
-const KEY = "__ascend_auth_context__";
+const KEY = "__aroha_auth_context__";
 const globalStore = globalThis as typeof globalThis & {
   [KEY]?: ReturnType<typeof createContext<AuthState | null>>;
 };
@@ -50,25 +51,26 @@ export const AuthContext =
 
 /**
  * Developer-only debug logging.
- * Enable in the browser console with:  __ascendAuthDebug(true)
- * (persists in localStorage under "ascend:auth-debug"). Off by default and
+ * Enable in the browser console with:  __arohaAuthDebug(true)
+ * (persists in localStorage under "aroha:auth-debug"). Off by default and
  * fully inert in production builds.
  */
-const DEBUG_STORAGE_KEY = "ascend:auth-debug";
+const DEBUG_STORAGE_KEY = "aroha:auth-debug";
 
 const debugStore = globalThis as typeof globalThis & {
-  __ascendAuthDebugEnabled?: boolean;
-  __ascendAuthDebug?: (on?: boolean) => boolean;
+  __arohaAuthDebugEnabled?: boolean;
+  __arohaAuthDebug?: (on?: boolean) => boolean;
 };
 
 export function isAuthDebugEnabled(): boolean {
   if (!import.meta.env.DEV) return false;
-  if (typeof debugStore.__ascendAuthDebugEnabled === "boolean") {
-    return debugStore.__ascendAuthDebugEnabled;
+  if (typeof debugStore.__arohaAuthDebugEnabled === "boolean") {
+    return debugStore.__arohaAuthDebugEnabled;
   }
   try {
+    migrateBrandPreferences();
     const stored = globalThis.localStorage?.getItem(DEBUG_STORAGE_KEY) === "1";
-    debugStore.__ascendAuthDebugEnabled = stored;
+    debugStore.__arohaAuthDebugEnabled = stored;
     return stored;
   } catch {
     return false;
@@ -76,7 +78,7 @@ export function isAuthDebugEnabled(): boolean {
 }
 
 export function setAuthDebugEnabled(on: boolean): boolean {
-  debugStore.__ascendAuthDebugEnabled = on;
+  debugStore.__arohaAuthDebugEnabled = on;
   try {
     if (on) globalThis.localStorage?.setItem(DEBUG_STORAGE_KEY, "1");
     else globalThis.localStorage?.removeItem(DEBUG_STORAGE_KEY);
@@ -92,6 +94,6 @@ export function authDebug(message: string, ...details: unknown[]) {
   console.info(`[auth] ${message}`, ...details);
 }
 
-if (import.meta.env.DEV && !debugStore.__ascendAuthDebug) {
-  debugStore.__ascendAuthDebug = (on = true) => setAuthDebugEnabled(on);
+if (import.meta.env.DEV && !debugStore.__arohaAuthDebug) {
+  debugStore.__arohaAuthDebug = (on = true) => setAuthDebugEnabled(on);
 }
