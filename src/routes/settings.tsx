@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading, SectionHeader } from "@/components/ascend/primitives";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading, SectionHeader } from "@/components/aroha/primitives";
 import { Switch } from "@/components/ui/switch";
 import { useAuth, type PreferenceKey } from "@/hooks/use-auth";
 
@@ -12,6 +12,8 @@ export const Route = createFileRoute("/settings")({
       { name: "description", content: "Theme, notifications, privacy and account preferences for AROHA." },
       { property: "og:title", content: "Settings — AROHA" },
       { property: "og:description", content: "Theme, notifications and privacy preferences." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SettingsPage,

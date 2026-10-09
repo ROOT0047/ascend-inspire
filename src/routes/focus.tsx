@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Pause, Play, RotateCcw, ShieldBan } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading, StatTile } from "@/components/ascend/primitives";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading, StatTile } from "@/components/aroha/primitives";
 import { Switch } from "@/components/ui/switch";
-import { useAscend } from "@/context/ascend";
+import { useAroha } from "@/context/aroha";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +19,8 @@ export const Route = createFileRoute("/focus")({
       },
       { property: "og:title", content: "Focus — AROHA" },
       { property: "og:description", content: "Deep work, measured in sessions." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: FocusPage,
@@ -31,7 +33,7 @@ const presets = [
 ] as const;
 
 function FocusPage() {
-  const { logFocus, focusMinutes, sessions } = useAscend();
+  const { logFocus, focusMinutes, sessions } = useAroha();
   const { profile, updatePreference } = useAuth();
   const [mode, setMode] = useState<"pomodoro" | "stopwatch">("pomodoro");
   const [preset, setPreset] = useState<(typeof presets)[number]>(presets[0]);

@@ -45,7 +45,7 @@ export type CoachMessage = { id: string; role: "coach" | "user"; content: string
 
 export const profile = {
   name: "King",
-  email: "king@ascend.app",
+  email: "king@aroha.app",
   level: 18,
   rank: "Elite",
   timezone: "Europe/Istanbul",

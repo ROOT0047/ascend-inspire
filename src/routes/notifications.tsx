@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Bell } from "lucide-react";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading } from "@/components/ascend/primitives";
-import { NotificationPermissionCard } from "@/components/ascend/notification-permission-card";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading } from "@/components/aroha/primitives";
+import { NotificationPermissionCard } from "@/components/aroha/notification-permission-card";
 import { notifications } from "@/data/mock";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +13,8 @@ export const Route = createFileRoute("/notifications")({
       { name: "description", content: "Streak warnings, session reminders and weekly review alerts." },
       { property: "og:title", content: "Notifications — AROHA" },
       { property: "og:description", content: "Streak warnings and review alerts in one feed." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: NotificationsPage,

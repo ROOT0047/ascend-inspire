@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://ascend-inspire.lovable.app/sitemap.xml
+Sitemap: https://aroha-os.lovable.app/sitemap.xml

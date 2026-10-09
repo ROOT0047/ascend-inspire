@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Droplets, Dumbbell, Footprints, Moon } from "lucide-react";
-import { AppShell } from "@/components/ascend/app-shell";
-import { Meter, PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
+import { AppShell } from "@/components/aroha/app-shell";
+import { Meter, PageHeading, SectionHeader, StatTile } from "@/components/aroha/primitives";
 import { Button } from "@/components/ui/button";
-import { useAscend } from "@/context/ascend";
+import { useAroha } from "@/context/aroha";
 import { healthStats } from "@/data/mock";
 
 export const Route = createFileRoute("/health")({
@@ -13,13 +13,15 @@ export const Route = createFileRoute("/health")({
       { name: "description", content: "Water, sleep, steps, weight and workout tracking in one view." },
       { property: "og:title", content: "Health — AROHA" },
       { property: "og:description", content: "Sleep, hydration and training are the inputs." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: HealthPage,
 });
 
 function HealthPage() {
-  const { water, sleep, addWater, setSleep } = useAscend();
+  const { water, sleep, addWater, setSleep } = useAroha();
 
   return (
     <AppShell title="Health">

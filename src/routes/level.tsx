@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award, CheckCircle2, Flame, Lock, Sparkles, TrendingUp } from "lucide-react";
-import { AppShell } from "@/components/ascend/app-shell";
-import { EmptyNote, Meter, PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
-import { isoDate, useAscend } from "@/context/ascend";
+import { AppShell } from "@/components/aroha/app-shell";
+import { EmptyNote, Meter, PageHeading, SectionHeader, StatTile } from "@/components/aroha/primitives";
+import { isoDate, useAroha } from "@/context/aroha";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/level")({
@@ -12,6 +12,8 @@ export const Route = createFileRoute("/level")({
       { name: "description", content: "Your XP, rank, badges, and progress toward the next level." },
       { property: "og:title", content: "Level & Rank — AROHA" },
       { property: "og:description", content: "Track XP, ranks, and badges earned through daily execution." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: LevelPage,
@@ -27,7 +29,7 @@ const RANK_LADDER = [
 ];
 
 function LevelPage() {
-  const { progression, achievements, habits, schedule, selectedDate, disciplineScore } = useAscend();
+  const { progression, achievements, habits, schedule, selectedDate, disciplineScore } = useAroha();
 
   const isToday = selectedDate === isoDate(new Date());
   const habitsDone = habits.filter((h) => h.completedToday);

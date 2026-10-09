@@ -36,7 +36,7 @@ export function NotificationPermissionCard() {
         await showSystemNotification({
           title: "AROHA alerts are live",
           body: "Blocks and nudges will now appear in your notification shade.",
-          tag: "ascend-enabled",
+          tag: "aroha-enabled",
           vibrate: profile?.haptics_enabled ?? false,
         });
         toast.success("System notifications enabled");
@@ -53,7 +53,7 @@ export function NotificationPermissionCard() {
     const ok = await showSystemNotification({
       title: "Workout window opens in 10 minutes",
       body: "Test alert from AROHA.",
-      tag: "ascend-test",
+      tag: "aroha-test",
       url: "/schedule",
       vibrate: profile?.haptics_enabled ?? false,
     });

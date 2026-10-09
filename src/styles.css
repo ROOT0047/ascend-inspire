@@ -162,7 +162,7 @@
   box-shadow: var(--shadow-card);
 }
 
-@keyframes ascend-rise {
+@keyframes aroha-rise {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -174,5 +174,5 @@
 }
 
 @utility rise {
-  animation: ascend-rise 280ms ease-out both;
+  animation: aroha-rise 280ms ease-out both;
 }

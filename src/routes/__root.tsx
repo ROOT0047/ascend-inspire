@@ -11,10 +11,10 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { AscendProvider } from "@/context/ascend";
+import { ArohaProvider } from "@/context/aroha";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
-import { NotificationScheduler } from "@/components/ascend/notification-scheduler";
+import { NotificationScheduler } from "@/components/aroha/notification-scheduler";
 
 function NotFoundComponent() {
   return (
@@ -99,8 +99,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "AROHA — Your Personal Evolution System" },
       { name: "twitter:description", content: "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1d082f8d-414c-49f8-a302-4b22b1e0fe5f" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/1d082f8d-414c-49f8-a302-4b22b1e0fe5f" },
       { name: "theme-color", content: "#0B0D14" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
@@ -149,12 +147,12 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AscendProvider>
+        <ArohaProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
           <NotificationScheduler />
           <Toaster position="top-center" />
-        </AscendProvider>
+        </ArohaProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

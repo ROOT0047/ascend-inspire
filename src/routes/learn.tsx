@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppShell } from "@/components/ascend/app-shell";
-import { Meter, PageHeading } from "@/components/ascend/primitives";
+import { AppShell } from "@/components/aroha/app-shell";
+import { Meter, PageHeading } from "@/components/aroha/primitives";
 import { learningItems } from "@/data/mock";
 
 export const Route = createFileRoute("/learn")({
@@ -10,6 +10,8 @@ export const Route = createFileRoute("/learn")({
       { name: "description", content: "Books, courses, languages and skill practice tracked by progress." },
       { property: "og:title", content: "Learning — AROHA" },
       { property: "og:description", content: "Track books, courses and skills by real progress." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: LearnPage,

@@ -9,7 +9,7 @@ import {
   TrendingUp,
   Trophy,
 } from "lucide-react";
-import mark from "@/assets/ascend-mark.png";
+import mark from "@/assets/aroha-mark.png";
 
 export const Route = createFileRoute("/features")({
   head: () => ({
@@ -30,10 +30,11 @@ export const Route = createFileRoute("/features")({
           "Build discipline with schedule planning, habit streaks, focus sessions, health tracking and an AI coach — all in one app.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://ascend-inspire.lovable.app/features" },
+      { property: "og:url", content: "https://aroha-os.lovable.app/features" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "canonical", href: "https://ascend-inspire.lovable.app/features" },
+      { rel: "canonical", href: "https://aroha-os.lovable.app/features" },
     ],
   }),
   component: Features,

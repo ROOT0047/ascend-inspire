@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
-import { useAscend } from "@/context/ascend";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading, SectionHeader, StatTile } from "@/components/aroha/primitives";
+import { useAroha } from "@/context/aroha";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/analytics")({
@@ -16,6 +16,8 @@ export const Route = createFileRoute("/analytics")({
       },
       { property: "og:title", content: "Analytics — AROHA" },
       { property: "og:description", content: "Measure progress over months, not days." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AnalyticsPage,
@@ -24,7 +26,7 @@ export const Route = createFileRoute("/analytics")({
 const ranges = ["Week", "Month"] as const;
 
 function AnalyticsPage() {
-  const { disciplineScore, focusMinutes, habits, weekTrend, monthTrend, heatmap } = useAscend();
+  const { disciplineScore, focusMinutes, habits, weekTrend, monthTrend, heatmap } = useAroha();
   const [range, setRange] = useState<(typeof ranges)[number]>("Week");
 
   const data = range === "Week" ? weekTrend : monthTrend;

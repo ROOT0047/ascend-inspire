@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, Flame, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading } from "@/components/ascend/primitives";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading } from "@/components/aroha/primitives";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useAscend } from "@/context/ascend";
+import { useAroha } from "@/context/aroha";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/habits")({
@@ -27,6 +27,8 @@ export const Route = createFileRoute("/habits")({
       },
       { property: "og:title", content: "Habits — AROHA" },
       { property: "og:description", content: "Build streaks. Track every miss honestly." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: HabitsPage,
@@ -35,7 +37,7 @@ export const Route = createFileRoute("/habits")({
 const filters = ["All", "Daily", "Weekly", "Monthly"] as const;
 
 function HabitsPage() {
-  const { habits, toggleHabit, addHabit, deleteHabit, loading } = useAscend();
+  const { habits, toggleHabit, addHabit, deleteHabit, loading } = useAroha();
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");

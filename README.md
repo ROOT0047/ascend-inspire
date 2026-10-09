@@ -1,8 +1,8 @@
-# Ascend Life OS
+# Aroha Life OS
 
 Complete Feature Roadmap
 
-Project Name: Project Ayanokoji (Codename: ASCEND)
+Project Name: Project Ayanokoji (Codename: AROHA)
 
 The goal is not just a habit tracker, but an AI-powered life operating system that manages your schedule, discipline, health, learning, and personal growth.
 
@@ -816,7 +816,7 @@ Phase 4: AI coach, voice reminders, offline sync, and app store release.
 
 This step-by-step approach keeps the codebase organized and makes it much easier to test and maintain.
 
-AI Coach: ASCEND AI
+AI Coach: AROHA AI
 
 Core Principle
 
@@ -1708,7 +1708,7 @@ Long-press for detailed statistics.
 
 AI Coach Screen
 
-ASCEND AI
+AROHA AI
 
 
 
@@ -1840,7 +1840,7 @@ Google, Apple, and Email sign-in buttons
 
 App Identity
 
-App Name: ASCEND
+App Name: AROHA
 
 Tagline:
 
@@ -1850,7 +1850,7 @@ This aesthetic creates a polished, understated interface that feels focused and 
 
 This project was built with [Lovable](https://lovable.dev).
 
-**Live app**: https://ascend-inspire.lovable.app
+**Live app**: https://aroha-os.lovable.app
 
 ## Build with Lovable
 

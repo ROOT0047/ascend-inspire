@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Chrome, Loader2, Mail } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import mark from "@/assets/ascend-mark.png";
+import mark from "@/assets/aroha-mark.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +24,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Login,
@@ -192,7 +194,7 @@ function Login() {
             app — so every day is planned, measured and improved.
           </p>
           <Link
-            to="/ascend"
+            to="/aroha"
             className="inline-block text-xs font-medium text-primary underline-offset-4 transition-colors hover:underline"
           >
             About AROHA

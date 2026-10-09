@@ -1,12 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Award, ChevronRight, LogOut, Pencil } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { AppShell } from "@/components/ascend/app-shell";
-import { Meter, PageHeading, SectionHeader, StatTile } from "@/components/ascend/primitives";
-import { useAscend } from "@/context/ascend";
+import { AppShell } from "@/components/aroha/app-shell";
+import { Meter, PageHeading, SectionHeader, StatTile } from "@/components/aroha/primitives";
+import { useAroha } from "@/context/aroha";
 import { useAuth } from "@/hooks/use-auth";
 import { profile } from "@/data/mock";
-import mark from "@/assets/ascend-mark.png";
+import mark from "@/assets/aroha-mark.png";
 
 export const Route = createFileRoute("/profile/")({
   head: () => ({
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/profile/")({
       },
       { property: "og:title", content: "Profile — AROHA" },
       { property: "og:description", content: "Rank, level and lifetime discipline stats." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ProfilePage,
@@ -34,7 +36,7 @@ const links = [
 ] as const;
 
 function ProfilePage() {
-  const { disciplineScore, habits, achievements, progression } = useAscend();
+  const { disciplineScore, habits, achievements, progression } = useAroha();
   const { user, profile: account, avatarSrc, signOut } = useAuth();
   const navigate = useNavigate();
   const name = account?.display_name ?? user?.email?.split("@")[0] ?? profile.name;

@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CloudCog, Download, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading, SectionHeader } from "@/components/ascend/primitives";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading, SectionHeader } from "@/components/aroha/primitives";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/sync")({
@@ -12,6 +12,8 @@ export const Route = createFileRoute("/sync")({
       { name: "description", content: "Offline-first storage with cloud sync, export and restore for your data." },
       { property: "og:title", content: "Sync & Backup — AROHA" },
       { property: "og:description", content: "Offline-first, with cloud sync and export." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SyncPage,

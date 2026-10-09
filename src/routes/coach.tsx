@@ -3,11 +3,11 @@ import { useServerFn } from "@tanstack/react-start";
 import { Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { AppShell } from "@/components/ascend/app-shell";
-import { useAscend } from "@/context/ascend";
+import { AppShell } from "@/components/aroha/app-shell";
+import { useAroha } from "@/context/aroha";
 import { askCoach } from "@/lib/coach.functions";
 import { cn } from "@/lib/utils";
-import logo from "@/assets/ascend-mark.png";
+import logo from "@/assets/aroha-mark.png";
 
 export const Route = createFileRoute("/coach")({
   head: () => ({
@@ -19,13 +19,15 @@ export const Route = createFileRoute("/coach")({
       },
       { property: "og:title", content: "AROHA AI — Your Discipline Coach" },
       { property: "og:description", content: "Daily briefings, pattern analysis, honest feedback." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: CoachPage,
 });
 
 function CoachPage() {
-  const { coach, addCoachMessage, refreshCoach } = useAscend();
+  const { coach, addCoachMessage, refreshCoach } = useAroha();
   const ask = useServerFn(askCoach);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);

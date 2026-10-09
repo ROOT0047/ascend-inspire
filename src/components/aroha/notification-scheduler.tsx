@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { useAscend } from "@/context/ascend";
+import { migrateBrandPreferences } from "@/lib/brand-preferences";
+import { useAroha } from "@/context/aroha";
 import { useAuth } from "@/hooks/use-auth";
 import { reminders as reminderSeed } from "@/data/mock";
 import {
@@ -9,7 +10,7 @@ import {
   vibrate,
 } from "@/lib/notifications";
 
-const FIRED_KEY = "ascend:fired-notifications";
+const FIRED_KEY = "aroha:fired-notifications";
 /** Minutes before a block starts that the heads-up fires. */
 const LEAD_MINUTES = 10;
 
@@ -20,6 +21,7 @@ function todayIso() {
 
 function readFired(): Set<string> {
   try {
+    migrateBrandPreferences();
     const raw = JSON.parse(localStorage.getItem(FIRED_KEY) ?? "{}") as {
       date?: string;
       keys?: string[];
@@ -50,7 +52,7 @@ function minutesOfDay(time: string): number | null {
  * open or backgrounded on the device. Renders nothing.
  */
 export function NotificationScheduler() {
-  const { schedule, selectedDate } = useAscend();
+  const { schedule, selectedDate } = useAroha();
   const { profile } = useAuth();
   const stateRef = useRef({ schedule, selectedDate, profile });
   stateRef.current = { schedule, selectedDate, profile };

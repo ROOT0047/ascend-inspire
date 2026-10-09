@@ -3,15 +3,15 @@ import { Camera, Loader2, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { AppShell } from "@/components/ascend/app-shell";
-import { PageHeading, SectionHeader } from "@/components/ascend/primitives";
+import { AppShell } from "@/components/aroha/app-shell";
+import { PageHeading, SectionHeader } from "@/components/aroha/primitives";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
-import mark from "@/assets/ascend-mark.png";
+import mark from "@/assets/aroha-mark.png";
 
 export const Route = createFileRoute("/profile/edit")({
   head: () => ({
@@ -23,6 +23,8 @@ export const Route = createFileRoute("/profile/edit")({
       },
       { property: "og:title", content: "Edit profile — AROHA" },
       { property: "og:description", content: "Update your display name, avatar and preferences." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: EditProfilePage,
