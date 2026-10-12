@@ -1,12 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, LayoutTemplate, Plus, Trash2 } from "lucide-react";
+import { CalendarDays, Check, LayoutTemplate, ListChecks, Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/aroha/app-shell";
+import { TemplateEditorSheet, useCustomTemplates } from "@/components/aroha/custom-templates";
 import { PageHeading } from "@/components/aroha/primitives";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Sheet,
   SheetContent,
@@ -15,8 +19,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useAroha } from "@/context/aroha";
-import { scheduleTemplates } from "@/data/templates";
+import { isoDate, useAroha } from "@/context/aroha";
+import { scheduleTemplates, type ScheduleTemplate, type TemplateBlock } from "@/data/templates";
 import { cn } from "@/lib/utils";
 
 type ScheduleSearch = { date?: string; block?: string };
@@ -53,19 +57,48 @@ const dotColor: Record<string, string> = {
 };
 
 function SchedulePage() {
-  const { schedule, toggleBlock, addBlock, deleteBlock, selectedDate, setSelectedDate, loading, weekPlan } =
-    useAroha();
+  const {
+    schedule,
+    toggleBlock,
+    addBlock,
+    deleteBlock,
+    deleteBlocks,
+    selectedDate,
+    setSelectedDate,
+    loading,
+    weekPlan,
+  } = useAroha();
   const { date: dateParam, block: blockParam } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [open, setOpen] = useState(false);
   const [templatesOpen, setTemplatesOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const focusRef = useRef<HTMLLIElement | null>(null);
   const [title, setTitle] = useState("");
   const [start, setStart] = useState("09:00");
   const [end, setEnd] = useState("10:00");
+  const [blockDate, setBlockDate] = useState(selectedDate);
   const [repeatDays, setRepeatDays] = useState<number[]>([]);
   const [weeks, setWeeks] = useState(1);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [editing, setEditing] = useState<{
+    id?: string;
+    name: string;
+    tagline: string;
+    blocks: TemplateBlock[];
+  } | null>(null);
+  const { templates: customTemplates, save: saveTemplate, remove: removeTemplate } =
+    useCustomTemplates();
+
+  useEffect(() => {
+    if (open) setBlockDate(selectedDate);
+  }, [open, selectedDate]);
+
+  useEffect(() => {
+    setSelected(new Set());
+  }, [selectedDate]);
 
   const week = weekPlan;
   const weekTotals = useMemo(
@@ -112,9 +145,40 @@ function SchedulePage() {
     }
   }
 
+  function toggleSelected(id: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function exitSelect() {
+    setSelectMode(false);
+    setSelected(new Set());
+  }
+
+  function bulkDelete() {
+    const ids = schedule.filter((b) => selected.has(b.id)).map((b) => b.id);
+    if (!ids.length) return;
+    if (!confirm(`Delete ${ids.length} block${ids.length > 1 ? "s" : ""}?`)) return;
+    deleteBlocks(ids);
+    toast.success(`Deleted ${ids.length} block${ids.length > 1 ? "s" : ""}`);
+    exitSelect();
+  }
+
   function submit() {
     if (!title.trim()) {
       toast.error("Give the block a name");
+      return;
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(blockDate)) {
+      toast.error("Pick a date");
+      return;
+    }
+    if (start >= end) {
+      toast.error("End time must be after start time");
       return;
     }
     addBlock(
@@ -126,22 +190,21 @@ function SchedulePage() {
         priority: "Medium",
         color: "primary",
       },
-      repeatDays.length ? { weekdays: repeatDays, weeks } : undefined,
+      { date: blockDate, ...(repeatDays.length ? { weekdays: repeatDays, weeks } : {}) },
     );
     toast.success(
       repeatDays.length
         ? `Planned on ${repeatDays.length} day${repeatDays.length > 1 ? "s" : ""} × ${weeks} week${weeks > 1 ? "s" : ""}`
-        : "Block added",
+        : `Block added for ${blockDate}`,
     );
+    if (blockDate !== selectedDate && !repeatDays.length) setSelectedDate(blockDate);
     setTitle("");
     setRepeatDays([]);
     setWeeks(1);
     setOpen(false);
   }
 
-  function applyTemplate(templateId: string) {
-    const template = scheduleTemplates.find((t) => t.id === templateId);
-    if (!template) return;
+  function applyTemplate(template: ScheduleTemplate) {
     for (const b of template.blocks) {
       addBlock({
         title: b.title,
@@ -211,6 +274,25 @@ function SchedulePage() {
           <span className="num text-lg text-primary">
             {weekTotals.total ? Math.round((weekTotals.done / weekTotals.total) * 100) : 0}%
           </span>
+          <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+            <PopoverTrigger
+              aria-label="Pick a date"
+              className="grid size-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+            >
+              <CalendarDays className="size-4" strokeWidth={1.75} />
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={selectedLabel}
+                onSelect={(d) => {
+                  if (!d) return;
+                  setSelectedDate(isoDate(d));
+                  setCalendarOpen(false);
+                }}
+              />
+            </PopoverContent>
+          </Popover>
           <button
             type="button"
             onClick={() => setTemplatesOpen(true)}
@@ -231,7 +313,42 @@ function SchedulePage() {
             Add your first time block for this day.
           </p>
         </div>
-      ) : null}
+      ) : (
+        <div className="mb-3 flex items-center justify-end gap-2">
+          {selectMode ? (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() =>
+                  setSelected(
+                    selected.size === schedule.length
+                      ? new Set()
+                      : new Set(schedule.map((b) => b.id)),
+                  )
+                }
+              >
+                {selected.size === schedule.length ? "Clear" : "Select all"}
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                disabled={!selected.size}
+                onClick={bulkDelete}
+              >
+                <Trash2 className="size-3.5" /> Delete {selected.size || ""}
+              </Button>
+              <Button variant="outline" size="sm" onClick={exitSelect}>
+                Done
+              </Button>
+            </>
+          ) : (
+            <Button variant="outline" size="sm" onClick={() => setSelectMode(true)}>
+              <ListChecks className="size-3.5" /> Select
+            </Button>
+          )}
+        </div>
+      )}
 
       <ol className="relative space-y-2 pb-8 pl-[3.6rem]">
         {schedule.length ? (
@@ -261,7 +378,7 @@ function SchedulePage() {
               >
                 <button
                   type="button"
-                  onClick={() => setFocusedId(block.id)}
+                  onClick={() => (selectMode ? toggleSelected(block.id) : setFocusedId(block.id))}
                   className="min-w-0 flex-1 text-left"
                 >
                   <p
@@ -276,25 +393,36 @@ function SchedulePage() {
                     {block.durationLabel} · {block.priority}
                   </p>
                 </button>
-                <button
-                  aria-label={block.completed ? "Mark incomplete" : "Mark complete"}
-                  onClick={() => toggleBlock(block.id)}
-                  className={cn(
-                    "grid size-8 shrink-0 place-items-center rounded-full border transition-colors",
-                    block.completed
-                      ? "border-success bg-success/15 text-success"
-                      : "border-border text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  <Check className="size-4" strokeWidth={2} />
-                </button>
-                <button
-                  aria-label={`Delete ${block.title}`}
-                  onClick={() => deleteBlock(block.id)}
-                  className="grid size-8 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-destructive"
-                >
-                  <Trash2 className="size-3.5" strokeWidth={1.75} />
-                </button>
+                {selectMode ? (
+                  <Checkbox
+                    aria-label={`Select ${block.title}`}
+                    checked={selected.has(block.id)}
+                    onCheckedChange={() => toggleSelected(block.id)}
+                    className="size-5"
+                  />
+                ) : (
+                  <>
+                    <button
+                      aria-label={block.completed ? "Mark incomplete" : "Mark complete"}
+                      onClick={() => toggleBlock(block.id)}
+                      className={cn(
+                        "grid size-8 shrink-0 place-items-center rounded-full border transition-colors",
+                        block.completed
+                          ? "border-success bg-success/15 text-success"
+                          : "border-border text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      <Check className="size-4" strokeWidth={2} />
+                    </button>
+                    <button
+                      aria-label={`Delete ${block.title}`}
+                      onClick={() => deleteBlock(block.id)}
+                      className="grid size-8 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-destructive"
+                    >
+                      <Trash2 className="size-3.5" strokeWidth={1.75} />
+                    </button>
+                  </>
+                )}
               </div>
             </li>
           );
@@ -353,15 +481,92 @@ function SchedulePage() {
           <SheetHeader>
             <SheetTitle>Schedule templates</SheetTitle>
           </SheetHeader>
-          <div className="space-y-2.5 px-4 pb-2">
+          <div className="max-h-[60vh] space-y-2.5 overflow-y-auto px-4 pb-2">
             <p className="text-xs text-muted-foreground">
               Fill the selected day with a ready-made plan. Existing blocks are kept.
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setEditing({ name: "", tagline: "", blocks: [] });
+                  setTemplatesOpen(false);
+                }}
+              >
+                <Plus className="size-3.5" /> New template
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={!schedule.length}
+                onClick={() => {
+                  setEditing({
+                    name: "",
+                    tagline: `Saved from ${selectedDate}`,
+                    blocks: schedule.map((b) => ({
+                      title: b.title,
+                      description: b.description,
+                      startTime: b.startTime,
+                      endTime: b.endTime,
+                      priority: b.priority,
+                      color: b.color,
+                    })),
+                  });
+                  setTemplatesOpen(false);
+                }}
+              >
+                Save this day
+              </Button>
+            </div>
+            {customTemplates.length ? (
+              <p className="pt-1 text-[0.65rem] tracking-[0.18em] uppercase text-muted-foreground">
+                My templates
+              </p>
+            ) : null}
+            {customTemplates.map((t) => (
+              <div key={t.id} className="card-surface flex items-center gap-2 px-3 py-2.5">
+                <button
+                  type="button"
+                  onClick={() => applyTemplate(t)}
+                  className="min-w-0 flex-1 text-left"
+                >
+                  <p className="truncate text-sm text-foreground">{t.name}</p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                    {t.blocks.length} blocks{t.tagline ? ` · ${t.tagline}` : ""}
+                  </p>
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Edit ${t.name}`}
+                  onClick={() => {
+                    setEditing(t);
+                    setTemplatesOpen(false);
+                  }}
+                  className="grid size-8 place-items-center rounded-full border border-border text-muted-foreground hover:text-primary"
+                >
+                  <Pencil className="size-3.5" />
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Delete ${t.name}`}
+                  onClick={() => {
+                    if (confirm(`Delete template "${t.name}"?`)) removeTemplate.mutate(t.id);
+                  }}
+                  className="grid size-8 place-items-center rounded-full border border-border text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 className="size-3.5" />
+                </button>
+              </div>
+            ))}
+            <p className="pt-1 text-[0.65rem] tracking-[0.18em] uppercase text-muted-foreground">
+              Built-in
             </p>
             {scheduleTemplates.map((t) => (
               <button
                 key={t.id}
                 type="button"
-                onClick={() => applyTemplate(t.id)}
+                onClick={() => applyTemplate(t)}
                 className="card-surface flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:border-primary"
               >
                 <div className="min-w-0">
@@ -402,6 +607,15 @@ function SchedulePage() {
                 maxLength={60}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Deep work"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="block-date">Date</Label>
+              <Input
+                id="block-date"
+                type="date"
+                value={blockDate}
+                onChange={(e) => setBlockDate(e.target.value)}
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
