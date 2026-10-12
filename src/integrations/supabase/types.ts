@@ -340,6 +340,36 @@ export type Database = {
         }
         Relationships: []
       }
+      schedule_templates: {
+        Row: {
+          blocks: Json
+          created_at: string
+          id: string
+          name: string
+          tagline: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          blocks?: Json
+          created_at?: string
+          id?: string
+          name: string
+          tagline?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          blocks?: Json
+          created_at?: string
+          id?: string
+          name?: string
+          tagline?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       time_blocks: {
         Row: {
           block_date: string
