@@ -178,9 +178,10 @@ type ArohaState = {
   toggleBlock: (id: string) => void;
   addBlock: (
     block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">,
-    options?: { weekdays?: number[]; weeks?: number },
+    options?: { weekdays?: number[]; weeks?: number; date?: string },
   ) => void;
   deleteBlock: (id: string) => void;
+  deleteBlocks: (ids: string[]) => void;
   weekPlan: WeekDayPlan[];
   toggleHabit: (id: string) => void;
   addHabit: (habit: Pick<Habit, "title" | "cadence" | "goal" | "unit">) => void;
@@ -551,23 +552,25 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
       options,
     }: {
       block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">;
-      options?: { weekdays?: number[]; weeks?: number };
+      options?: { weekdays?: number[]; weeks?: number; date?: string };
     }) => {
       if (!userId) return;
+      const baseDate =
+        options?.date && /^\d{4}-\d{2}-\d{2}$/.test(options.date) ? options.date : selectedDate;
       const weekdays = options?.weekdays?.length ? options.weekdays : null;
       const weeks = Math.max(1, Math.min(8, options?.weeks ?? 1));
       const dates: string[] = [];
       if (weekdays) {
-        const base = startOfWeekISO(new Date(`${selectedDate}T00:00:00`));
+        const base = startOfWeekISO(new Date(`${baseDate}T00:00:00`));
         for (let w = 0; w < weeks; w++) {
           for (const wd of weekdays) dates.push(shiftISO(base, w * 7 + wd));
         }
       } else {
-        dates.push(selectedDate);
+        dates.push(baseDate);
       }
       const today = todayISO();
       const rows = Array.from(new Set(dates))
-        .filter((d) => d >= today || d === selectedDate)
+        .filter((d) => d >= today || d === baseDate)
         .map((block_date) => ({
           user_id: userId,
           block_date,
@@ -587,8 +590,8 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
   });
 
   const deleteBlockMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("time_blocks").delete().eq("id", id);
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase.from("time_blocks").delete().in("id", ids);
       if (error) throw error;
     },
     onSuccess: invalidateBlocks,
@@ -766,7 +769,10 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
       toggleBlock: (id) => toggleBlockMutation.mutate(id),
       addBlock: (b, options) =>
         addBlockMutation.mutate(options ? { block: b, options } : { block: b }),
-      deleteBlock: (id) => deleteBlockMutation.mutate(id),
+      deleteBlock: (id) => deleteBlockMutation.mutate([id]),
+      deleteBlocks: (ids) => {
+        if (ids.length) deleteBlockMutation.mutate(ids);
+      },
       toggleHabit: (id) => toggleHabitMutation.mutate(id),
       addHabit: (h) => addHabitMutation.mutate(h),
       deleteHabit: (id) => deleteHabitMutation.mutate(id),
