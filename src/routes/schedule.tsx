@@ -61,6 +61,7 @@ function SchedulePage() {
     schedule,
     toggleBlock,
     addBlock,
+    updateBlock,
     deleteBlock,
     deleteBlocks,
     selectedDate,
@@ -81,6 +82,8 @@ function SchedulePage() {
   const [blockDate, setBlockDate] = useState(selectedDate);
   const [repeatDays, setRepeatDays] = useState<number[]>([]);
   const [weeks, setWeeks] = useState(1);
+  const [days, setDays] = useState(1);
+  const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [editing, setEditing] = useState<{
