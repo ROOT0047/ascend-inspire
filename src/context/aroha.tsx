@@ -178,7 +178,13 @@ type ArohaState = {
   toggleBlock: (id: string) => void;
   addBlock: (
     block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">,
-    options?: { weekdays?: number[]; weeks?: number; date?: string },
+    options?: { weekdays?: number[]; weeks?: number; date?: string; days?: number },
+  ) => void;
+  updateBlock: (
+    id: string,
+    patch: Partial<
+      Pick<ScheduleBlock, "title" | "description" | "startTime" | "endTime" | "priority" | "color">
+    > & { date?: string },
   ) => void;
   deleteBlock: (id: string) => void;
   deleteBlocks: (ids: string[]) => void;
