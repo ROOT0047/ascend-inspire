@@ -596,6 +596,32 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
     onError: notifyError,
   });
 
+  const updateBlockMutation = useMutation({
+    mutationFn: async ({
+      id,
+      patch,
+    }: {
+      id: string;
+      patch: Partial<
+        Pick<ScheduleBlock, "title" | "description" | "startTime" | "endTime" | "priority" | "color">
+      > & { date?: string };
+    }) => {
+      const row: Record<string, string> = {};
+      if (patch.title !== undefined) row.title = patch.title;
+      if (patch.description !== undefined) row.description = patch.description;
+      if (patch.startTime !== undefined) row.start_time = patch.startTime;
+      if (patch.endTime !== undefined) row.end_time = patch.endTime;
+      if (patch.priority !== undefined) row.priority = patch.priority;
+      if (patch.color !== undefined) row.color = patch.color;
+      if (patch.date && /^\d{4}-\d{2}-\d{2}$/.test(patch.date)) row.block_date = patch.date;
+      if (!Object.keys(row).length) return;
+      const { error } = await supabase.from("time_blocks").update(row).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: invalidateBlocks,
+    onError: notifyError,
+  });
+
   const deleteBlockMutation = useMutation({
     mutationFn: async (ids: string[]) => {
       const { error } = await supabase.from("time_blocks").delete().in("id", ids);
