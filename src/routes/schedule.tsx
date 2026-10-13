@@ -696,6 +696,14 @@ function SchedulePage() {
           </SheetFooter>
         </SheetContent>
       </Sheet>
+      <TemplateEditorSheet
+        open={Boolean(editing)}
+        onOpenChange={(v) => (v ? null : setEditing(null))}
+        initial={editing}
+        onSave={(t) => {
+          saveTemplate.mutate(t, { onSuccess: () => toast.success(`Template "${t.name}" saved`) });
+        }}
+      />
     </AppShell>
   );
 }
