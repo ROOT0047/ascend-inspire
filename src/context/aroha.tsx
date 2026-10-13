@@ -178,7 +178,13 @@ type ArohaState = {
   toggleBlock: (id: string) => void;
   addBlock: (
     block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">,
-    options?: { weekdays?: number[]; weeks?: number; date?: string },
+    options?: { weekdays?: number[]; weeks?: number; date?: string; days?: number },
+  ) => void;
+  updateBlock: (
+    id: string,
+    patch: Partial<
+      Pick<ScheduleBlock, "title" | "description" | "startTime" | "endTime" | "priority" | "color">
+    > & { date?: string },
   ) => void;
   deleteBlock: (id: string) => void;
   deleteBlocks: (ids: string[]) => void;
@@ -552,13 +558,14 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
       options,
     }: {
       block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">;
-      options?: { weekdays?: number[]; weeks?: number; date?: string };
+      options?: { weekdays?: number[]; weeks?: number; date?: string; days?: number };
     }) => {
       if (!userId) return;
       const baseDate =
         options?.date && /^\d{4}-\d{2}-\d{2}$/.test(options.date) ? options.date : selectedDate;
       const weekdays = options?.weekdays?.length ? options.weekdays : null;
       const weeks = Math.max(1, Math.min(8, options?.weeks ?? 1));
+      const days = Math.max(1, Math.min(30, options?.days ?? 1));
       const dates: string[] = [];
       if (weekdays) {
         const base = startOfWeekISO(new Date(`${baseDate}T00:00:00`));
@@ -566,7 +573,7 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
           for (const wd of weekdays) dates.push(shiftISO(base, w * 7 + wd));
         }
       } else {
-        dates.push(baseDate);
+        for (let i = 0; i < days; i++) dates.push(shiftISO(baseDate, i));
       }
       const today = todayISO();
       const rows = Array.from(new Set(dates))
@@ -583,6 +590,32 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
         }));
       if (!rows.length) return;
       const { error } = await supabase.from("time_blocks").insert(rows);
+      if (error) throw error;
+    },
+    onSuccess: invalidateBlocks,
+    onError: notifyError,
+  });
+
+  const updateBlockMutation = useMutation({
+    mutationFn: async ({
+      id,
+      patch,
+    }: {
+      id: string;
+      patch: Partial<
+        Pick<ScheduleBlock, "title" | "description" | "startTime" | "endTime" | "priority" | "color">
+      > & { date?: string };
+    }) => {
+      const row: Record<string, string> = {};
+      if (patch.title !== undefined) row.title = patch.title;
+      if (patch.description !== undefined) row.description = patch.description;
+      if (patch.startTime !== undefined) row.start_time = patch.startTime;
+      if (patch.endTime !== undefined) row.end_time = patch.endTime;
+      if (patch.priority !== undefined) row.priority = patch.priority;
+      if (patch.color !== undefined) row.color = patch.color;
+      if (patch.date && /^\d{4}-\d{2}-\d{2}$/.test(patch.date)) row.block_date = patch.date;
+      if (!Object.keys(row).length) return;
+      const { error } = await supabase.from("time_blocks").update(row).eq("id", id);
       if (error) throw error;
     },
     onSuccess: invalidateBlocks,
@@ -769,6 +802,7 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
       toggleBlock: (id) => toggleBlockMutation.mutate(id),
       addBlock: (b, options) =>
         addBlockMutation.mutate(options ? { block: b, options } : { block: b }),
+      updateBlock: (id, patch) => updateBlockMutation.mutate({ id, patch }),
       deleteBlock: (id) => deleteBlockMutation.mutate([id]),
       deleteBlocks: (ids) => {
         if (ids.length) deleteBlockMutation.mutate(ids);
@@ -806,6 +840,7 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
       heatmap,
       toggleBlockMutation,
       addBlockMutation,
+      updateBlockMutation,
       deleteBlockMutation,
       toggleHabitMutation,
       addHabitMutation,

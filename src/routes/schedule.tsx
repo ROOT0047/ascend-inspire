@@ -61,6 +61,7 @@ function SchedulePage() {
     schedule,
     toggleBlock,
     addBlock,
+    updateBlock,
     deleteBlock,
     deleteBlocks,
     selectedDate,
@@ -81,6 +82,8 @@ function SchedulePage() {
   const [blockDate, setBlockDate] = useState(selectedDate);
   const [repeatDays, setRepeatDays] = useState<number[]>([]);
   const [weeks, setWeeks] = useState(1);
+  const [days, setDays] = useState(1);
+  const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [editing, setEditing] = useState<{
@@ -168,6 +171,20 @@ function SchedulePage() {
     exitSelect();
   }
 
+  function openEdit(id: string) {
+    const b = schedule.find((x) => x.id === id);
+    if (!b) return;
+    setEditingBlockId(id);
+    setTitle(b.title);
+    setStart(b.startTime);
+    setEnd(b.endTime);
+    setBlockDate(selectedDate);
+    setRepeatDays([]);
+    setWeeks(1);
+    setDays(1);
+    setOpen(true);
+  }
+
   function submit() {
     if (!title.trim()) {
       toast.error("Give the block a name");
@@ -181,26 +198,48 @@ function SchedulePage() {
       toast.error("End time must be after start time");
       return;
     }
-    addBlock(
-      {
+    if (editingBlockId) {
+      updateBlock(editingBlockId, {
         title: title.trim(),
-        description: "Added from the planner",
         startTime: start,
         endTime: end,
-        priority: "Medium",
-        color: "primary",
-      },
-      { date: blockDate, ...(repeatDays.length ? { weekdays: repeatDays, weeks } : {}) },
-    );
-    toast.success(
-      repeatDays.length
-        ? `Planned on ${repeatDays.length} day${repeatDays.length > 1 ? "s" : ""} × ${weeks} week${weeks > 1 ? "s" : ""}`
-        : `Block added for ${blockDate}`,
-    );
-    if (blockDate !== selectedDate && !repeatDays.length) setSelectedDate(blockDate);
+        date: blockDate,
+      });
+      toast.success("Block updated");
+      if (blockDate !== selectedDate) setSelectedDate(blockDate);
+    } else {
+      addBlock(
+        {
+          title: title.trim(),
+          description: "Added from the planner",
+          startTime: start,
+          endTime: end,
+          priority: "Medium",
+          color: "primary",
+        },
+        {
+          date: blockDate,
+          ...(repeatDays.length
+            ? { weekdays: repeatDays, weeks }
+            : days > 1
+              ? { days }
+              : {}),
+        },
+      );
+      toast.success(
+        repeatDays.length
+          ? `Planned on ${repeatDays.length} day${repeatDays.length > 1 ? "s" : ""} × ${weeks} week${weeks > 1 ? "s" : ""}`
+          : days > 1
+            ? `Added to ${days} days from ${blockDate}`
+            : `Block added for ${blockDate}`,
+      );
+      if (blockDate !== selectedDate && !repeatDays.length) setSelectedDate(blockDate);
+    }
     setTitle("");
     setRepeatDays([]);
     setWeeks(1);
+    setDays(1);
+    setEditingBlockId(null);
     setOpen(false);
   }
 
