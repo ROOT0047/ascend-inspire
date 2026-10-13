@@ -802,6 +802,7 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
       toggleBlock: (id) => toggleBlockMutation.mutate(id),
       addBlock: (b, options) =>
         addBlockMutation.mutate(options ? { block: b, options } : { block: b }),
+      updateBlock: (id, patch) => updateBlockMutation.mutate({ id, patch }),
       deleteBlock: (id) => deleteBlockMutation.mutate([id]),
       deleteBlocks: (ids) => {
         if (ids.length) deleteBlockMutation.mutate(ids);
@@ -839,6 +840,7 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
       heatmap,
       toggleBlockMutation,
       addBlockMutation,
+      updateBlockMutation,
       deleteBlockMutation,
       toggleHabitMutation,
       addHabitMutation,
