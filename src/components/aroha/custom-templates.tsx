@@ -116,12 +116,20 @@ export function TemplateEditorSheet({
     const clean = blocks
       .map((b) => ({ ...b, title: b.title.trim() }))
       .filter((b) => b.title);
-    if (!name.trim()) return toast.error("Give the template a name");
-    if (!clean.length) return toast.error("Add at least one block with a title");
-    if (clean.some((b) => b.startTime >= b.endTime))
-      return toast.error("Each block must end after it starts");
+    if (!name.trim()) {
+      toast.error("Give the template a name");
+      return;
+    }
+    if (!clean.length) {
+      toast.error("Add at least one block with a title");
+      return;
+    }
+    if (clean.some((b) => b.startTime >= b.endTime)) {
+      toast.error("Each block must end after it starts");
+      return;
+    }
     onSave({
-      id: initial?.id,
+      ...(initial?.id ? { id: initial.id } : {}),
       name: name.trim().slice(0, 60),
       tagline: tagline.trim().slice(0, 120),
       blocks: clean.sort((a, b) => a.startTime.localeCompare(b.startTime)),
