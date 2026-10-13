@@ -558,13 +558,14 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
       options,
     }: {
       block: Omit<ScheduleBlock, "id" | "completed" | "durationLabel">;
-      options?: { weekdays?: number[]; weeks?: number; date?: string };
+      options?: { weekdays?: number[]; weeks?: number; date?: string; days?: number };
     }) => {
       if (!userId) return;
       const baseDate =
         options?.date && /^\d{4}-\d{2}-\d{2}$/.test(options.date) ? options.date : selectedDate;
       const weekdays = options?.weekdays?.length ? options.weekdays : null;
       const weeks = Math.max(1, Math.min(8, options?.weeks ?? 1));
+      const days = Math.max(1, Math.min(30, options?.days ?? 1));
       const dates: string[] = [];
       if (weekdays) {
         const base = startOfWeekISO(new Date(`${baseDate}T00:00:00`));
@@ -572,7 +573,7 @@ export function ArohaProvider({ children }: { children: ReactNode }) {
           for (const wd of weekdays) dates.push(shiftISO(base, w * 7 + wd));
         }
       } else {
-        dates.push(baseDate);
+        for (let i = 0; i < days; i++) dates.push(shiftISO(baseDate, i));
       }
       const today = todayISO();
       const rows = Array.from(new Set(dates))
