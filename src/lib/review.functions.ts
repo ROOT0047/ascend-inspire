@@ -103,19 +103,17 @@ Plan rules: blocks start after ${now}, must not overlap existing blocks, fit wea
  "plan": [],
  "insights": [3 short items: one win, one gap, one specific adjustment for tomorrow]}`;
 
-    const key = process.env["LOVABLE_API_KEY"];
-    if (!key) throw new Error("Missing LOVABLE_API_KEY");
-    const [{ streamText }, { createLovableAiGatewayProvider }] = await Promise.all([
+    const [{ streamText }, { getAiApiKey, createAiProvider }] = await Promise.all([
       import("ai"),
-      import("./ai-gateway.server"),
+      import("./ai-provider.server"),
     ]);
-    const gateway = createLovableAiGatewayProvider(key);
+    const key = getAiApiKey();
+    const provider = createAiProvider(key);
     const result = streamText({
-      model: gateway("openai/gpt-6-astra"),
+      model: provider("gemini-2.5-flash"),
       system:
         "You are AROHA AI, an adaptive planner modelled on a calm, analytical strategist. No emoji, no flattery. Output valid json only.",
       prompt: `${task}\n\nUser data (json context):\n${facts}`,
-      providerOptions: { lovable: { reasoningEffort: "low" } },
     });
 
     let text = "";

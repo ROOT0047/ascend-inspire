@@ -29,11 +29,11 @@ export const Route = createFileRoute("/habit-tracker")({
           "Track habits, build streaks and measure real discipline with a live score and AI coach — more than a checkbox habit tracker.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://aroha-os.lovable.app/habit-tracker" },
+      { property: "og:url", content: "https://aroha.app/habit-tracker" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "canonical", href: "https://aroha-os.lovable.app/habit-tracker" },
+      { rel: "canonical", href: "https://aroha.app/habit-tracker" },
     ],
   }),
   component: HabitTracker,

@@ -29,11 +29,11 @@ export const Route = createFileRoute("/time-blocking-app")({
           "Plan your day in time blocks, repeat tasks across weeks, and receive alerts before each block starts. The discipline-first time blocking app.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://aroha-os.lovable.app/time-blocking-app" },
+      { property: "og:url", content: "https://aroha.app/time-blocking-app" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "canonical", href: "https://aroha-os.lovable.app/time-blocking-app" },
+      { rel: "canonical", href: "https://aroha.app/time-blocking-app" },
     ],
   }),
   component: TimeBlockingApp,

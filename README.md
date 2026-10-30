@@ -1848,17 +1848,9 @@ Master your habits. Master yourself.
 
 This aesthetic creates a polished, understated interface that feels focused and professional while remaining highly usable for long daily sessions.
 
-This project was built with [Lovable](https://lovable.dev).
+## AROHA Personal Evolution System
 
-**Live app**: https://aroha-os.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/6a0d8966-2450-4263-9c77-128723d1660b).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Offline-first tactical operating system for schedule, habits, focus, and health.
 
 ## Development
 

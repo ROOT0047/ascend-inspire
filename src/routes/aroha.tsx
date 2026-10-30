@@ -33,11 +33,11 @@ export const Route = createFileRoute("/aroha")({
       },
 
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://aroha-os.lovable.app/aroha" },
+      { property: "og:url", content: "https://aroha.app/aroha" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "canonical", href: "https://aroha-os.lovable.app/aroha" },
+      { rel: "canonical", href: "https://aroha.app/aroha" },
     ],
   }),
   component: BrandPage,

@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,11 +25,11 @@ export const Route = createFileRoute("/")({
         content: "Sign in to AROHA, the personal evolution system for schedule, habits, focus, health and AI coaching.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://aroha-os.lovable.app/og-aroha.jpg" },
+      { property: "og:image", content: "/og-aroha.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "640" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://aroha-os.lovable.app/og-aroha.jpg" },
+      { name: "twitter:image", content: "/og-aroha.jpg" },
     ],
   }),
   component: Login,
@@ -77,16 +77,16 @@ function Login() {
 
   async function onGoogle() {
     setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin,
+      },
     });
-    if (result.error) {
+    if (error) {
       setBusy(false);
-      toast.error("Google sign-in failed");
-      return;
+      toast.error(error.message || "Google sign-in failed");
     }
-    if (result.redirected) return;
-    setBusy(false);
   }
 
   return (

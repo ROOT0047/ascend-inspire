@@ -41,15 +41,13 @@ export const askCoach = createServerFn({ method: "POST" })
       }.`,
     ].join(" ");
 
-    const key = process.env["LOVABLE_API_KEY"];
-    if (!key) throw new Error("Missing LOVABLE_API_KEY");
-
-    const [{ streamText }, { createLovableAiGatewayProvider }] = await Promise.all([
+    const [{ streamText }, { getAiApiKey, createAiProvider }] = await Promise.all([
       import("ai"),
-      import("./ai-gateway.server"),
+      import("./ai-provider.server"),
     ]);
 
-    const gateway = createLovableAiGatewayProvider(key);
+    const key = getAiApiKey();
+    const provider = createAiProvider(key);
     const priorMessages = (history.data ?? [])
       .slice()
       .reverse()
@@ -60,7 +58,7 @@ export const askCoach = createServerFn({ method: "POST" })
 
     let streamError: unknown = null;
     const result = streamText({
-      model: gateway("google/gemini-3.6-flash"),
+      model: provider("gemini-2.5-flash"),
       instructions: `${SYSTEM}\n\nUser data: ${contextLine}`,
       messages: priorMessages,
       onError: ({ error }) => {
